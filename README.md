@@ -50,28 +50,28 @@ This is an e-commerce-Node.js application built with Express.js, Mongoose, and M
 
 1. Category:
 
-   - id => ObjectId (PK)
+   - \_id => ObjectId (Automatically generated primary key)
    - name => String
    - slug => String
    - image => String
 
 2. Subcategory:
 
-   - id => ObjectId (PK)
+   - \_id => ObjectId (Automatically generated primary key)
    - name => String
    - slug => String
-   - category => ObjectId (FK: Category)
+   - category_id: ObjectId (Reference to Category)
 
 3. Brand:
 
-   - id => ObjectId (PK)
+   - \_id => ObjectId (Automatically generated primary key)
    - name => String
    - slug => String
    - image => String
 
 4. Product:
 
-   - id => ObjectId (PK)
+   - \_id => ObjectId (Automatically generated primary key)
    - name => String
    - slug => String
    - mainImage => String
@@ -84,24 +84,24 @@ This is an e-commerce-Node.js application built with Express.js, Mongoose, and M
    - rateCount => Number
    - stock => Number
    - soldItems => Number
-   - categoryId => ObjectId (FK: Category)
-   - subcategoryId => ObjectId (FK: Subcategory)
-   - brandId => ObjectId (FK: Brand)
-   - createdBy => ObjectId (FK: User)
-   - updatedBy => ObjectId (FK: User)
+   - category_id: ObjectId (Reference to Category)
+   - subcategory_id: ObjectId (Reference to Subcategory)
+   - brand_id: ObjectId (Reference to Brand)
+   - createdBy: ObjectId (Reference to User)
+   - updatedBy: ObjectId (Reference to User)
 
 5. Review:
 
-   - id => ObjectId (PK)
+   - \_id => ObjectId (Automatically generated primary key)
    - title => String
    - content => String
    - rate => Number
-   - productId => ObjectId (FK: Product)
-   - customerId => ObjectId (FK: User)
+   - product_id: ObjectId (Reference to Product)
+   - customer_id: ObjectId (Reference to User)
 
 6. Address:
 
-   - id => ObjectId (PK)
+   - \_id => ObjectId (Automatically generated primary key)
    - street => String
    - city => String
    - zipCode => Number
@@ -110,37 +110,37 @@ This is an e-commerce-Node.js application built with Express.js, Mongoose, and M
 
 7. User:
 
-   - id => ObjectId (PK)
+   - \_id => ObjectId (Automatically generated primary key)
    - firstName => String
    - lastName => String
    - slug => String
    - email => String
    - password => String
    - phone => String
-   - Address => [Address]
+   - addresses: [Embedded Address documents]
    - role => String
    - verifiedEmail => Boolean
    - blocked => Boolean
    - deactivated => Boolean
-   - wishlist => [ObjectID] (FK)
+   - wishlist: [ObjectID] (References to Products)
 
 8. Cart:
 
-   - id => ObjectId (PK)
+   - \_id => ObjectId (Automatically generated primary key)
      **More attributes will be added later**
 
 9. Coupon:
 
-   - id => ObjectId (PK)
+   - \_id => ObjectId (Automatically generated primary key)
    - code => String
    - expiresAt => Date
    - discount => Number
    - active => Boolean
-   - customerId => [ObjectId]
+   - customerIds: [ObjectID] (References to Users)
 
 10. Order:
 
-    - id => ObjectId (PK)
+    - \_id => ObjectId (Automatically generated primary key)
       **More attributes will be added later**
 
 ---
