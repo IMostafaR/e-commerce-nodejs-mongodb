@@ -42,9 +42,6 @@ const ProductSchema = new mongoose.Schema(
       default: 0,
       min: 0,
     },
-    variations: {
-      type: Object,
-    },
     stock: {
       type: Number,
       default: 0,

@@ -30,21 +30,19 @@ This is an e-commerce-Node.js application built with Express.js, Mongoose, and M
 
 6. **Categorization**: Implement a category structure for products, allowing items to belong to one or more categories.
 
-7. **Product Variations**: Allow products to have different attributes like colors or sizes, each with its set of values.
+7. **Inventory Tracking**: Keep track of product availability by monitoring stock levels.
 
-8. **Inventory Tracking**: Keep track of product availability by monitoring stock levels.
+8. **Shopping Cart**: Facilitate users' shopping experience by letting them add items to a cart. Carts can be saved for logged-in users.
 
-9. **Shopping Cart**: Facilitate users' shopping experience by letting them add items to a cart. Carts can be saved for logged-in users.
+9. **Order Placement**: Require users to provide both payment and address details when placing an order.
 
-10. **Order Placement**: Require users to provide both payment and address details when placing an order.
+10. **Shipping Options**: Provide users with a selection of shipping methods, each associated with a fixed price.
 
-11. **Shipping Options**: Provide users with a selection of shipping methods, each associated with a fixed price.
+11. **Order Progress**: Implement an order processing system with stages such as order processing, delivery in progress, and order delivered.
 
-12. **Order Progress**: Implement an order processing system with stages such as order processing, delivery in progress, and order delivered.
+12. **Customer Reviews**: Allow users to leave reviews for purchased products, including a rating and written feedback.
 
-13. **Customer Reviews**: Allow users to leave reviews for purchased products, including a rating and written feedback.
-
-14. **Promotions**: Enable the platform to run promotions, allowing discounts on specific product categories.
+13. **Promotions**: Enable the platform to run promotions, allowing discounts on specific product categories.
 
 ---
 
@@ -82,7 +80,6 @@ This is an e-commerce-Node.js application built with Express.js, Mongoose, and M
    - price => Number
    - discount => Number
    - priceAfterDiscount => Number
-   - variations => Object (value as array)
    - ratingAvg => Number
    - rateCount => Number
    - stock => Number
