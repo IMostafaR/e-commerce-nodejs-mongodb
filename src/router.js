@@ -12,7 +12,6 @@ export const router = (app, express) => {
 
   db();
   app.use(express.json());
-  app.use("/api/v1/");
   app.all("*", (req, res, next) => {
     next(new AppError(`invalid routing ${req.originalUrl}`, 404));
   });
