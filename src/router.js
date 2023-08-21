@@ -1,6 +1,5 @@
 import { db } from "../database/connection.js";
 import { globalErrorHandler } from "./middleware/error/globalErrorHandler.js";
-import { createAdmin } from "./modules/user/admin.js";
 import { AppError } from "./utils/error/appError.js";
 
 export const router = (app, express) => {
@@ -12,7 +11,6 @@ export const router = (app, express) => {
   //   });
 
   db();
-  // createAdmin();
   app.use(express.json());
   app.all("*", (req, res, next) => {
     next(new AppError(`invalid routing ${req.originalUrl}`, 404));
