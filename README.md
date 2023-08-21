@@ -48,6 +48,8 @@ This is an e-commerce-Node.js application built with Express.js, Mongoose, and M
 
 # Database Analysis
 
+![](./ERD.svg)
+
 1. Category:
 
    - \_id => ObjectId (Automatically generated primary key)
