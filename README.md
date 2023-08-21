@@ -48,7 +48,7 @@ This is an e-commerce-Node.js application built with Express.js, Mongoose, and M
 
 # Database Analysis
 
-![](./ERD.svg)
+![](./ERD.png)
 
 1. Category:
 
