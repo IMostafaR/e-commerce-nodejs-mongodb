@@ -1,6 +1,9 @@
 import { Router } from "express";
 import { category } from "./category.controller.js";
-import { fileValidation, uploadFile } from "../../utils/upload/multerLocal.js";
+import {
+  uploadFileCloud,
+  fileValidation,
+} from "../../utils/upload/multerCloud.js";
 
 export const categoryRouter = Router();
 
@@ -8,8 +11,8 @@ export const categoryRouter = Router();
 
 categoryRouter.post(
   "/",
-  uploadFile({ folder: "categories", fileType: fileValidation.image }).single(
-    "image"
-  ),
+  uploadFileCloud({
+    fileType: fileValidation.image,
+  }).single("image"),
   category.add
 );
