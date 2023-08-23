@@ -7,7 +7,6 @@ import cloudinary from "../../utils/cloud/cloud.js";
 export const category = {
   add: catchAsyncError(async (req, res, next) => {
     const { name } = req.body;
-    console.log(req.file.path);
 
     const existingCategory = await Category.findOne({ name });
 
