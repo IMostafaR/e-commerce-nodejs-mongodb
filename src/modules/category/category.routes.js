@@ -16,3 +16,13 @@ categoryRouter.post(
   }).single("image"),
   category.add
 );
+
+// update category
+
+categoryRouter.put(
+  "/",
+  uploadFileCloud({
+    fileType: fileValidation.image,
+  }).single("image"),
+  category.update
+);

@@ -34,4 +34,11 @@ export const category = {
       data: newCategory,
     });
   }),
+
+  update: catchAsyncError(async (req, res, next) => {
+    res.status(201).json({
+      status: "success",
+      message: "",
+    });
+  }),
 };
