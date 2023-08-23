@@ -36,9 +36,27 @@ export const category = {
   }),
 
   update: catchAsyncError(async (req, res, next) => {
+    const { name } = req.body;
+    const existingCategory = await Category.findOne({ name });
+
+    if (!existingCategory) {
+      return next(
+        new AppError(`Sorry, the ${name} category cannot be found`, 404)
+      );
+    }
+
+    const { secure_url } = await cloudinary.uploader.upload(req.file.path, {
+      public_id: existingCategory.image.public_id,
+    });
+
+    existingCategory.image.secure_url = secure_url;
+
+    const updatedCategory = await existingCategory.save();
+
     res.status(201).json({
       status: "success",
-      message: "",
+      message: "Category image updated successfully",
+      data: updatedCategory,
     });
   }),
 };
