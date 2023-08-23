@@ -50,34 +50,40 @@ This is an e-commerce-Node.js application built with Express.js, Mongoose, and M
 
 ![](./ERD.png)
 
-1. Category:
+1. Image:
+
+   - \_id => ObjectId (Automatically generated primary key)
+   - secure_url => String
+   - public_id => String
+
+2. Category:
 
    - \_id => ObjectId (Automatically generated primary key)
    - name => String
    - slug => String
-   - image => String
+   - image => Embedded Image document
 
-2. Subcategory:
+3. Subcategory:
 
    - \_id => ObjectId (Automatically generated primary key)
    - name => String
    - slug => String
    - category_id: ObjectId (Reference to Category)
 
-3. Brand:
+4. Brand:
 
    - \_id => ObjectId (Automatically generated primary key)
    - name => String
    - slug => String
-   - image => String
+   - image => Embedded Image document
 
-4. Product:
+5. Product:
 
    - \_id => ObjectId (Automatically generated primary key)
    - name => String
    - slug => String
-   - mainImage => String
-   - images => [String]
+   - mainImage => Embedded Image document
+   - images => [Embedded Image documents]
    - description => String
    - price => Number
    - discount => Number
@@ -92,7 +98,7 @@ This is an e-commerce-Node.js application built with Express.js, Mongoose, and M
    - createdBy: ObjectId (Reference to User)
    - updatedBy: ObjectId (Reference to User)
 
-5. Review:
+6. Review:
 
    - \_id => ObjectId (Automatically generated primary key)
    - title => String
@@ -101,7 +107,7 @@ This is an e-commerce-Node.js application built with Express.js, Mongoose, and M
    - product_id: ObjectId (Reference to Product)
    - customer_id: ObjectId (Reference to User)
 
-6. Address:
+7. Address:
 
    - \_id => ObjectId (Automatically generated primary key)
    - street => String
@@ -110,7 +116,7 @@ This is an e-commerce-Node.js application built with Express.js, Mongoose, and M
    - country => String
    - defaultAddress => Boolean
 
-7. User:
+8. User:
 
    - \_id => ObjectId (Automatically generated primary key)
    - firstName => String
@@ -126,21 +132,21 @@ This is an e-commerce-Node.js application built with Express.js, Mongoose, and M
    - deactivated => Boolean
    - wishlist: [ObjectID] (References to Products)
 
-8. Cart:
+9. Cart:
 
    - \_id => ObjectId (Automatically generated primary key)
      **More attributes will be added later**
 
-9. Coupon:
+10. Coupon:
 
-   - \_id => ObjectId (Automatically generated primary key)
-   - code => String
-   - expiresAt => Date
-   - discount => Number
-   - active => Boolean
-   - customerIds: [ObjectID] (References to Users)
+    - \_id => ObjectId (Automatically generated primary key)
+    - code => String
+    - expiresAt => Date
+    - discount => Number
+    - active => Boolean
+    - customerIds: [ObjectID] (References to Users)
 
-10. Order:
+11. Order:
 
     - \_id => ObjectId (Automatically generated primary key)
       **More attributes will be added later**
