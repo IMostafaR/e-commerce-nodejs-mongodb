@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { Image } from "./image.model.js";
 
 const BrandSchema = new mongoose.Schema(
   {
@@ -12,10 +13,7 @@ const BrandSchema = new mongoose.Schema(
       type: String,
       lowercase: true,
     },
-    image: {
-      type: String,
-      required: true,
-    },
+    image: Image.schema,
   },
   {
     timestamps: true,
