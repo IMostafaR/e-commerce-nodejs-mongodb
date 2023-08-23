@@ -4,7 +4,8 @@ import { catchAsyncError } from "../../utils/error/asyncError.js";
 import { AppError } from "../../utils/error/appError.js";
 export const category = {
   add: catchAsyncError(async (req, res, next) => {
-    const { name, image } = req.body;
+    const { name } = req.body;
+    const image = req.file.path;
 
     const existingCategory = await Category.findOne({ name });
 
@@ -14,12 +15,12 @@ export const category = {
 
     const newCategory = new Category({ name, slug, image });
 
-    await newCategory.save();
+    const addedCategory = await newCategory.save();
 
     res.status(201).json({
       status: "success",
       message: "Category added successfully",
-      data: newCategory,
+      data: addedCategory,
     });
   }),
 };

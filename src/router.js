@@ -14,6 +14,7 @@ export const router = (app, express) => {
   db();
   app.use(express.json());
   app.use("/api/v1/categories", categoryRouter);
+  app.use("/uploads", express.static("uploads"));
   app.all("*", (req, res, next) => {
     next(new AppError(`invalid routing ${req.originalUrl}`, 404));
   });
