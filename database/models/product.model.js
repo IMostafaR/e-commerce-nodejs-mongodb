@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { Image } from "./image.model.js";
+import { ImageSchema } from "./image.model.js";
 
 const ProductSchema = new mongoose.Schema(
   {
@@ -13,9 +13,9 @@ const ProductSchema = new mongoose.Schema(
       type: String,
       lowercase: true,
     },
-    mainImage: Image.schema,
+    mainImage: ImageSchema,
 
-    images: [Image.schema],
+    images: [ImageSchema],
     description: {
       type: String,
       required: true,

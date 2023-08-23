@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const ImageSchema = new mongoose.Schema({
+export const ImageSchema = new mongoose.Schema({
   secure_url: {
     type: String,
     required: true,
@@ -10,5 +10,3 @@ const ImageSchema = new mongoose.Schema({
     required: true,
   },
 });
-
-export const Image = mongoose.model("Image", ImageSchema);
