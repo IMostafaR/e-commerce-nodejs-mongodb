@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { category } from "./category.controller.js";
-import { fileValidation, uploadFile } from "../../utils/upload/multer.js";
+import { fileValidation, uploadFile } from "../../utils/upload/multerLocal.js";
 
 export const categoryRouter = Router();
 
