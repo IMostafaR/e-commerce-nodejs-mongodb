@@ -4,13 +4,16 @@ config({ path: path.resolve("../../../config/.env") });
 import mongoose from "mongoose";
 import { User } from "../../../database/models/user.model.js";
 import { hashPassword } from "../../utils/password/passwordHashing.js";
-import { catchAsyncError } from "../../utils/error/asyncError.js";
 
-export const createAdmin = catchAsyncError(async () => {
+(async () => {
+  // establish DB connection
   await mongoose.connect(process.env.DB_CONNECTION);
   console.log("Database connected:", mongoose.connections[0].name);
+
+  // hash admin login password
   const hashedPassword = hashPassword(process.env.ADMIN_PASS);
 
+  // define admin data object
   const adminObj = {
     firstName: "Super",
     lastName: "Admin",
@@ -20,9 +23,10 @@ export const createAdmin = catchAsyncError(async () => {
     verifiedEmail: true,
   };
 
+  // add admin data to DB
   await User.create(adminObj);
   console.log("Admin account created successfully");
-  mongoose.disconnect();
-});
 
-createAdmin();
+  // terminate DB connection
+  mongoose.disconnect();
+})();
