@@ -36,8 +36,8 @@ export const category = {
   }),
 
   update: catchAsyncError(async (req, res, next) => {
-    const { name } = req.body;
-    const existingCategory = await Category.findOne({ name });
+    const { id } = req.body;
+    const existingCategory = await Category.findById(id);
 
     if (!existingCategory) {
       return next(
