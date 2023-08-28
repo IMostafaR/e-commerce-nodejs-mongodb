@@ -35,14 +35,16 @@ export const mainValidationSchema = {
 };
 
 export const validation = (schema) => {
-  const reqData = { ...req.body, ...req.params, ...req.query };
+  return (req, res, next) => {
+    const reqData = { ...req.body, ...req.params, ...req.query };
 
-  const { error } = schema.validate(reqData, { abortEarly: false });
+    const { error } = schema.validate(reqData, { abortEarly: false });
 
-  if (error) {
-    const message = error.details.map((err) => err.message);
-    return new AppError(message, 400);
-  }
+    if (error) {
+      const message = error.details.map((err) => err.message);
+      return new AppError(message, 400);
+    }
 
-  next();
+    next();
+  };
 };
