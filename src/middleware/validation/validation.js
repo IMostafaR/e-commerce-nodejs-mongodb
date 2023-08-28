@@ -47,7 +47,7 @@ export const validation = (schema) => {
 
     if (error) {
       const message = error.details.map((err) => err.message);
-      return new AppError(message, 400);
+      return next(new AppError(message, 400));
     }
 
     next();
