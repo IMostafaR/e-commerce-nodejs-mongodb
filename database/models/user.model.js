@@ -89,6 +89,9 @@ const UserSchema = new mongoose.Schema(
       type: string,
       trim: true,
     },
+    jwtSecretKey: {
+      type: string,
+    },
   },
   {
     timestamps: true,
