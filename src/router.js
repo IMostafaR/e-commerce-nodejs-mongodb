@@ -1,6 +1,7 @@
 import { db } from "../database/connection.js";
 import { globalErrorHandler } from "./middleware/error/globalErrorHandler.js";
 import { categoryRouter } from "./modules/category/category.routes.js";
+import { userRouter } from "./modules/user/user.routes.js";
 import { AppError } from "./utils/error/appError.js";
 
 export const router = (app, express) => {
@@ -13,6 +14,7 @@ export const router = (app, express) => {
 
   db();
   app.use(express.json());
+  app.use("/api/v1/user", userRouter);
   app.use("/api/v1/categories", categoryRouter);
   app.use("/uploads", express.static("uploads"));
   app.all("*", (req, res, next) => {

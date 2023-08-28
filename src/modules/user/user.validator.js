@@ -1,6 +1,14 @@
 import Joi from "joi";
+import { mainValidationSchema } from "../../middleware/validation/validation.js";
 
-export const userValidator = {
+export const userValidatorSchema = {
   // signup
-  signup: Joi.object(),
+  signup: Joi.object({
+    firstName: mainValidationSchema.firstName,
+    lastName: mainValidationSchema.lastName,
+    email: mainValidationSchema.email,
+    password: mainValidationSchema.password,
+    repeatPassword: mainValidationSchema.re,
+    phone: mainValidationSchema.phone,
+  }),
 };
