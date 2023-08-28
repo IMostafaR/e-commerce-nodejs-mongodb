@@ -86,11 +86,11 @@ const UserSchema = new mongoose.Schema(
       ref: "Product",
     },
     resetPassCode: {
-      type: string,
+      type: String,
       trim: true,
     },
     jwtSecretKey: {
-      type: string,
+      type: mongoose.Schema.Types.UUID,
     },
   },
   {
