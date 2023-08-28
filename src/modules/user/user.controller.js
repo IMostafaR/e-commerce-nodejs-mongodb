@@ -5,5 +5,7 @@ export const user = {
   signup: catchAsyncError(async (req, res, next) => {
     const { firstName, lastName, email, password, repeatPassword, phone } =
       req.body;
+
+    res.json("success");
   }),
 };
