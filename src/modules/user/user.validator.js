@@ -9,6 +9,5 @@ export const userValidatorSchema = {
     email: mainValidationSchema.email,
     password: mainValidationSchema.password,
     repeatPassword: mainValidationSchema.repeatPassword,
-    phone: mainValidationSchema.phone,
   }),
 };
