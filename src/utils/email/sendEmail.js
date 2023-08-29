@@ -13,12 +13,10 @@ const transporter = nodemailer.createTransport({
 export const emailSender = async (options) => {
   const info = await transporter.sendMail({
     from: `"E-Commerce App 📦" <${process.env.EMAIL_ADDRESS}>`,
-    to: options?.email,
-    subject: options?.subject,
-    html: options.verifyEmailHtml,
+    to: options.email,
+    subject: options.subject,
+    html: options.html,
   });
 
-  console.log("Message sent: %s", info.messageId);
+  console.log("Message sent: ", info.messageId);
 };
-
-emailSender().catch(console.error);
