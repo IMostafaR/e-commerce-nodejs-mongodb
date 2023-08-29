@@ -7,6 +7,10 @@ export const userRouter = Router();
 
 userRouter.post("/signup", validation(userValidatorSchema.signup), user.signup);
 
-userRouter.get("/verifyEmail/:token", user.verifyEmail);
+userRouter.get(
+  "/verifyEmail/:token",
+  validation(userValidatorSchema.verifyEmail),
+  user.verifyEmail
+);
 
 userRouter.get("/resendEmail/:refreshToken", user.resendVerificationEmail);
