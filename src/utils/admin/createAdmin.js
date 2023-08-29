@@ -3,7 +3,7 @@ import { config } from "dotenv";
 config({ path: path.resolve("../../../config/.env") });
 import mongoose from "mongoose";
 import { User } from "../../../database/models/user.model.js";
-import { hashPassword } from "../password/passwordHashing.js";
+import { pass } from "../password/passwordHashing.js";
 
 (async () => {
   // establish DB connection
@@ -11,7 +11,7 @@ import { hashPassword } from "../password/passwordHashing.js";
   console.log("Database connected:", mongoose.connections[0].name);
 
   // hash admin login password
-  const hashedPassword = hashPassword(process.env.ADMIN_PASS);
+  const hashedPassword = pass.hash(process.env.ADMIN_PASS);
 
   // define admin data object
   const adminObj = {
