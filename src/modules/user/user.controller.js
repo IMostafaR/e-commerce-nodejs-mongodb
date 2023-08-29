@@ -51,7 +51,8 @@ export const user = {
     // Send successful response
     res.status(201).json({
       status: "success",
-      message: "Account successfully created",
+      message:
+        "Account successfully created. Please check your email to confirm your account before trying to login",
       data: newUser,
     });
   }),
