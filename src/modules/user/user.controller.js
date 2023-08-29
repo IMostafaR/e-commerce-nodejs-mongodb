@@ -55,4 +55,62 @@ export const user = {
       data: newUser,
     });
   }),
+
+  verifyEmail: (req, res, next) => {
+    const { token } = req.params;
+    Jwt.verify(token, process.env.VERIFY_EMAIL_KEY, async (error, decoded) => {
+      if (error) return next(new AppError("Invalid token", 401));
+
+      const verifiedUser = await User.findOneAndUpdate(
+        {
+          email: decoded.email,
+        },
+        { verifiedEmail: true },
+        { new: true }
+      );
+
+      res.status(201).json({
+        status: "success",
+        message: "Email successfully verified",
+        data: verifiedUser,
+      });
+    });
+  },
+
+  resendVerificationEmail: (req, res, next) => {
+    const { refreshToken } = req.params;
+    Jwt.verify(
+      refreshToken,
+      process.env.VERIFY_EMAIL_KEY,
+      async (error, decoded) => {
+        if (error) return next(new AppError("Invalid token", 401));
+
+        // email confirmation link creation with token
+        const token = Jwt.sign(
+          { email: decoded.email },
+          process.env.VERIFY_EMAIL_KEY,
+          {
+            expiresIn: 60 * 10,
+          }
+        );
+
+        const confirmationLink = `${req.protocol}://${req.headers.host}/api/v1/user/verifyEmail/${token}`; // main confirmation link
+
+        const html = `<a href="${confirmationLink}" target="_blank">Verify Email</a> <br />`;
+
+        // Send confirmation email
+        await emailSender({
+          email: decoded.email,
+          subject: "Confirmation email",
+          html,
+        });
+
+        // Send successful response
+        res.status(201).json({
+          status: "success",
+          message: `New email sent to ${decoded.email}`,
+        });
+      }
+    );
+  },
 };

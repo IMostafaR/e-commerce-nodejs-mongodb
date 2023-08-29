@@ -6,3 +6,7 @@ import { validation } from "../../middleware/validation/validation.js";
 export const userRouter = Router();
 
 userRouter.post("/signup", validation(userValidatorSchema.signup), user.signup);
+
+userRouter.get("/verifyEmail/:token", user.verifyEmail);
+
+userRouter.get("/resendEmail/:refreshToken", user.resendVerificationEmail);
