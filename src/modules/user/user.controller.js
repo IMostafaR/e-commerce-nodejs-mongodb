@@ -5,6 +5,7 @@ import { AppError } from "../../utils/error/appError.js";
 import { catchAsyncError } from "../../utils/error/asyncError.js";
 import { pass } from "../../utils/password/passwordHashing.js";
 import Jwt from "jsonwebtoken";
+import { v4 as uuidv4 } from "uuid";
 
 export const user = {
   //signup
@@ -152,4 +153,61 @@ export const user = {
       }
     );
   },
+
+  // login
+
+  login: catchAsyncError(async (req, res, next) => {
+    // Request Data
+    const { email, password } = req.body;
+
+    // find if user exists in DB
+    const user = await User.findOne({
+      email,
+    });
+    console.log(Boolean(user));
+    // check if the user verified their email
+    if (user && !user.verifiedEmail)
+      return next(
+        new AppError(
+          "You have to verify your email before trying to login. Please check your email inbox.",
+          401
+        )
+      );
+
+    // check if the user's account is blocked
+    if (user && user.blocked)
+      return next(
+        new AppError("Sorry! your account is blocked. Please contact us", 403)
+      );
+
+    // check if the user's password is correct
+    if (!user || !pass.compare(password, user.password))
+      return next(new AppError("Incorrect email or password", 401));
+
+    // if all cases above didn't throw error:
+    // * generate secret key and save it to DB (to be changed when the user logout)
+    const jwtSecretKey = uuidv4();
+    user.jwtSecretKey = jwtSecretKey;
+    await user.save();
+
+    // generate token
+    const token = Jwt.sign(
+      {
+        id: user._id,
+        name: `${user.firstName} ${user.lastName}`,
+        role: user.role,
+      },
+      jwtSecretKey,
+      {
+        expiresIn: "183d",
+      }
+    );
+
+    // Send successful response
+    res.status(201).json({
+      status: "success",
+      message: `Welcome ${user.firstName}`,
+      token,
+    });
+  }),
 };

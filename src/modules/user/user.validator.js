@@ -20,4 +20,9 @@ export const userValidatorSchema = {
   resendVerificationEmail: Joi.object({
     refreshToken: mainValidationSchema.token,
   }),
+
+  login: Joi.object({
+    email: mainValidationSchema.email,
+    password: mainValidationSchema.password,
+  }),
 };
