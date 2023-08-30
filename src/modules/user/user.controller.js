@@ -1,3 +1,4 @@
+import slugify from "slugify";
 import { User } from "../../../database/models/user.model.js";
 import { emailSender } from "../../utils/email/sendEmail.js";
 import { AppError } from "../../utils/error/appError.js";
@@ -10,6 +11,10 @@ export const user = {
   signup: catchAsyncError(async (req, res, next) => {
     // Request Data
     const { firstName, lastName, email, password } = req.body;
+
+    let slug = `${firstName} ${lastName}`;
+
+    slug = slugify(slug);
 
     // Check if email exists in the DB
     const existingEmail = await User.findOne({ email });
@@ -24,16 +29,24 @@ export const user = {
     const newUser = await User.create({
       firstName,
       lastName,
+      slug,
       email,
       password: hashedPassword,
     });
 
     // email confirmation link creation with token
-    const token = Jwt.sign({ email }, process.env.VERIFY_EMAIL_KEY, {
-      expiresIn: 60 * 10,
-    });
+    const token = Jwt.sign(
+      { email: newUser.email },
+      process.env.VERIFY_EMAIL_KEY,
+      {
+        expiresIn: 60 * 10,
+      }
+    );
 
-    const refreshToken = Jwt.sign({ email }, process.env.VERIFY_EMAIL_KEY); // to be sent to user's email to ask for new token if the original token has expired
+    const refreshToken = Jwt.sign(
+      { email: newUser.email },
+      process.env.VERIFY_EMAIL_KEY
+    ); // to be sent to user's email to ask for new token if the original token has expired
 
     const confirmationLink = `${req.protocol}://${req.headers.host}/api/v1/user/verifyEmail/${token}`; // main confirmation link
     const resendEmailLink = `${req.protocol}://${req.headers.host}/api/v1/user/resendEmail/${refreshToken}`; // to ask for new confirmation link
@@ -43,7 +56,7 @@ export const user = {
 
     // Send confirmation email
     await emailSender({
-      email,
+      email: newUser.email,
       subject: "Confirmation email",
       html,
     });
