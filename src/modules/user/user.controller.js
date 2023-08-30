@@ -57,29 +57,54 @@ export const user = {
     });
   }),
 
-  verifyEmail: (req, res, next) => {
+  verifyEmail: catchAsyncError(async (req, res, next) => {
+    // Request Data
     const { token } = req.params;
+
+    // verify token from request params
     Jwt.verify(token, process.env.VERIFY_EMAIL_KEY, async (error, decoded) => {
       if (error) return next(new AppError("Invalid token", 401));
 
-      const verifiedUser = await User.findOneAndUpdate(
-        {
-          email: decoded.email,
-        },
-        { verifiedEmail: true },
-        { new: true }
-      );
+      // Search for this email in the DB
+      const existingUser = await User.findOne({ email: decoded.email });
 
+      // Email not exist error
+      if (!existingUser)
+        return next(
+          new AppError(
+            `${decoded.email} is not registered. Please signup first`,
+            404
+          )
+        );
+
+      // Email is already verified error
+      if (existingUser.verifiedEmail)
+        return next(
+          new AppError(
+            `${decoded.email} is already verified. Please login.`,
+            404
+          )
+        );
+
+      // Verify email in DB and save
+      existingUser.verifiedEmail = true;
+      await existingUser.save();
+
+      // Send successful response
       res.status(201).json({
         status: "success",
         message: "Email successfully verified",
-        data: verifiedUser,
+        data: existingUser,
       });
     });
-  },
+  }),
 
+  // resendVerificationEmail with refreshToken
   resendVerificationEmail: (req, res, next) => {
+    // Request Data
     const { refreshToken } = req.params;
+
+    // verify token from request params
     Jwt.verify(
       refreshToken,
       process.env.VERIFY_EMAIL_KEY,
