@@ -93,7 +93,7 @@ const UserSchema = new mongoose.Schema(
       trim: true,
     },
     jwtSecretKey: {
-      type: mongoose.Schema.Types.UUID,
+      type: mongoose.Schema.Types.Buffer,
     },
   },
   {
