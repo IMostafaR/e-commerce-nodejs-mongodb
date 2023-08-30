@@ -6,6 +6,7 @@ import { catchAsyncError } from "../../utils/error/asyncError.js";
 import { pass } from "../../utils/password/passwordHashing.js";
 import Jwt from "jsonwebtoken";
 import { v4 as uuidv4 } from "uuid";
+import crypto from "crypto";
 
 export const user = {
   //signup
@@ -155,7 +156,6 @@ export const user = {
   },
 
   // login
-
   login: catchAsyncError(async (req, res, next) => {
     // Request Data
     const { email, password } = req.body;
@@ -164,7 +164,6 @@ export const user = {
     const user = await User.findOne({
       email,
     });
-    console.log(Boolean(user));
     // check if the user verified their email
     if (user && !user.verifiedEmail)
       return next(
@@ -186,20 +185,21 @@ export const user = {
 
     // if all cases above didn't throw error:
     // * generate secret key and save it to DB (to be changed when the user logout)
-    const jwtSecretKey = uuidv4();
-    user.jwtSecretKey = jwtSecretKey;
+    user.jwtSecretKey = crypto.randomBytes(32).toString("hex");
     await user.save();
 
     // generate token
-    const token = Jwt.sign(
+    const idToken = Jwt.sign({ id: user._id }, process.env.SECRET_KEY);
+
+    const authToken = Jwt.sign(
       {
         id: user._id,
         name: `${user.firstName} ${user.lastName}`,
         role: user.role,
       },
-      jwtSecretKey,
+      user.jwtSecretKey,
       {
-        expiresIn: "183d",
+        expiresIn: "30d",
       }
     );
 
