@@ -207,7 +207,24 @@ export const user = {
     res.status(201).json({
       status: "success",
       message: `Welcome ${user.firstName}`,
-      token,
+      idToken,
+      authToken,
+    });
+  }),
+
+  // logout
+
+  logout: catchAsyncError(async (req, res, next) => {
+    const id = req.userId;
+
+    const user = await User.findById(id);
+
+    user.jwtSecretKey = crypto.randomBytes(32).toString("hex");
+    await user.save();
+
+    return res.json({
+      status: "success",
+      message: `${user.email} logged out successfully`,
     });
   }),
 };

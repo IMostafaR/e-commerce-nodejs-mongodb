@@ -21,8 +21,15 @@ export const userValidatorSchema = {
     refreshToken: mainValidationSchema.token,
   }),
 
+  //login
   login: Joi.object({
     email: mainValidationSchema.email,
     password: mainValidationSchema.password,
+  }),
+
+  //logout
+  logout: Joi.object({
+    idtoken: mainValidationSchema.token,
+    authtoken: mainValidationSchema.token,
   }),
 };
