@@ -95,7 +95,7 @@ export const user = {
         return next(
           new AppError(
             `${decoded.email} is already verified. Please login.`,
-            404
+            409
           )
         );
 
