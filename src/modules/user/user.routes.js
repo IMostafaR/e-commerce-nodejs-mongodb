@@ -31,3 +31,17 @@ userRouter.patch(
   auth,
   user.logout
 );
+
+// send reset password code
+userRouter.patch(
+  "/resetCode",
+  validation(userValidatorSchema.resetPassCode),
+  user.resetPassCode
+);
+
+// reset password
+userRouter.patch(
+  "/resetPassword",
+  validation(userValidatorSchema.resetPassword),
+  user.resetPassword
+);

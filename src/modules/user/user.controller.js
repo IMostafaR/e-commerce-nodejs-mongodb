@@ -5,7 +5,6 @@ import { AppError } from "../../utils/error/appError.js";
 import { catchAsyncError } from "../../utils/error/asyncError.js";
 import { pass } from "../../utils/password/passwordHashing.js";
 import Jwt from "jsonwebtoken";
-import { v4 as uuidv4 } from "uuid";
 import crypto from "crypto";
 
 export const user = {
@@ -223,9 +222,67 @@ export const user = {
     user.jwtSecretKey = crypto.randomBytes(32).toString("hex");
     await user.save();
 
-    return res.json({
+    res.status(201).json({
       status: "success",
       message: `${user.email} logged out successfully`,
+    });
+  }),
+
+  // send reset password code
+  resetPassCode: catchAsyncError(async (req, res, next) => {
+    // Request Data
+    const { email } = req.body;
+
+    // find if user exists in DB
+    const user = await User.findOne({ email });
+    if (!user) return next(new AppError("Account is not exist", 404));
+
+    // generate random code and save it to DB
+    const code = crypto.randomBytes(3).toString("hex");
+    user.resetPassCode = code;
+    await user.save();
+
+    // send email to user with reset code
+    const html = `<p>This email is sent to you upon your request to reset your password</p>
+    <h1>Code: ${code}</h1>
+    <p>If you did not request resetting your password, ignore this email</p>
+    `;
+
+    await emailSender({
+      email: user.email,
+      subject: "Request to reset password",
+      html,
+    });
+
+    res.status(201).json({
+      status: "success",
+      message: `Reset code has been sent to ${user.email}.`,
+    });
+  }),
+
+  // reset password
+  resetPassword: catchAsyncError(async (req, res, next) => {
+    // Request Data
+    const { email, code, password } = req.body;
+
+    // find if user exists in DB
+    let user = await User.findOne({ email });
+    if (!user) return next(new AppError("Account is not exist", 404));
+
+    if (user && user.resetPassCode !== code)
+      return next(new AppError("Incorrect code", 401));
+
+    const hashedPassword = pass.hash(password);
+    const jwtSecretKey = crypto.randomBytes(32).toString("hex");
+
+    user = await User.findOneAndUpdate(
+      { email },
+      { password: hashedPassword, jwtSecretKey, $unset: { resetPassCode: 1 } }
+    );
+
+    return res.status(201).json({
+      status: "success",
+      message: `Your password has been successfully reset. Please try to login`,
     });
   }),
 };

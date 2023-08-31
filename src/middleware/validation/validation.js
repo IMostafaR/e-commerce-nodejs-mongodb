@@ -43,6 +43,7 @@ export const mainValidationSchema = {
       "string.empty": `The URL missing a token`,
       "string.pattern.base": "The token formate is invalid",
     }),
+  code: Joi.string().length(6).hex().required(),
 };
 
 export const validation = (schema) => {
