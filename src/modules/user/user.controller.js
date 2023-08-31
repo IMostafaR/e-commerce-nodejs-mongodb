@@ -188,9 +188,10 @@ export const user = {
     user.jwtSecretKey = crypto.randomBytes(32).toString("hex");
     await user.save();
 
-    // generate token
+    /* generate token with payload contains _id to retrieve user data in auth middleware */
     const idToken = Jwt.sign({ id: user._id }, process.env.SECRET_KEY);
 
+    /* generate token with payload contains user's data to confirm if user authorized in auth middleware */
     const authToken = Jwt.sign(
       {
         id: user._id,
