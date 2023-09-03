@@ -20,7 +20,7 @@ export const mainValidationSchema = {
     "any.required": "Email is required",
   }),
   password: Joi.string()
-    .pattern(/^[a-zA-Z0-9]{3,30}$/)
+    .pattern(/^[a-zA-Z0-9]{8,30}$/)
     .required()
     .messages({
       "string.empty": `Password cannot be an empty field`,

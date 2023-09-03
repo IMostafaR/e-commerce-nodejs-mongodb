@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { ImageSchema } from "./image.model.js";
 
 // AddressSchema will be embedded into UserSchema
 
@@ -33,14 +34,14 @@ const UserSchema = new mongoose.Schema(
   {
     firstName: {
       type: String,
-      required: true,
+      required: [true, "First name is required"],
       min: 2,
       max: 16,
       trim: true,
     },
     lastName: {
       type: String,
-      required: true,
+      required: [true, "Last name is required"],
       min: 2,
       max: 16,
       trim: true,
@@ -48,22 +49,25 @@ const UserSchema = new mongoose.Schema(
     slug: {
       type: String,
       lowercase: true,
+      required: true,
     },
     email: {
       type: String,
-      required: true,
-      unique: true,
+      required: [true, "Email is required"],
+      unique: [true, "Email already registered"],
       trim: true,
       lowercase: true,
     },
     password: {
       type: String,
-      required: true,
+      required: [true, "Password is required"],
+      minLength: [8, "Password is too short"],
     },
     phone: {
       type: String,
       trim: true,
     },
+    profilePic: ImageSchema,
     address: {
       type: [AddressSchema],
     },
