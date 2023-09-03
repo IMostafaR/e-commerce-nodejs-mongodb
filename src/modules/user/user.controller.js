@@ -3,7 +3,7 @@ import { User } from "../../../database/models/user.model.js";
 import { emailSender } from "../../utils/email/sendEmail.js";
 import { AppError } from "../../utils/error/appError.js";
 import { catchAsyncError } from "../../utils/error/asyncError.js";
-import { pass } from "../../utils/password/passwordHashing.js";
+import * as pass from "../../utils/password/passwordHashing.js";
 import Jwt from "jsonwebtoken";
 import crypto from "crypto";
 
