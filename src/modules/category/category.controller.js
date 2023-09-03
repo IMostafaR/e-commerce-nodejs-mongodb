@@ -83,7 +83,7 @@ const getAll = catchAsyncError(async (req, res, next) => {
 });
 
 /**
- * Get a specific category with its id from DB
+ * Get a specific category by its id from DB
  */
 const getById = catchAsyncError(async (req, res, next) => {
   const { id } = req.params;
