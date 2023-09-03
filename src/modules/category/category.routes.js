@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { category } from "./category.controller.js";
+import * as category from "./category.controller.js";
 import {
   uploadFileCloud,
   fileValidation,
@@ -7,18 +7,20 @@ import {
 
 export const categoryRouter = Router();
 
-// add category
-
+/**
+ * create new category route
+ */
 categoryRouter.post(
   "/",
   uploadFileCloud({
     fileType: fileValidation.image,
   }).single("image"),
-  category.add
+  category.create
 );
 
-// update category
-
+/**
+ * update existing category route
+ */
 categoryRouter.put(
   "/",
   uploadFileCloud({
