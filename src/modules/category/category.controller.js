@@ -65,4 +65,17 @@ const update = catchAsyncError(async (req, res, next) => {
   });
 });
 
-export { create, update };
+/**
+ * Get all categories from DB
+ */
+const getAll = catchAsyncError(async (req, res, next) => {
+  const categories = await Category.find({});
+
+  res.status(201).json({
+    status: "success",
+    message: `${categories.length} category has been found in the DB.`,
+    data: categories,
+  });
+});
+
+export { create, update, getAll };

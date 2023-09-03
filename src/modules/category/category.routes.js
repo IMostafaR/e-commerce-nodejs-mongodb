@@ -28,3 +28,8 @@ categoryRouter.put(
   }).single("image"),
   category.update
 );
+
+/**
+ * Get all categories from DB
+ */
+categoryRouter.get("/", category.getAll);
