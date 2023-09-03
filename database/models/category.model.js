@@ -5,8 +5,11 @@ const CategorySchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      unique: [true, "Category name is required"],
-      required: true,
+      unique: [
+        true,
+        "There's already a category with this same name in the database",
+      ],
+      required: [true, "Category name is required"],
       trim: true,
       minLength: [2, "Category name is too short"],
     },
