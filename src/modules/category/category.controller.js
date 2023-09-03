@@ -73,9 +73,25 @@ const getAll = catchAsyncError(async (req, res, next) => {
 
   res.status(201).json({
     status: "success",
-    message: `${categories.length} category has been found in the DB.`,
     data: categories,
   });
 });
 
-export { create, update, getAll };
+/**
+ * Get a specific category by its id from DB
+ */
+const getById = catchAsyncError(async (req, res, next) => {
+  const { id } = req.params;
+  const category = await Category.findById(id);
+
+  category &&
+    res.status(201).json({
+      status: "success",
+      data: category,
+    });
+
+  next(new AppError("No such category id exist in the DB", 404));
+  console.log(!category);
+});
+
+export { create, update, getAll, getById };

@@ -33,3 +33,8 @@ categoryRouter.put(
  * Get all categories from DB
  */
 categoryRouter.get("/", category.getAll);
+
+/**
+ * Get a specific category with its id from DB
+ */
+categoryRouter.get("/:id", category.getById);
