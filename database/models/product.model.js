@@ -5,13 +5,19 @@ const ProductSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      unique: true,
-      required: true,
+      unique: [
+        true,
+        "There's already a product with this name in the database",
+      ],
+      required: [true, "Product name is required"],
+      trim: true,
+      minLength: [2, "Product name is too short"],
       trim: true,
     },
     slug: {
       type: String,
       lowercase: true,
+      required: true,
     },
     mainImage: ImageSchema,
 
@@ -34,6 +40,11 @@ const ProductSchema = new mongoose.Schema(
       min: 0,
     },
     priceAfterDiscount: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+    quantity: {
       type: Number,
       default: 0,
       min: 0,
