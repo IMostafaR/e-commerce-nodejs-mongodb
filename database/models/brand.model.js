@@ -5,9 +5,10 @@ const BrandSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      unique: true,
-      required: true,
+      unique: [true, "There's already a brand with this name in the database"],
+      required: [true, "Brand name is required"],
       trim: true,
+      minLength: [2, "Brand name is too short"],
     },
     slug: {
       type: String,
