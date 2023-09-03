@@ -6,7 +6,7 @@ const SubcategorySchema = new mongoose.Schema(
       type: String,
       unique: [
         true,
-        "There's already a subcategory with this same name in the database",
+        "There's already a subcategory with this name in the database",
       ],
       required: [true, "Subcategory name is required"],
       trim: true,
