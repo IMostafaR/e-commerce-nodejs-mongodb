@@ -71,6 +71,11 @@ const update = catchAsyncError(async (req, res, next) => {
 const getAll = catchAsyncError(async (req, res, next) => {
   const categories = await Category.find({});
 
+  if (!categories)
+    return next(
+      new AppError("There's no categories added to the DB yet.", 404)
+    );
+
   res.status(201).json({
     status: "success",
     data: categories,
@@ -78,20 +83,19 @@ const getAll = catchAsyncError(async (req, res, next) => {
 });
 
 /**
- * Get a specific category by its id from DB
+ * Get a specific category with its id from DB
  */
 const getById = catchAsyncError(async (req, res, next) => {
   const { id } = req.params;
   const category = await Category.findById(id);
 
-  category &&
-    res.status(201).json({
-      status: "success",
-      data: category,
-    });
+  if (!category)
+    return next(new AppError("No such category id exist in the DB", 404));
 
-  next(new AppError("No such category id exist in the DB", 404));
-  console.log(!category);
+  res.status(201).json({
+    status: "success",
+    data: category,
+  });
 });
 
 export { create, update, getAll, getById };
