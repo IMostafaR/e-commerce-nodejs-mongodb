@@ -119,4 +119,4 @@ const deleteOne = catchAsyncError(async (req, res, next) => {
   });
 });
 
-export { create, update, getAll, getById, deleteOne };
+export { create, update, getAll, getOne, deleteOne };

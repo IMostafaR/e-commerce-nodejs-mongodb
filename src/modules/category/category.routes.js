@@ -37,7 +37,7 @@ categoryRouter.get("/", category.getAll);
 /**
  * Get a specific category with its id from DB
  */
-categoryRouter.get("/:id", category.getById);
+categoryRouter.get("/:id", category.getOne);
 
 /**
  * Delete a specific category by its id from DB
