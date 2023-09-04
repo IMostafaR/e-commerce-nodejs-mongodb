@@ -49,7 +49,8 @@ const update = catchAsyncError(async (req, res, next) => {
       new AppError(`Sorry, the category with id ${id}  cannot be found`, 404)
     );
   }
-
+  // TODO: update category name and slug
+  // TODO: when updating category name and slug, you should also update folders names in clouninary
   const { secure_url } = await cloudinary.uploader.upload(req.file.path, {
     public_id: existingCategory.image.public_id,
   });
