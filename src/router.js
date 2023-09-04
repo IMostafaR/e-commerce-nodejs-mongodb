@@ -6,12 +6,12 @@ import { AppError } from "./utils/error/appError.js";
 import morgan from "morgan";
 
 export const router = (app, express) => {
-  //   process.on("unhandledRejection", (error) => {
-  //     console.error("Error: ", error);
-  //   });
-  //   process.on("uncaughtException", (error) => {
-  //     console.error("Error: ", error);
-  //   });
+  process.on("unhandledRejection", (error) => {
+    console.error("Error: ", error);
+  });
+  process.on("uncaughtException", (error) => {
+    console.error("Error: ", error);
+  });
 
   db();
   app.use(express.json());
