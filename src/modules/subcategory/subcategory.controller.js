@@ -56,4 +56,21 @@ const update = catchAsyncError(async (req, res, next) => {
   });
 });
 
-export { create, update };
+/**
+ * Get all subcategories from DB
+ */
+const getAll = catchAsyncError(async (req, res, next) => {
+  const subcategories = await Subcategory.find({});
+
+  if (!subcategories)
+    return next(
+      new AppError("There's not subcategories added to the DB yet", 404)
+    );
+
+  res.status(201).json({
+    status: "success",
+    data: subcategories,
+  });
+});
+
+export { create, update, getAll };
