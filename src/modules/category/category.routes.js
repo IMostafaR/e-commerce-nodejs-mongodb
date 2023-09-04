@@ -7,39 +7,38 @@ import {
 
 export const categoryRouter = Router();
 
-/**
- * create new category route
- */
-categoryRouter.post(
-  "/",
-  uploadFileCloud({
-    fileType: fileValidation.image,
-  }).single("image"),
-  category.create
-);
+categoryRouter
+  .route("/")
+  /**
+   * Get all categories from DB
+   */
+  .get(category.getAll)
+  /**
+   * create new category route
+   */
+  .post(
+    uploadFileCloud({
+      fileType: fileValidation.image,
+    }).single("image"),
+    category.create
+  );
 
-/**
- * update existing category route
- */
-categoryRouter.put(
-  "/:id",
-  uploadFileCloud({
-    fileType: fileValidation.image,
-  }).single("image"),
-  category.update
-);
-
-/**
- * Get all categories from DB
- */
-categoryRouter.get("/", category.getAll);
-
-/**
- * Get a specific category with its id from DB
- */
-categoryRouter.get("/:id", category.getOne);
-
-/**
- * Delete a specific category by its id from DB
- */
-categoryRouter.delete("/:id", category.deleteOne);
+categoryRouter
+  .route("/:id")
+  /**
+   * Get a specific category with its id from DB
+   */
+  .get(category.getOne)
+  /**
+   * update existing category route
+   */
+  .put(
+    uploadFileCloud({
+      fileType: fileValidation.image,
+    }).single("image"),
+    category.update
+  )
+  /**
+   * Delete a specific category by its id from DB
+   */
+  .delete(category.deleteOne);
