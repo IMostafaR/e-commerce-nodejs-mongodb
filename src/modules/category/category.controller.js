@@ -90,7 +90,9 @@ const getById = catchAsyncError(async (req, res, next) => {
   const category = await Category.findById(id);
 
   if (!category)
-    return next(new AppError("No such category id exist in the DB", 404));
+    return next(
+      new AppError("No such category with this id exist in the DB", 404)
+    );
 
   res.status(201).json({
     status: "success",
