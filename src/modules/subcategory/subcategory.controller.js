@@ -25,4 +25,35 @@ const create = catchAsyncError(async (req, res, next) => {
   });
 });
 
-export { create };
+/**
+ * update existing subcategory
+ */
+const update = catchAsyncError(async (req, res, next) => {
+  const { id } = req.params;
+  const { name, category } = req.body;
+
+  const existingSubcategory = await Subcategory.findById(id);
+
+  if (!existingSubcategory)
+    return next(
+      new AppError(`Sorry, the subcategory with id ${id} cannot be found`, 404)
+    );
+
+  if (name) {
+    const slug = slugify(name);
+    existingSubcategory.name = name;
+    existingSubcategory.slug = slug;
+  }
+
+  if (category) existingSubcategory.category = category;
+
+  const updatedSubcategory = await existingSubcategory.save();
+
+  res.status(201).json({
+    status: "success",
+    message: "Subcategory updated successfully",
+    data: updatedSubcategory,
+  });
+});
+
+export { create, update };
