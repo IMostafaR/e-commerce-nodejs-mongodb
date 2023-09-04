@@ -46,7 +46,7 @@ const update = catchAsyncError(async (req, res, next) => {
 
   if (!existingCategory) {
     return next(
-      new AppError(`Sorry, the ${name} category cannot be found`, 404)
+      new AppError(`Sorry, the category with id ${id}  cannot be found`, 404)
     );
   }
 
