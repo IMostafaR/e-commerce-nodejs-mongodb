@@ -98,4 +98,23 @@ const getById = catchAsyncError(async (req, res, next) => {
   });
 });
 
-export { create, update, getAll, getById };
+/**
+ * Delete a specific category by its id from DB
+ */
+const deleteOne = catchAsyncError(async (req, res, next) => {
+  const { id } = req.params;
+
+  const deletedCategory = await Category.findByIdAndDelete(id);
+
+  if (!deletedCategory)
+    return next(
+      new AppError("No such category with this id exist in the DB", 404)
+    );
+
+  res.status(201).json({
+    status: "success",
+    message: `${deletedCategory.name} category successfully deleted`,
+  });
+});
+
+export { create, update, getAll, getById, deleteOne };
