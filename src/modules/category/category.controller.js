@@ -92,7 +92,7 @@ const getOne = catchAsyncError(async (req, res, next) => {
 
   if (!category)
     return next(
-      new AppError("No such category with this id exist in the DB", 404)
+      new AppError("No such category with this id exists in the DB", 404)
     );
 
   res.status(201).json({
@@ -111,7 +111,7 @@ const deleteOne = catchAsyncError(async (req, res, next) => {
 
   if (!deletedCategory)
     return next(
-      new AppError("No such category with this id exist in the DB", 404)
+      new AppError("No such category with this id exists in the DB", 404)
     );
 
   res.status(201).json({
