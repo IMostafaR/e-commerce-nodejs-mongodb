@@ -22,7 +22,7 @@ categoryRouter.post(
  * update existing category route
  */
 categoryRouter.put(
-  "/",
+  "/:id",
   uploadFileCloud({
     fileType: fileValidation.image,
   }).single("image"),

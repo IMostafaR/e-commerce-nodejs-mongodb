@@ -41,7 +41,7 @@ const create = catchAsyncError(async (req, res, next) => {
  * update existing category
  */
 const update = catchAsyncError(async (req, res, next) => {
-  const { id } = req.body;
+  const { id } = req.params;
   const existingCategory = await Category.findById(id);
 
   if (!existingCategory) {
