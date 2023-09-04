@@ -73,4 +73,22 @@ const getAll = catchAsyncError(async (req, res, next) => {
   });
 });
 
-export { create, update, getAll };
+/**
+ * Get a specific subcategory by its id from DB
+ */
+const getOne = catchAsyncError(async (req, res, next) => {
+  const { id } = req.params;
+  const subcategory = await Subcategory.findById(id);
+
+  if (!subcategory)
+    return next(
+      new AppError("No such subcategory with this id exists in the DB", 404)
+    );
+
+  res.status(201).json({
+    status: "success",
+    data: subcategory,
+  });
+});
+
+export { create, update, getAll, getOne };

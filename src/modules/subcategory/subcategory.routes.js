@@ -5,4 +5,8 @@ export const subcategoryRouter = Router();
 
 subcategoryRouter.route("/").get(subcategory.getAll).post(subcategory.create);
 
-subcategoryRouter.route("/:id").get().put(subcategory.update).delete();
+subcategoryRouter
+  .route("/:id")
+  .get(subcategory.getOne)
+  .put(subcategory.update)
+  .delete();
