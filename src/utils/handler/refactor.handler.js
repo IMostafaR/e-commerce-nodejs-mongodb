@@ -35,6 +35,37 @@ const createOne = (model) => {
   });
 };
 
+const updateOne = (model) => {
+  return catchAsyncError(async (req, res, next) => {
+    const { id } = req.params;
+    const existingDoc = await model.findById(id);
+
+    if (!existingDoc) {
+      return next(
+        new AppError(
+          `Sorry, the ${model.modelName} with id ${id}  cannot be found`,
+          404
+        )
+      );
+    }
+    // TODO: update name and slug
+    // TODO: when updating name and slug, you should also update folders names in clouninary
+    const { secure_url } = await cloudinary.uploader.upload(req.file.path, {
+      public_id: existingDoc.image.public_id,
+    });
+
+    existingDoc.image.secure_url = secure_url;
+
+    const updatedDoc = await existingDoc.save();
+
+    res.status(200).json({
+      status: "success",
+      message: `${model.modelName} image updated successfully`,
+      data: updatedDoc,
+    });
+  });
+};
+
 const handleAll = (model) => {
   return catchAsyncError(async (req, res, next) => {
     const queryObj = {};
@@ -98,4 +129,4 @@ const handleOne = (model) => {
   });
 };
 
-export { createOne, handleAll, handleOne };
+export { createOne, updateOne, handleAll, handleOne };
