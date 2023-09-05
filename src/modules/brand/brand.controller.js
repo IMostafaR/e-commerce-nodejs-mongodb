@@ -66,7 +66,7 @@ const update = catchAsyncError(async (req, res, next) => {
 });
 
 /**
- * Get all categories from DB
+ * Get all brands from DB
  */
 const getAll = catchAsyncError(async (req, res, next) => {
   const brands = await Brand.find({});
