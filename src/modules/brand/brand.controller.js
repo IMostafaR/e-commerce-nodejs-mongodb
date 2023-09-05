@@ -100,7 +100,7 @@ const getOne = catchAsyncError(async (req, res, next) => {
 });
 
 /**
- * Delete a specific category by its id from DB
+ * Delete a specific brand by its id from DB
  */
 const deleteOne = catchAsyncError(async (req, res, next) => {
   const { id } = req.params;
@@ -114,7 +114,7 @@ const deleteOne = catchAsyncError(async (req, res, next) => {
 
   res.status(200).json({
     status: "success",
-    message: `${deletedBrand.name} category successfully deleted`,
+    message: `${deletedBrand.name} brand successfully deleted`,
   });
 });
 
