@@ -14,7 +14,7 @@ const BrandSchema = new mongoose.Schema(
       type: String,
       lowercase: true,
     },
-    logo: { type: ImageSchema, required: [true, "Brand logo is required"] },
+    image: { type: ImageSchema, required: [true, "Brand logo is required"] },
   },
   {
     timestamps: true,
