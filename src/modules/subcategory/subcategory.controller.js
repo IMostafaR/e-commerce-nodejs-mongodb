@@ -94,7 +94,7 @@ const getOneSubcategory = getOne(Subcategory, "Subcategory");
 /**
  * Delete a specific subcategory by its id from DB
  */
-const deleteOneSubcategory = deleteOne(Subcategory);
+const deleteOneSubcategory = deleteOne(Subcategory, "Subcategory");
 
 export {
   createSubcategory,

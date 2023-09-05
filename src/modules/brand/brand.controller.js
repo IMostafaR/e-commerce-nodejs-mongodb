@@ -89,6 +89,6 @@ const getOneBrand = getOne(Brand, "Brand");
 /**
  * Delete a specific brand by its id from DB
  */
-const deleteOneBrand = deleteOne(Brand);
+const deleteOneBrand = deleteOne(Brand, "Brand");
 
 export { createBrand, updateBrand, getAllBrands, getOneBrand, deleteOneBrand };

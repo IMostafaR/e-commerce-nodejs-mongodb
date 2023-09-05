@@ -16,13 +16,14 @@ const getOne = (model, docName) => {
   });
 };
 
-const deleteOne = (model) => {
+const deleteOne = (model, docName) => {
   return catchAsyncError(async (req, res, next) => {
     const { id } = req.params;
 
     const deletedDoc = await model.findByIdAndDelete(id);
 
-    if (!deletedDoc) return next(new AppError(`${id} cannot be found`, 404));
+    if (!deletedDoc)
+      return next(new AppError(`${docName} with ID ${id} not found`, 404));
 
     res.status(200).json({
       status: "success",

@@ -92,7 +92,7 @@ const getOneCategory = getOne(Category, "Category");
 /**
  * Delete a specific category by its id from DB
  */
-const deleteOneCategory = deleteOne(Category);
+const deleteOneCategory = deleteOne(Category, "Category");
 
 export {
   createCategory,
