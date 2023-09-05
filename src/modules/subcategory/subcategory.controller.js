@@ -66,9 +66,7 @@ const getAll = catchAsyncError(async (req, res, next) => {
   const subcategories = await Subcategory.find(queryObj);
 
   if (!subcategories.length)
-    return next(
-      new AppError("There's not subcategories added to the DB yet", 404)
-    );
+    return next(new AppError("Subcategories not found", 404));
 
   res.status(200).json({
     status: "success",
