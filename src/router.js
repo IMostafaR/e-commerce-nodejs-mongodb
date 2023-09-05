@@ -21,7 +21,7 @@ export const router = (app, express) => {
   app.use("/api/v1/user", userRouter);
   app.use("/api/v1/categories", categoryRouter);
   app.use("/api/v1/subcategories", subcategoryRouter);
-  app.use("/api/v1/brand", brandRouter);
+  app.use("/api/v1/brands", brandRouter);
   app.use("/uploads", express.static("uploads"));
   app.all("*", (req, res, next) => {
     next(new AppError(`invalid routing ${req.originalUrl}`, 404));
