@@ -17,9 +17,9 @@ brandRouter
 
 brandRouter
   .route("/:id")
-  .get()
+  .get(brand.getOne)
   .put(
     uploadFileCloud({ fileType: fileValidation.image }).single("logo"),
     brand.update
   )
-  .delete();
+  .delete(brand.deleteOne);

@@ -80,4 +80,42 @@ const getAll = catchAsyncError(async (req, res, next) => {
   });
 });
 
-export { create, update, getAll };
+/**
+ * Get a specific brand by its id from DB
+ */
+const getOne = catchAsyncError(async (req, res, next) => {
+  const { id } = req.params;
+
+  const brand = await Brand.findById(id);
+
+  if (!brand)
+    return next(
+      new AppError("No such brand with this id exists in the DB", 404)
+    );
+
+  res.status(200).json({
+    status: "success",
+    data: brand,
+  });
+});
+
+/**
+ * Delete a specific category by its id from DB
+ */
+const deleteOne = catchAsyncError(async (req, res, next) => {
+  const { id } = req.params;
+
+  const deletedBrand = await Brand.findByIdAndDelete(id);
+
+  if (!deletedBrand)
+    return next(
+      new AppError("No such brand with this id exists in the DB", 404)
+    );
+
+  res.status(200).json({
+    status: "success",
+    message: `${deletedBrand.name} category successfully deleted`,
+  });
+});
+
+export { create, update, getAll, getOne, deleteOne };
