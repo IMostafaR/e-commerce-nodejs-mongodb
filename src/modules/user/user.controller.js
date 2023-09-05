@@ -106,7 +106,7 @@ const verifyEmail = catchAsyncError(async (req, res, next) => {
     await existingUser.save();
 
     // Send successful response
-    res.status(201).json({
+    res.status(200).json({
       status: "success",
       message: "Email successfully verified",
       data: existingUser,
@@ -149,7 +149,7 @@ const resendVerificationEmail = catchAsyncError(async (req, res, next) => {
       });
 
       // Send successful response
-      res.status(201).json({
+      res.status(200).json({
         status: "success",
         message: `New email sent to ${decoded.email}`,
       });
@@ -209,7 +209,7 @@ const login = catchAsyncError(async (req, res, next) => {
   );
 
   // Send successful response
-  res.status(201).json({
+  res.status(200).json({
     status: "success",
     message: `Welcome ${user.firstName}`,
     idToken,
@@ -228,7 +228,7 @@ const logout = catchAsyncError(async (req, res, next) => {
   user.jwtSecretKey = crypto.randomBytes(32).toString("hex");
   await user.save();
 
-  res.status(201).json({
+  res.status(200).json({
     status: "success",
     message: `${user.email} logged out successfully`,
   });
@@ -262,7 +262,7 @@ const resetPassCode = catchAsyncError(async (req, res, next) => {
     html,
   });
 
-  res.status(201).json({
+  res.status(200).json({
     status: "success",
     message: `Reset code has been sent to ${user.email}.`,
   });
@@ -290,7 +290,7 @@ const resetPassword = catchAsyncError(async (req, res, next) => {
     { password: hashedPassword, jwtSecretKey, $unset: { resetPassCode: 1 } }
   );
 
-  return res.status(201).json({
+  return res.status(200).json({
     status: "success",
     message: `Your password has been successfully reset. Please try to login`,
   });

@@ -59,7 +59,7 @@ const update = catchAsyncError(async (req, res, next) => {
 
   const updatedCategory = await existingCategory.save();
 
-  res.status(201).json({
+  res.status(200).json({
     status: "success",
     message: "Category image updated successfully",
     data: updatedCategory,
@@ -77,7 +77,7 @@ const getAll = catchAsyncError(async (req, res, next) => {
       new AppError("There's no categories added to the DB yet.", 404)
     );
 
-  res.status(201).json({
+  res.status(200).json({
     status: "success",
     data: categories,
   });
@@ -95,7 +95,7 @@ const getOne = catchAsyncError(async (req, res, next) => {
       new AppError("No such category with this id exists in the DB", 404)
     );
 
-  res.status(201).json({
+  res.status(200).json({
     status: "success",
     data: category,
   });
@@ -114,7 +114,7 @@ const deleteOne = catchAsyncError(async (req, res, next) => {
       new AppError("No such category with this id exists in the DB", 404)
     );
 
-  res.status(201).json({
+  res.status(200).json({
     status: "success",
     message: `${deletedCategory.name} category successfully deleted`,
   });

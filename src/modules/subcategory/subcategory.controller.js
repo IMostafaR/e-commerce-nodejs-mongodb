@@ -49,7 +49,7 @@ const update = catchAsyncError(async (req, res, next) => {
 
   const updatedSubcategory = await existingSubcategory.save();
 
-  res.status(201).json({
+  res.status(200).json({
     status: "success",
     message: "Subcategory updated successfully",
     data: updatedSubcategory,
@@ -67,7 +67,7 @@ const getAll = catchAsyncError(async (req, res, next) => {
       new AppError("There's not subcategories added to the DB yet", 404)
     );
 
-  res.status(201).json({
+  res.status(200).json({
     status: "success",
     data: subcategories,
   });
@@ -85,7 +85,7 @@ const getOne = catchAsyncError(async (req, res, next) => {
       new AppError("No such subcategory with this id exists in the DB", 404)
     );
 
-  res.status(201).json({
+  res.status(200).json({
     status: "success",
     data: subcategory,
   });
@@ -103,7 +103,7 @@ const deleteOne = catchAsyncError(async (req, res, next) => {
       new AppError("No such subcategory with this id exists in the DB", 404)
     );
 
-  res.status(201).json({
+  res.status(200).json({
     status: "success",
     message: `${deletedSubcategory.name} subcategory successfully deleted`,
   });
