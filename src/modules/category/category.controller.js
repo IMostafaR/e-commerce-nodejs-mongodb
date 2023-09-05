@@ -7,7 +7,7 @@ import cloudinary from "../../utils/cloud/cloud.js";
 /**
  * create new category
  */
-const create = catchAsyncError(async (req, res, next) => {
+const createCategory = catchAsyncError(async (req, res, next) => {
   const { name } = req.body;
 
   const existingCategory = await Category.findOne({ name });
@@ -40,7 +40,7 @@ const create = catchAsyncError(async (req, res, next) => {
 /**
  * update existing category
  */
-const update = catchAsyncError(async (req, res, next) => {
+const updateCategory = catchAsyncError(async (req, res, next) => {
   const { id } = req.params;
   const existingCategory = await Category.findById(id);
 
@@ -69,7 +69,7 @@ const update = catchAsyncError(async (req, res, next) => {
 /**
  * Get all categories from DB
  */
-const getAll = catchAsyncError(async (req, res, next) => {
+const getAllCategories = catchAsyncError(async (req, res, next) => {
   const categories = await Category.find({});
 
   if (!categories.length)
@@ -86,7 +86,7 @@ const getAll = catchAsyncError(async (req, res, next) => {
 /**
  * Get a specific category by its id from DB
  */
-const getOne = catchAsyncError(async (req, res, next) => {
+const getOneCategory = catchAsyncError(async (req, res, next) => {
   const { id } = req.params;
   const category = await Category.findById(id);
 
@@ -104,7 +104,7 @@ const getOne = catchAsyncError(async (req, res, next) => {
 /**
  * Delete a specific category by its id from DB
  */
-const deleteOne = catchAsyncError(async (req, res, next) => {
+const deleteOneCategory = catchAsyncError(async (req, res, next) => {
   const { id } = req.params;
 
   const deletedCategory = await Category.findByIdAndDelete(id);
@@ -120,4 +120,10 @@ const deleteOne = catchAsyncError(async (req, res, next) => {
   });
 });
 
-export { create, update, getAll, getOne, deleteOne };
+export {
+  createCategory,
+  updateCategory,
+  getAllCategories,
+  getOneCategory,
+  deleteOneCategory,
+};
