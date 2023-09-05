@@ -72,7 +72,7 @@ const update = catchAsyncError(async (req, res, next) => {
 const getAll = catchAsyncError(async (req, res, next) => {
   const categories = await Category.find({});
 
-  if (!categories)
+  if (!categories.length)
     return next(
       new AppError("There's no categories added to the DB yet.", 404)
     );
