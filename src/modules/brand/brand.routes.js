@@ -9,7 +9,7 @@ export const brandRouter = Router();
 
 brandRouter
   .route("/")
-  .get()
+  .get(brand.getAll)
   .post(
     uploadFileCloud({ fileType: fileValidation.image }).single("logo"),
     brand.create

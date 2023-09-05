@@ -65,4 +65,19 @@ const update = catchAsyncError(async (req, res, next) => {
   });
 });
 
-export { create, update };
+/**
+ * Get all categories from DB
+ */
+const getAll = catchAsyncError(async (req, res, next) => {
+  const brands = await Brand.find({});
+
+  if (!brands.length)
+    return next(new AppError("There's no brands added to the DB yet.", 404));
+
+  res.status(200).json({
+    status: "success",
+    data: brands,
+  });
+});
+
+export { create, update, getAll };
