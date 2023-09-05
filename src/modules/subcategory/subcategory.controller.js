@@ -3,7 +3,7 @@ import { Subcategory } from "../../../database/models/subCategory.model.js";
 import { AppError } from "../../utils/error/appError.js";
 import { catchAsyncError } from "../../utils/error/asyncError.js";
 import { Category } from "../../../database/models/category.model.js";
-import { deleteOne, getOne } from "../../utils/handler/refactor.handler.js";
+import { handleOne } from "../../utils/handler/refactor.handler.js";
 
 /**
  * create new subcategory
@@ -89,12 +89,12 @@ const getAllSubcategories = catchAsyncError(async (req, res, next) => {
 /**
  * Get a specific subcategory by its id from DB
  */
-const getOneSubcategory = getOne(Subcategory, "Subcategory");
+const getOneSubcategory = handleOne(Subcategory);
 
 /**
  * Delete a specific subcategory by its id from DB
  */
-const deleteOneSubcategory = deleteOne(Subcategory, "Subcategory");
+const deleteOneSubcategory = handleOne(Subcategory);
 
 export {
   createSubcategory,

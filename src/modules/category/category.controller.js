@@ -3,7 +3,7 @@ import { Category } from "../../../database/models/category.model.js";
 import { catchAsyncError } from "../../utils/error/asyncError.js";
 import { AppError } from "../../utils/error/appError.js";
 import cloudinary from "../../utils/cloud/cloud.js";
-import { deleteOne, getOne } from "../../utils/handler/refactor.handler.js";
+import { handleOne } from "../../utils/handler/refactor.handler.js";
 
 /**
  * create new category
@@ -87,12 +87,12 @@ const getAllCategories = catchAsyncError(async (req, res, next) => {
 /**
  * Get a specific category by its id from DB
  */
-const getOneCategory = getOne(Category, "Category");
+const getOneCategory = handleOne(Category);
 
 /**
  * Delete a specific category by its id from DB
  */
-const deleteOneCategory = deleteOne(Category, "Category");
+const deleteOneCategory = handleOne(Category);
 
 export {
   createCategory,

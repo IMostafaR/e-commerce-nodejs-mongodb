@@ -3,7 +3,7 @@ import { Brand } from "../../../database/models/brand.model.js";
 import { AppError } from "../../utils/error/appError.js";
 import { catchAsyncError } from "../../utils/error/asyncError.js";
 import cloudinary from "../../utils/cloud/cloud.js";
-import { deleteOne, getOne } from "../../utils/handler/refactor.handler.js";
+import { handleOne } from "../../utils/handler/refactor.handler.js";
 
 /**
  * create new brnad
@@ -84,11 +84,11 @@ const getAllBrands = catchAsyncError(async (req, res, next) => {
 /**
  * Get a specific brand by its id from DB
  */
-const getOneBrand = getOne(Brand, "Brand");
+const getOneBrand = handleOne(Brand);
 
 /**
  * Delete a specific brand by its id from DB
  */
-const deleteOneBrand = deleteOne(Brand, "Brand");
+const deleteOneBrand = handleOne(Brand);
 
 export { createBrand, updateBrand, getAllBrands, getOneBrand, deleteOneBrand };
