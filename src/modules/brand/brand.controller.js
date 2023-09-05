@@ -3,6 +3,7 @@ import { Brand } from "../../../database/models/brand.model.js";
 import { AppError } from "../../utils/error/appError.js";
 import { catchAsyncError } from "../../utils/error/asyncError.js";
 import cloudinary from "../../utils/cloud/cloud.js";
+import { deleteOne } from "../../utils/handler/refactor.handler.js";
 
 /**
  * create new brnad
@@ -102,20 +103,6 @@ const getOneBrand = catchAsyncError(async (req, res, next) => {
 /**
  * Delete a specific brand by its id from DB
  */
-const deleteOneBrand = catchAsyncError(async (req, res, next) => {
-  const { id } = req.params;
-
-  const deletedBrand = await Brand.findByIdAndDelete(id);
-
-  if (!deletedBrand)
-    return next(
-      new AppError("No such brand with this id exists in the DB", 404)
-    );
-
-  res.status(200).json({
-    status: "success",
-    message: `${deletedBrand.name} brand successfully deleted`,
-  });
-});
+const deleteOneBrand = deleteOne(Brand);
 
 export { createBrand, updateBrand, getAllBrands, getOneBrand, deleteOneBrand };
