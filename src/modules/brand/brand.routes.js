@@ -9,17 +9,17 @@ export const brandRouter = Router();
 
 brandRouter
   .route("/")
-  .get(brand.getAll)
+  .get(brand.getAllBrands)
   .post(
     uploadFileCloud({ fileType: fileValidation.image }).single("logo"),
-    brand.create
+    brand.createBrand
   );
 
 brandRouter
   .route("/:id")
-  .get(brand.getOne)
+  .get(brand.getOneBrand)
   .put(
     uploadFileCloud({ fileType: fileValidation.image }).single("logo"),
-    brand.update
+    brand.updateBrand
   )
-  .delete(brand.deleteOne);
+  .delete(brand.deleteOneBrand);
