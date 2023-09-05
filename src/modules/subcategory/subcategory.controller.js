@@ -2,6 +2,7 @@ import slugify from "slugify";
 import { Subcategory } from "../../../database/models/subCategory.model.js";
 import { AppError } from "../../utils/error/appError.js";
 import { catchAsyncError } from "../../utils/error/asyncError.js";
+import { Category } from "../../../database/models/category.model.js";
 
 /**
  * create new subcategory
@@ -66,7 +67,17 @@ const getAll = catchAsyncError(async (req, res, next) => {
   const subcategories = await Subcategory.find(queryObj);
 
   if (!subcategories.length)
-    return next(new AppError("Subcategories not found", 404));
+    return req.params && req.params.id
+      ? (await Category.findById(req.params.id))
+        ? next(
+            new AppError("Subcategories are not found for this category", 404)
+          )
+        : next(
+            new AppError("No such category with this id exists in the DB", 404)
+          )
+      : next(
+          new AppError("There's no subcategories added to the DB yet.", 404)
+        );
 
   res.status(200).json({
     status: "success",
