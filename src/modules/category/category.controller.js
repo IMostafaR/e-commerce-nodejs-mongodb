@@ -3,7 +3,7 @@ import { Category } from "../../../database/models/category.model.js";
 import { catchAsyncError } from "../../utils/error/asyncError.js";
 import { AppError } from "../../utils/error/appError.js";
 import cloudinary from "../../utils/cloud/cloud.js";
-import { handleOne } from "../../utils/handler/refactor.handler.js";
+import { handleAll, handleOne } from "../../utils/handler/refactor.handler.js";
 
 /**
  * create new category
@@ -70,19 +70,7 @@ const updateCategory = catchAsyncError(async (req, res, next) => {
 /**
  * Get all categories from DB
  */
-const getAllCategories = catchAsyncError(async (req, res, next) => {
-  const categories = await Category.find({});
-
-  if (!categories.length)
-    return next(
-      new AppError("There's no categories added to the DB yet.", 404)
-    );
-
-  res.status(200).json({
-    status: "success",
-    data: categories,
-  });
-});
+const getAllCategories = handleAll(Category);
 
 /**
  * Get a specific category by its id from DB

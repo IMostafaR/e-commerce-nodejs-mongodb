@@ -3,7 +3,7 @@ import { Subcategory } from "../../../database/models/subCategory.model.js";
 import { AppError } from "../../utils/error/appError.js";
 import { catchAsyncError } from "../../utils/error/asyncError.js";
 import { Category } from "../../../database/models/category.model.js";
-import { handleOne } from "../../utils/handler/refactor.handler.js";
+import { handleAll, handleOne } from "../../utils/handler/refactor.handler.js";
 
 /**
  * create new subcategory
@@ -61,30 +61,7 @@ const updateSubcategory = catchAsyncError(async (req, res, next) => {
 /**
  * Get all subcategories from DB or all subcategories of a category from DB
  */
-const getAllSubcategories = catchAsyncError(async (req, res, next) => {
-  const queryObj = {};
-  req.params && req.params.id ? (queryObj.category = req.params.id) : null;
-
-  const subcategories = await Subcategory.find(queryObj);
-
-  if (!subcategories.length)
-    return req.params && req.params.id
-      ? (await Category.findById(req.params.id))
-        ? next(
-            new AppError("Subcategories are not found for this category", 404)
-          )
-        : next(
-            new AppError("No such category with this id exists in the DB", 404)
-          )
-      : next(
-          new AppError("There's no subcategories added to the DB yet.", 404)
-        );
-
-  res.status(200).json({
-    status: "success",
-    data: subcategories,
-  });
-});
+const getAllSubcategories = handleAll(Subcategory);
 
 /**
  * Get a specific subcategory by its id from DB

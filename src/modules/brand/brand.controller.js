@@ -3,7 +3,7 @@ import { Brand } from "../../../database/models/brand.model.js";
 import { AppError } from "../../utils/error/appError.js";
 import { catchAsyncError } from "../../utils/error/asyncError.js";
 import cloudinary from "../../utils/cloud/cloud.js";
-import { handleOne } from "../../utils/handler/refactor.handler.js";
+import { handleAll, handleOne } from "../../utils/handler/refactor.handler.js";
 
 /**
  * create new brnad
@@ -69,17 +69,7 @@ const updateBrand = catchAsyncError(async (req, res, next) => {
 /**
  * Get all brands from DB
  */
-const getAllBrands = catchAsyncError(async (req, res, next) => {
-  const brands = await Brand.find({});
-
-  if (!brands.length)
-    return next(new AppError("There's no brands added to the DB yet.", 404));
-
-  res.status(200).json({
-    status: "success",
-    data: brands,
-  });
-});
+const getAllBrands = handleAll(Brand);
 
 /**
  * Get a specific brand by its id from DB
