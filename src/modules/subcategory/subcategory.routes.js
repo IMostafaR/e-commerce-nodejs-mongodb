@@ -3,10 +3,13 @@ import * as subcategory from "./subcategory.controller.js";
 
 export const subcategoryRouter = Router({ mergeParams: true });
 
-subcategoryRouter.route("/").get(subcategory.getAll).post(subcategory.create);
+subcategoryRouter
+  .route("/")
+  .get(subcategory.getAllSubcategories)
+  .post(subcategory.createSubcategory);
 
 subcategoryRouter
   .route("/:id")
-  .get(subcategory.getOne)
-  .put(subcategory.update)
-  .delete(subcategory.deleteOne);
+  .get(subcategory.getOneSubcategory)
+  .put(subcategory.updateSubcategory)
+  .delete(subcategory.deleteOneSubcategory);
