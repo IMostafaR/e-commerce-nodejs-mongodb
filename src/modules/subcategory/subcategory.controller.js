@@ -2,7 +2,6 @@ import slugify from "slugify";
 import { Subcategory } from "../../../database/models/subCategory.model.js";
 import { AppError } from "../../utils/error/appError.js";
 import { catchAsyncError } from "../../utils/error/asyncError.js";
-import { Category } from "../../../database/models/category.model.js";
 import { handleAll, handleOne } from "../../utils/handler/refactor.handler.js";
 
 /**
