@@ -8,7 +8,7 @@ import cloudinary from "../../utils/cloud/cloud.js";
  * create new brnad
  */
 
-const create = catchAsyncError(async (req, res, next) => {
+const createBrand = catchAsyncError(async (req, res, next) => {
   const { name } = req.body;
 
   const existingBrand = await Brand.findOne({ name });
@@ -39,7 +39,7 @@ const create = catchAsyncError(async (req, res, next) => {
 /**
  * update existing brand
  */
-const update = catchAsyncError(async (req, res, next) => {
+const updateBrand = catchAsyncError(async (req, res, next) => {
   const { id } = req.params;
   const existingBrand = await Brand.findById(id);
 
@@ -68,7 +68,7 @@ const update = catchAsyncError(async (req, res, next) => {
 /**
  * Get all brands from DB
  */
-const getAll = catchAsyncError(async (req, res, next) => {
+const getAllBrands = catchAsyncError(async (req, res, next) => {
   const brands = await Brand.find({});
 
   if (!brands.length)
@@ -83,7 +83,7 @@ const getAll = catchAsyncError(async (req, res, next) => {
 /**
  * Get a specific brand by its id from DB
  */
-const getOne = catchAsyncError(async (req, res, next) => {
+const getOneBrand = catchAsyncError(async (req, res, next) => {
   const { id } = req.params;
 
   const brand = await Brand.findById(id);
@@ -102,7 +102,7 @@ const getOne = catchAsyncError(async (req, res, next) => {
 /**
  * Delete a specific brand by its id from DB
  */
-const deleteOne = catchAsyncError(async (req, res, next) => {
+const deleteOneBrand = catchAsyncError(async (req, res, next) => {
   const { id } = req.params;
 
   const deletedBrand = await Brand.findByIdAndDelete(id);
@@ -118,4 +118,4 @@ const deleteOne = catchAsyncError(async (req, res, next) => {
   });
 });
 
-export { create, update, getAll, getOne, deleteOne };
+export { createBrand, updateBrand, getAllBrands, getOneBrand, deleteOneBrand };
