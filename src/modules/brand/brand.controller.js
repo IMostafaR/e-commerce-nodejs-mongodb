@@ -3,39 +3,17 @@ import { Brand } from "../../../database/models/brand.model.js";
 import { AppError } from "../../utils/error/appError.js";
 import { catchAsyncError } from "../../utils/error/asyncError.js";
 import cloudinary from "../../utils/cloud/cloud.js";
-import { handleAll, handleOne } from "../../utils/handler/refactor.handler.js";
+import {
+  createOne,
+  handleAll,
+  handleOne,
+} from "../../utils/handler/refactor.handler.js";
 
 /**
  * create new brnad
  */
 
-const createBrand = catchAsyncError(async (req, res, next) => {
-  const { name } = req.body;
-
-  const existingBrand = await Brand.findOne({ name });
-
-  if (existingBrand) return next(new AppError("Brand already exists", 404));
-
-  const slug = slugify(name);
-
-  const cloudUpload = await cloudinary.uploader.upload(req.file.path, {
-    folder: `E-commerce-40/brands/${slug}`,
-  });
-
-  const { secure_url, public_id } = cloudUpload;
-
-  const newBrand = await Brand.create({
-    name,
-    slug,
-    logo: { secure_url, public_id },
-  });
-
-  res.status(201).json({
-    status: "success",
-    message: "Brand added successfully",
-    data: newBrand,
-  });
-});
+const createBrand = createOne(Brand);
 
 /**
  * update existing brand

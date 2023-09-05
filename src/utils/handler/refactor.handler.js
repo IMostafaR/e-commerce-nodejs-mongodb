@@ -1,5 +1,39 @@
+import slugify from "slugify";
+import cloudinary from "../../utils/cloud/cloud.js";
 import { AppError } from "../error/appError.js";
 import { catchAsyncError } from "../error/asyncError.js";
+
+const createOne = (model) => {
+  return catchAsyncError(async (req, res, next) => {
+    const { name } = req.body;
+
+    const existingDoc = await model.findOne({ name });
+
+    if (existingDoc) {
+      return next(new AppError(`${model.modelName} already exists`, 409));
+    }
+
+    const slug = slugify(name);
+
+    const cloudUpload = await cloudinary.uploader.upload(req.file.path, {
+      folder: `E-commerce-40/${model.modelName}/${slug}`,
+    });
+
+    const { secure_url, public_id } = cloudUpload;
+
+    const newDoc = await model.create({
+      name,
+      slug,
+      image: { secure_url, public_id },
+    });
+
+    res.status(201).json({
+      status: "success",
+      message: `${model.modelName} added successfully`,
+      data: newDoc,
+    });
+  });
+};
 
 const handleAll = (model) => {
   return catchAsyncError(async (req, res, next) => {
@@ -64,4 +98,4 @@ const handleOne = (model) => {
   });
 };
 
-export { handleAll, handleOne };
+export { createOne, handleAll, handleOne };
