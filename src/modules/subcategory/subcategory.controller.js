@@ -91,4 +91,22 @@ const getOne = catchAsyncError(async (req, res, next) => {
   });
 });
 
-export { create, update, getAll, getOne };
+/**
+ * Delete a specific subcategory by its id from DB
+ */
+const deleteOne = catchAsyncError(async (req, res, next) => {
+  const { id } = req.params;
+  const deletedSubcategory = await Subcategory.findByIdAndDelete(id);
+
+  if (!deletedSubcategory)
+    return next(
+      new AppError("No such subcategory with this id exists in the DB", 404)
+    );
+
+  res.status(201).json({
+    status: "success",
+    message: `${deletedSubcategory.name} subcategory successfully deleted`,
+  });
+});
+
+export { create, update, getAll, getOne, deleteOne };

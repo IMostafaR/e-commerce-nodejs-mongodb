@@ -9,4 +9,4 @@ subcategoryRouter
   .route("/:id")
   .get(subcategory.getOne)
   .put(subcategory.update)
-  .delete();
+  .delete(subcategory.deleteOne);
