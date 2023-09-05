@@ -7,7 +7,7 @@ import { Category } from "../../../database/models/category.model.js";
 /**
  * create new subcategory
  */
-const create = catchAsyncError(async (req, res, next) => {
+const createSubcategory = catchAsyncError(async (req, res, next) => {
   const { name, category } = req.body;
 
   const existingSubcategory = await Subcategory.findOne({ name });
@@ -29,7 +29,7 @@ const create = catchAsyncError(async (req, res, next) => {
 /**
  * update existing subcategory
  */
-const update = catchAsyncError(async (req, res, next) => {
+const updateSubcategory = catchAsyncError(async (req, res, next) => {
   const { id } = req.params;
   const { name, category } = req.body;
 
@@ -60,7 +60,7 @@ const update = catchAsyncError(async (req, res, next) => {
 /**
  * Get all subcategories from DB or all subcategories of a category from DB
  */
-const getAll = catchAsyncError(async (req, res, next) => {
+const getAllSubcategories = catchAsyncError(async (req, res, next) => {
   const queryObj = {};
   req.params && req.params.id ? (queryObj.category = req.params.id) : null;
 
@@ -88,7 +88,7 @@ const getAll = catchAsyncError(async (req, res, next) => {
 /**
  * Get a specific subcategory by its id from DB
  */
-const getOne = catchAsyncError(async (req, res, next) => {
+const getOneSubcategory = catchAsyncError(async (req, res, next) => {
   const { id } = req.params;
   const subcategory = await Subcategory.findById(id);
 
@@ -106,7 +106,7 @@ const getOne = catchAsyncError(async (req, res, next) => {
 /**
  * Delete a specific subcategory by its id from DB
  */
-const deleteOne = catchAsyncError(async (req, res, next) => {
+const deleteOneSubcategory = catchAsyncError(async (req, res, next) => {
   const { id } = req.params;
   const deletedSubcategory = await Subcategory.findByIdAndDelete(id);
 
@@ -121,4 +121,10 @@ const deleteOne = catchAsyncError(async (req, res, next) => {
   });
 });
 
-export { create, update, getAll, getOne, deleteOne };
+export {
+  createSubcategory,
+  updateSubcategory,
+  getAllSubcategories,
+  getOneSubcategory,
+  deleteOneSubcategory,
+};
