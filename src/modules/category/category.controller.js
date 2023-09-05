@@ -3,7 +3,7 @@ import { Category } from "../../../database/models/category.model.js";
 import { catchAsyncError } from "../../utils/error/asyncError.js";
 import { AppError } from "../../utils/error/appError.js";
 import cloudinary from "../../utils/cloud/cloud.js";
-import { deleteOne } from "../../utils/handler/refactor.handler.js";
+import { deleteOne, getOne } from "../../utils/handler/refactor.handler.js";
 
 /**
  * create new category
@@ -87,20 +87,7 @@ const getAllCategories = catchAsyncError(async (req, res, next) => {
 /**
  * Get a specific category by its id from DB
  */
-const getOneCategory = catchAsyncError(async (req, res, next) => {
-  const { id } = req.params;
-  const category = await Category.findById(id);
-
-  if (!category)
-    return next(
-      new AppError("No such category with this id exists in the DB", 404)
-    );
-
-  res.status(200).json({
-    status: "success",
-    data: category,
-  });
-});
+const getOneCategory = getOne(Category, "Category");
 
 /**
  * Delete a specific category by its id from DB

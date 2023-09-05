@@ -3,7 +3,7 @@ import { Brand } from "../../../database/models/brand.model.js";
 import { AppError } from "../../utils/error/appError.js";
 import { catchAsyncError } from "../../utils/error/asyncError.js";
 import cloudinary from "../../utils/cloud/cloud.js";
-import { deleteOne } from "../../utils/handler/refactor.handler.js";
+import { deleteOne, getOne } from "../../utils/handler/refactor.handler.js";
 
 /**
  * create new brnad
@@ -84,21 +84,7 @@ const getAllBrands = catchAsyncError(async (req, res, next) => {
 /**
  * Get a specific brand by its id from DB
  */
-const getOneBrand = catchAsyncError(async (req, res, next) => {
-  const { id } = req.params;
-
-  const brand = await Brand.findById(id);
-
-  if (!brand)
-    return next(
-      new AppError("No such brand with this id exists in the DB", 404)
-    );
-
-  res.status(200).json({
-    status: "success",
-    data: brand,
-  });
-});
+const getOneBrand = getOne(Brand, "Brand");
 
 /**
  * Delete a specific brand by its id from DB

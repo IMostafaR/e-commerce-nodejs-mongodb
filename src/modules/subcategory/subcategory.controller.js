@@ -3,7 +3,7 @@ import { Subcategory } from "../../../database/models/subCategory.model.js";
 import { AppError } from "../../utils/error/appError.js";
 import { catchAsyncError } from "../../utils/error/asyncError.js";
 import { Category } from "../../../database/models/category.model.js";
-import { deleteOne } from "../../utils/handler/refactor.handler.js";
+import { deleteOne, getOne } from "../../utils/handler/refactor.handler.js";
 
 /**
  * create new subcategory
@@ -89,20 +89,7 @@ const getAllSubcategories = catchAsyncError(async (req, res, next) => {
 /**
  * Get a specific subcategory by its id from DB
  */
-const getOneSubcategory = catchAsyncError(async (req, res, next) => {
-  const { id } = req.params;
-  const subcategory = await Subcategory.findById(id);
-
-  if (!subcategory)
-    return next(
-      new AppError("No such subcategory with this id exists in the DB", 404)
-    );
-
-  res.status(200).json({
-    status: "success",
-    data: subcategory,
-  });
-});
+const getOneSubcategory = getOne(Subcategory, "Subcategory");
 
 /**
  * Delete a specific subcategory by its id from DB
