@@ -1,7 +1,7 @@
 import { Router } from "express";
 import * as subcategory from "./subcategory.controller.js";
 
-export const subcategoryRouter = Router();
+export const subcategoryRouter = Router({ mergeParams: true });
 
 subcategoryRouter.route("/").get(subcategory.getAll).post(subcategory.create);
 

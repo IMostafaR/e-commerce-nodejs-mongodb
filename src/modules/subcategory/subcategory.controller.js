@@ -57,12 +57,15 @@ const update = catchAsyncError(async (req, res, next) => {
 });
 
 /**
- * Get all subcategories from DB
+ * Get all subcategories from DB or all subcategories of a category from DB
  */
 const getAll = catchAsyncError(async (req, res, next) => {
-  const subcategories = await Subcategory.find({});
+  const queryObj = {};
+  req.params && req.params.id ? (queryObj.category = req.params.id) : null;
 
-  if (!subcategories)
+  const subcategories = await Subcategory.find(queryObj);
+
+  if (!subcategories.length)
     return next(
       new AppError("There's not subcategories added to the DB yet", 404)
     );

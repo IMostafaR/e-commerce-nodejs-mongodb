@@ -4,9 +4,14 @@ import {
   uploadFileCloud,
   fileValidation,
 } from "../../utils/upload/multerCloud.js";
+import { subcategoryRouter } from "../subcategory/subcategory.routes.js";
 
 export const categoryRouter = Router();
 
+// merge params
+categoryRouter.use("/:id/subcategories", subcategoryRouter);
+
+// category routes
 categoryRouter
   .route("/")
   .get(category.getAll)
