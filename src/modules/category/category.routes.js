@@ -14,21 +14,21 @@ categoryRouter.use("/:id/subcategories", subcategoryRouter);
 // category routes
 categoryRouter
   .route("/")
-  .get(category.getAll)
+  .get(category.getAllCategories)
   .post(
     uploadFileCloud({
       fileType: fileValidation.image,
     }).single("image"),
-    category.create
+    category.createCategory
   );
 
 categoryRouter
   .route("/:id")
-  .get(category.getOne)
+  .get(category.getOneCategory)
   .put(
     uploadFileCloud({
       fileType: fileValidation.image,
     }).single("image"),
-    category.update
+    category.updateCategory
   )
-  .delete(category.deleteOne);
+  .delete(category.deleteOneCategory);
