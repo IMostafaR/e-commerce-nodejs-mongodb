@@ -79,10 +79,18 @@ const updateOne = (model) => {
  */
 const handleAll = (model) => {
   return catchAsyncError(async (req, res, next) => {
+    const { page } = req.query; // for pagination
+    let skip; // for pagination
+    let limit; // for pagination
+
+    !page || page <= 0
+      ? ((limit = 0), (skip = limit))
+      : ((limit = 2), (skip = (page - 1) * limit)); // for pagination
+    console.log(skip);
     const queryObj = {};
     req.params && req.params.id ? (queryObj.category = req.params.id) : null;
 
-    const doc = await model.find(queryObj);
+    const doc = await model.find(queryObj).skip(skip).limit(limit); // for pagination
 
     if (!doc.length)
       return req.params && req.params.id
@@ -96,6 +104,8 @@ const handleAll = (model) => {
                 404
               )
             )
+        : page
+        ? next(new AppError(`Page not found`, 404))
         : next(
             new AppError(
               `There's no ${model.modelName} added to the DB yet.`,
@@ -105,6 +115,8 @@ const handleAll = (model) => {
 
     res.status(200).json({
       status: "success",
+      page, // for pagination
+      limit: doc.length, // for pagination
       data: doc,
     });
   });
