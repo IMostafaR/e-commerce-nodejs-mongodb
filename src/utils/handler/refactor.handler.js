@@ -116,7 +116,7 @@ const handleAll = (model) => {
     res.status(200).json({
       status: "success",
       page, // for pagination
-      limit: doc.length, // for pagination
+      limit, // for pagination
       data: doc,
     });
   });
