@@ -55,12 +55,12 @@ const createProduct = catchAsyncError(async (req, res, next) => {
 });
 
 /**
- * Get all categories from DB
+ * Get all products from DB
  */
 const getAllProducts = handleAll(Product);
 
 /**
- * Get a specific category by its id from DB
+ * Get a specific product by its id from DB
  */
 const getOneProduct = handleOne(Product);
 
