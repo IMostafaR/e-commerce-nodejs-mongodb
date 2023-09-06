@@ -2,6 +2,7 @@ import slugify from "slugify";
 import { catchAsyncError } from "../../utils/error/asyncError.js";
 import cloudinary from "../../utils/cloud/cloud.js";
 import { Product } from "../../../database/models/product.model.js";
+import { handleAll, handleOne } from "../../utils/handler/refactor.handler.js";
 
 /**
  * create new product
@@ -53,4 +54,19 @@ const createProduct = catchAsyncError(async (req, res, next) => {
   });
 });
 
-export { createProduct };
+/**
+ * Get all categories from DB
+ */
+const getAllProducts = handleAll(Product);
+
+/**
+ * Get a specific category by its id from DB
+ */
+const getOneProduct = handleOne(Product);
+
+/**
+ * Delete a specific product by its id from DB
+ */
+const deleteOneProduct = handleOne(Product);
+
+export { createProduct, getAllProducts, getOneProduct, deleteOneProduct };
