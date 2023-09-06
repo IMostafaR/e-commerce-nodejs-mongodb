@@ -5,10 +5,6 @@ const ProductSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      unique: [
-        true,
-        "There's already a product with this name in the database",
-      ],
       required: [true, "Product name is required"],
       trim: true,
       minLength: [2, "Product name is too short"],
