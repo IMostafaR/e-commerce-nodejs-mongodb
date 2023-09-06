@@ -19,7 +19,7 @@ const ProductSchema = new mongoose.Schema(
       lowercase: true,
       required: true,
     },
-    mainImage: ImageSchema,
+    mainImage: { type: ImageSchema, required: true },
 
     images: [ImageSchema],
     description: {
