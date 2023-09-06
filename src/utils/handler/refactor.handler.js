@@ -19,7 +19,7 @@ const createOne = (model) => {
     const slug = slugify(name);
 
     const cloudUpload = await cloudinary.uploader.upload(req.file.path, {
-      folder: `E-commerce-40/${model.modelName}/${slug}`,
+      folder: `E-commerce-40/${model.collection.name}/${slug}`,
     });
 
     const { secure_url, public_id } = cloudUpload;
