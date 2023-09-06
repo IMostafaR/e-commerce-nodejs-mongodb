@@ -86,7 +86,7 @@ const handleAll = (model) => {
     !page || page <= 0
       ? ((limit = 0), (skip = limit))
       : ((limit = 2), (skip = (page - 1) * limit)); // for pagination
-    console.log(skip);
+
     const queryObj = {};
     req.params && req.params.id ? (queryObj.category = req.params.id) : null;
 
@@ -104,8 +104,8 @@ const handleAll = (model) => {
                 404
               )
             )
-        : page
-        ? next(new AppError(`Page not found`, 404))
+        : page // for pagination
+        ? next(new AppError(`Page not found`, 404)) // for pagination
         : next(
             new AppError(
               `There's no ${model.modelName} added to the DB yet.`,
