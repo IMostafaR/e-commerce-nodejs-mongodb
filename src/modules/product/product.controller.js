@@ -55,6 +55,12 @@ const createProduct = catchAsyncError(async (req, res, next) => {
 });
 
 /**
+ * update existing category
+ */
+
+const updateProduct = catchAsyncError(async (req, res, next) => {});
+
+/**
  * Get all products from DB
  */
 const getAllProducts = handleAll(Product);
@@ -69,4 +75,10 @@ const getOneProduct = handleOne(Product);
  */
 const deleteOneProduct = handleOne(Product);
 
-export { createProduct, getAllProducts, getOneProduct, deleteOneProduct };
+export {
+  createProduct,
+  updateProduct,
+  getAllProducts,
+  getOneProduct,
+  deleteOneProduct,
+};

@@ -18,4 +18,8 @@ productRouter
 productRouter
   .route("/:id")
   .get(product.getOneProduct)
+  .put(
+    uploadFileCloud({ fileType: fileValidation.image }).single("mainImage"),
+    product.updateProduct
+  )
   .delete(product.deleteOneProduct);
