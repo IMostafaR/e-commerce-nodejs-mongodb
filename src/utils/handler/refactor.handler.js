@@ -56,11 +56,13 @@ const updateOne = (model) => {
     }
     // TODO: update name and slug
     // TODO: when updating name and slug, you should also update folders names in clouninary
-    const { secure_url } = await cloudinary.uploader.upload(req.file.path, {
-      public_id: existingDoc.image.public_id,
-    });
+    if (req.file) {
+      const { secure_url } = await cloudinary.uploader.upload(req.file.path, {
+        public_id: existingDoc.image.public_id,
+      });
 
-    existingDoc.image.secure_url = secure_url;
+      existingDoc.image.secure_url = secure_url;
+    }
 
     const updatedDoc = await existingDoc.save();
 
