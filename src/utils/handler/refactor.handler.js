@@ -3,6 +3,9 @@ import cloudinary from "../../utils/cloud/cloud.js";
 import { AppError } from "../error/appError.js";
 import { catchAsyncError } from "../error/asyncError.js";
 
+/**
+ * create new document
+ */
 const createOne = (model) => {
   return catchAsyncError(async (req, res, next) => {
     const { name } = req.body;
@@ -35,6 +38,9 @@ const createOne = (model) => {
   });
 };
 
+/**
+ * update existing document
+ */
 const updateOne = (model) => {
   return catchAsyncError(async (req, res, next) => {
     const { id } = req.params;
@@ -66,6 +72,9 @@ const updateOne = (model) => {
   });
 };
 
+/**
+ * Get all documents from DB
+ */
 const handleAll = (model) => {
   return catchAsyncError(async (req, res, next) => {
     const queryObj = {};
@@ -99,6 +108,9 @@ const handleAll = (model) => {
   });
 };
 
+/**
+ * Delete or Get a specific document by its id from DB
+ */
 const handleOne = (model) => {
   return catchAsyncError(async (req, res, next) => {
     const { id } = req.params;
