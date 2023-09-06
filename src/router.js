@@ -2,6 +2,7 @@ import { db } from "../database/connection.js";
 import { globalErrorHandler } from "./middleware/error/globalErrorHandler.js";
 import { brandRouter } from "./modules/brand/brand.routes.js";
 import { categoryRouter } from "./modules/category/category.routes.js";
+import { productRouter } from "./modules/product/product.routes.js";
 import { subcategoryRouter } from "./modules/subcategory/subcategory.routes.js";
 import { userRouter } from "./modules/user/user.routes.js";
 import { AppError } from "./utils/error/appError.js";
@@ -22,6 +23,7 @@ export const router = (app, express) => {
   app.use("/api/v1/categories", categoryRouter);
   app.use("/api/v1/subcategories", subcategoryRouter);
   app.use("/api/v1/brands", brandRouter);
+  app.use("/api/v1/products", productRouter);
   app.use("/uploads", express.static("uploads"));
   app.all("*", (req, res, next) => {
     next(new AppError(`invalid routing ${req.originalUrl}`, 404));
