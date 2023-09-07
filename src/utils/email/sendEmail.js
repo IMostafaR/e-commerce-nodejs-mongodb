@@ -10,7 +10,21 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+/**
+ * Send an email using the configured nodemailer transporter.
+ *
+ * @async
+ * @param {Object} options - The email sending options.
+ * @param {string} options.email - The recipient's email address.
+ * @param {string} options.subject - The subject of the email.
+ * @param {string} options.html - The HTML content of the email.
+ * @throws {Error} Throws an error if there's an issue with sending the email.
+ */
 export const emailSender = async (options) => {
+  /**
+   * Information about the sent email.
+   * @type {Object}
+   */
   const info = await transporter.sendMail({
     from: `"E-Commerce App 📦" <${process.env.EMAIL_ADDRESS}>`,
     to: options.email,
@@ -18,5 +32,9 @@ export const emailSender = async (options) => {
     html: options.html,
   });
 
+  /**
+   * The message ID of the sent email.
+   * @type {string}
+   */
   console.log("Message sent: ", info.messageId);
 };
