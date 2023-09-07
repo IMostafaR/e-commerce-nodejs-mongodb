@@ -1,7 +1,9 @@
 import slugify from "slugify";
+import { Category } from "../../../database/models/category.model.js";
 import cloudinary from "../../utils/cloud/cloud.js";
 import { AppError } from "../error/appError.js";
 import { catchAsyncError } from "../error/asyncError.js";
+import { APIFeatures } from "../apiFeature/apiFeature.js";
 
 /**
  * create new document
@@ -79,18 +81,17 @@ const updateOne = (model) => {
  */
 const handleAll = (model) => {
   return catchAsyncError(async (req, res, next) => {
-    const { page } = req.query; // for pagination
-    let skip; // for pagination
-    let limit; // for pagination
-
-    !page || page <= 0
-      ? ((limit = 0), (skip = limit))
-      : ((limit = 2), (skip = (page - 1) * limit)); // for pagination
-
-    const queryObj = {};
+    let queryObj;
     req.params && req.params.id ? (queryObj.category = req.params.id) : null;
 
-    const doc = await model.find(queryObj).skip(skip).limit(limit); // for pagination
+    let features = new APIFeatures(model.find(queryObj), req.query)
+      .pagination()
+      .filter()
+      .sort()
+      .search()
+      .select();
+
+    const doc = await features.mongooseQuery;
 
     if (!doc.length)
       return req.params && req.params.id
@@ -104,7 +105,7 @@ const handleAll = (model) => {
                 404
               )
             )
-        : page // for pagination
+        : features.page // for pagination
         ? next(new AppError(`Page not found`, 404)) // for pagination
         : next(
             new AppError(
@@ -115,8 +116,9 @@ const handleAll = (model) => {
 
     res.status(200).json({
       status: "success",
-      page, // for pagination
-      limit, // for pagination
+      page: features.page,
+      limit: features.limit,
+      total: doc.length,
       data: doc,
     });
   });
