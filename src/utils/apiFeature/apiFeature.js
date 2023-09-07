@@ -25,6 +25,7 @@ export class APIFeatures {
    * Apply pagination to the query.
    *
    * @returns {APIFeatures} - The current APIFeatures instance for chaining.
+   * @description This method applies pagination to the query based on the "page" and "limit" parameters in the request query.
    */
   pagination() {
     let { page } = this.reqQuery,
@@ -47,6 +48,7 @@ export class APIFeatures {
    * Apply filtering to the query.
    *
    * @returns {APIFeatures} - The current APIFeatures instance for chaining.
+   * @description This method applies filtering to the query based on the request query parameters, excluding specific forbidden queries.
    */
   filter() {
     let queryObj = { ...this.reqQuery };
@@ -71,6 +73,7 @@ export class APIFeatures {
    * Apply sorting to the query.
    *
    * @returns {APIFeatures} - The current APIFeatures instance for chaining.
+   * @description This method applies sorting to the query based on the "sort" parameter in the request query.
    */
   sort() {
     let { sort } = this.reqQuery;
@@ -87,6 +90,7 @@ export class APIFeatures {
    * Apply searching to the query.
    *
    * @returns {APIFeatures} - The current APIFeatures instance for chaining.
+   * @description This method applies searching to the query based on the "search" parameter in the request query.
    */
   search() {
     let { search } = this.reqQuery,
@@ -104,6 +108,7 @@ export class APIFeatures {
    * Apply field selection to the query.
    *
    * @returns {APIFeatures} - The current APIFeatures instance for chaining.
+   * @description This method applies field selection to the query based on the "fields" parameter in the request query.
    */
   select() {
     let { fields } = this.reqQuery;
