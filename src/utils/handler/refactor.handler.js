@@ -77,13 +77,24 @@ const updateOne = (model) => {
 };
 
 /**
- * Get all documents from DB
+ * Middleware for handling requests to list documents of a specific model.
+ *
+ * @param {mongoose.Model} model - The Mongoose model to query documents from.
+ * @returns {Function} - An Express middleware function for handling the request.
+ *
+ * @throws {AppError} - If no documents are found, it may throw errors based on the situation:
+ *   - 404 Not Found: If a category or page is not found.
+ *   - 404 Not Found: If no documents of the specified model exist.
  */
 const handleAll = (model) => {
   return catchAsyncError(async (req, res, next) => {
+    // Create an empty query object
     let queryObj = {};
+
+    // If a category ID is provided in the request params, add it to the query
     req.params && req.params.id ? (queryObj.category = req.params.id) : null;
 
+    // Create an APIFeatures instance to apply pagination, filtering, sorting, search, and selection
     let features = new APIFeatures(model.find(queryObj), req.query)
       .pagination()
       .filter()
@@ -91,8 +102,10 @@ const handleAll = (model) => {
       .search()
       .select();
 
+    // Execute the Mongoose query
     const doc = await features.mongooseQuery;
 
+    // Handle cases where no documents are found
     if (!doc.length)
       return req.params && req.params.id
         ? (await Category.findById(req.params.id))
@@ -114,6 +127,7 @@ const handleAll = (model) => {
             )
           );
 
+    // Send the response with the retrieved documents
     res.status(200).json({
       status: "success",
       page: features.page,
