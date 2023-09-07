@@ -81,7 +81,7 @@ const updateOne = (model) => {
  */
 const handleAll = (model) => {
   return catchAsyncError(async (req, res, next) => {
-    let queryObj;
+    let queryObj = {};
     req.params && req.params.id ? (queryObj.category = req.params.id) : null;
 
     let features = new APIFeatures(model.find(queryObj), req.query)
