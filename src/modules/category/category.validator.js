@@ -8,4 +8,8 @@ const createCategory = Joi.object({
   name: mainValidationSchema.name,
 }).options({ allowUnknown: true });
 
-export { createCategory };
+const handleOneCategory = Joi.object({
+  id: mainValidationSchema.id,
+});
+
+export { createCategory, handleOneCategory };

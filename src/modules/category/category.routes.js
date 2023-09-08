@@ -5,7 +5,7 @@ import {
   fileValidation,
 } from "../../utils/upload/multerCloud.js";
 import { subcategoryRouter } from "../subcategory/subcategory.routes.js";
-import { createCategory } from "./category.validator.js";
+import { createCategory, handleOneCategory } from "./category.validator.js";
 import { validation } from "../../middleware/validation/validation.js";
 
 export const categoryRouter = Router();
@@ -27,7 +27,7 @@ categoryRouter
 
 categoryRouter
   .route("/:id")
-  .get(category.getOneCategory)
+  .get(validation(handleOneCategory), category.getOneCategory)
   .put(
     uploadFileCloud({
       fileType: fileValidation.image,
