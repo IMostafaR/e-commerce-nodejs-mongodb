@@ -34,12 +34,12 @@ export const mainValidationSchema = {
   }),
   phone: Joi.string()
     .pattern(/^01[0125][0-9]{8}$/)
-    .message({
+    .messages({
       "string.pattern.base": "Only Egyptian phone numbers are allowed",
     }),
   token: Joi.string()
     .pattern(/^[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_.+/=]*$/)
-    .message({
+    .messages({
       "string.empty": `The URL missing a token`,
       "string.pattern.base": "The token formate is invalid",
     }),
