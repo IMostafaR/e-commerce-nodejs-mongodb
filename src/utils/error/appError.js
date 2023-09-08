@@ -5,7 +5,7 @@ export class AppError extends Error {
   /**
    * Creates a new application-specific error.
    *
-   * @param {string} message - A descriptive error message.
+   * @param {string | string[]} message - A descriptive error message.
    * @param {number} statusCode - The HTTP status code to be set when handling this error.
    */
   constructor(message, statusCode) {
