@@ -1,9 +1,10 @@
 import path from "path";
 import { config } from "dotenv";
+
 config({ path: path.resolve("../../../config/.env") });
 import mongoose from "mongoose";
 import { User } from "../../../database/models/user.model.js";
-import { pass } from "../password/passwordHashing.js";
+import * as pass from "../password/passwordHashing.js";
 
 (async () => {
   // establish DB connection
