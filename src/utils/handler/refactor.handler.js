@@ -52,8 +52,8 @@ const updateOne = (model) => {
       return next(
         new AppError(
           `Sorry, the ${model.modelName} with id ${id}  cannot be found`,
-          404
-        )
+          404,
+        ),
       );
     }
     // TODO: update name and slug
@@ -110,21 +110,24 @@ const handleAll = (model) => {
       return req.params && req.params.id
         ? (await Category.findById(req.params.id))
           ? next(
-              new AppError("Subcategories are not found for this category", 404)
+              new AppError(
+                "Subcategories are not found for this category",
+                404,
+              ),
             )
           : next(
               new AppError(
                 "No such category with this id exists in the DB",
-                404
-              )
+                404,
+              ),
             )
         : features.page // for pagination
         ? next(new AppError(`Page not found`, 404)) // for pagination
         : next(
             new AppError(
               `There's no ${model.modelName} added to the DB yet.`,
-              404
-            )
+              404,
+            ),
           );
 
     // Send the response with the retrieved documents
@@ -154,7 +157,7 @@ const handleOne = (model) => {
 
     if (!doc)
       return next(
-        new AppError(`${model.modelName} with ID ${id} not found`, 404)
+        new AppError(`${model.modelName} with ID ${id} not found`, 404),
       );
 
     if (req.method === "GET") {
