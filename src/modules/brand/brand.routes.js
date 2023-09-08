@@ -13,7 +13,7 @@ brandRouter
   .route("/")
   .get(brand.getAllBrands)
   .post(
-    uploadFileCloud({ fileType: fileValidation.image }).single("logo"),
+    uploadFileCloud({ fileType: fileValidation.image }).single("image"),
     validation(createBrand),
     brand.createBrand,
   );
@@ -22,7 +22,7 @@ brandRouter
   .route("/:id")
   .get(validation(handleOneBrand), brand.getOneBrand)
   .put(
-    uploadFileCloud({ fileType: fileValidation.image }).single("logo"),
+    uploadFileCloud({ fileType: fileValidation.image }).single("image"),
     brand.updateBrand,
   )
   .delete(validation(handleOneBrand), brand.deleteOneBrand);
