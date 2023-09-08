@@ -1,5 +1,5 @@
 import slugify from "slugify";
-import { Subcategory } from "../../../database/models/subCategory.model.js";
+import { Subcategory } from "../../../database/models/subcategory.model.js";
 import { AppError } from "../../utils/error/appError.js";
 import { catchAsyncError } from "../../utils/error/asyncError.js";
 import { handleAll, handleOne } from "../../utils/handler/refactor.handler.js";
@@ -37,7 +37,7 @@ const updateSubcategory = catchAsyncError(async (req, res, next) => {
 
   if (!existingSubcategory)
     return next(
-      new AppError(`Sorry, the subcategory with id ${id} cannot be found`, 404)
+      new AppError(`Sorry, the subcategory with id ${id} cannot be found`, 404),
     );
 
   if (name) {
