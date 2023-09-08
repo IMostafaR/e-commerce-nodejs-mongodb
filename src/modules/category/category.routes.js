@@ -34,4 +34,4 @@ categoryRouter
     }).single("image"),
     category.updateCategory,
   )
-  .delete(category.deleteOneCategory);
+  .delete(validation(handleOneCategory), category.deleteOneCategory);
