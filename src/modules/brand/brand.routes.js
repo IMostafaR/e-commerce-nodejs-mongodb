@@ -4,6 +4,8 @@ import {
   fileValidation,
   uploadFileCloud,
 } from "../../utils/upload/multerCloud.js";
+import { validation } from "../../middleware/validation/validation.js";
+import { createBrand, handleOneBrand } from "./brand.validator.js";
 
 export const brandRouter = Router();
 
@@ -12,14 +14,15 @@ brandRouter
   .get(brand.getAllBrands)
   .post(
     uploadFileCloud({ fileType: fileValidation.image }).single("logo"),
-    brand.createBrand
+    validation(createBrand),
+    brand.createBrand,
   );
 
 brandRouter
   .route("/:id")
-  .get(brand.getOneBrand)
+  .get(validation(handleOneBrand), brand.getOneBrand)
   .put(
     uploadFileCloud({ fileType: fileValidation.image }).single("logo"),
-    brand.updateBrand
+    brand.updateBrand,
   )
-  .delete(brand.deleteOneBrand);
+  .delete(validation(handleOneBrand), brand.deleteOneBrand);
