@@ -44,11 +44,11 @@ export const mainValidationSchema = {
       "string.pattern.base": "The token formate is invalid",
     }),
   code: Joi.string().length(6).hex().required(),
-  name: Joi.string().min(2).max(16).required().messages({
-    "string.empty": `firstName cannot be an empty field`,
-    "string.min": "firstName must be at least 2 characters long",
-    "string.max": "firstName cannot be more than 16 characters long",
-    "any.required": "firstName is required",
+  name: Joi.string().min(2).max(30).required().messages({
+    "string.empty": `name cannot be an empty field`,
+    "string.min": "name must be at least 2 characters long",
+    "string.max": "name cannot be more than 16 characters long",
+    "any.required": "name is required",
   }),
 };
 
