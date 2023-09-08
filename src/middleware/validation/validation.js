@@ -43,6 +43,12 @@ export const mainValidationSchema = {
       "string.empty": `The URL missing a token`,
       "string.pattern.base": "The token formate is invalid",
     }),
+  id: Joi.string().hex().length(24).required().messages({
+    "string.empty": `id cannot be an empty field`,
+    "string.hex": "Invalid id hexadecimal",
+    "string.length": "id must be 24 characters long",
+    "any.required": "id is required",
+  }),
   code: Joi.string().length(6).hex().required(),
   name: Joi.string().min(2).max(30).required().messages({
     "string.empty": `name cannot be an empty field`,
