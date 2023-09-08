@@ -53,7 +53,7 @@ export const mainValidationSchema = {
   name: Joi.string().min(2).max(30).required().messages({
     "string.empty": `name cannot be an empty field`,
     "string.min": "name must be at least 2 characters long",
-    "string.max": "name cannot be more than 16 characters long",
+    "string.max": "name cannot be more than 30 characters long",
     "any.required": "name is required",
   }),
 };
