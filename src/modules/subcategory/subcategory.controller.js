@@ -37,7 +37,7 @@ const updateSubcategory = catchAsyncError(async (req, res, next) => {
 
   if (!existingSubcategory)
     return next(
-      new AppError(`Sorry, the subcategory with id ${id} cannot be found`, 404),
+      new AppError(`Sorry, the subcategory with id ${id} cannot be found`, 404)
     );
 
   if (name) {
