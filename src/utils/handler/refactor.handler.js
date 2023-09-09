@@ -130,24 +130,12 @@ const handleAll = (model) => {
     // Handle cases where no documents are found
     if (!doc.length)
       return req.params && req.params.id
-        ? (await Category.findById(req.params.id))
-          ? next(
-              new AppError("Subcategories are not found for this category", 404)
-            )
-          : next(
-              new AppError(
-                "No such category with this id exists in the DB",
-                404
-              )
-            )
+        ? next(
+            new AppError("Subcategories are not found for this category", 404)
+          )
         : features.page // for pagination
         ? next(new AppError(`Page not found`, 404)) // for pagination
-        : next(
-            new AppError(
-              `There's no ${model.modelName} added to the DB yet.`,
-              404
-            )
-          );
+        : next(new AppError(`No ${model.collection.name} found.`, 404));
 
     // Send the response with the retrieved documents
     res.status(200).json({
