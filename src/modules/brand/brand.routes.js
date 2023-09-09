@@ -15,14 +15,16 @@ brandRouter
   .post(
     uploadFileCloud({ fileType: fileValidation.image }).single("image"),
     validation(createBrand),
-    brand.createBrand,
+    brand.createBrand
   );
 
 brandRouter
   .route("/:id")
   .get(validation(handleOneBrand), brand.getOneBrand)
+
+  // TODO: apply validation rules after handling updating brand name logic in the controller (refactor handler)
   .put(
     uploadFileCloud({ fileType: fileValidation.image }).single("image"),
-    brand.updateBrand,
+    brand.updateBrand
   )
   .delete(validation(handleOneBrand), brand.deleteOneBrand);

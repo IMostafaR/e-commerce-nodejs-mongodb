@@ -22,16 +22,18 @@ categoryRouter
       fileType: fileValidation.image,
     }).single("image"),
     validation(createCategory),
-    category.createCategory,
+    category.createCategory
   );
 
 categoryRouter
   .route("/:id")
   .get(validation(handleOneCategory), category.getOneCategory)
+
+  // TODO: apply validation rules after handling updating category name logic in the controller (refactor handler)
   .put(
     uploadFileCloud({
       fileType: fileValidation.image,
     }).single("image"),
-    category.updateCategory,
+    category.updateCategory
   )
   .delete(validation(handleOneCategory), category.deleteOneCategory);
