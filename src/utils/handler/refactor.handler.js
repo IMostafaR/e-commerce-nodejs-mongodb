@@ -1,9 +1,9 @@
 import slugify from "slugify";
-import {Category} from "../../../database/models/category.model.js";
+import { Category } from "../../../database/models/category.model.js";
 import cloudinary from "../../utils/cloud/cloud.js";
-import {AppError} from "../error/appError.js";
-import {catchAsyncError} from "../error/asyncError.js";
-import {APIFeatures} from "../apiFeature/apiFeature.js";
+import { AppError } from "../error/appError.js";
+import { catchAsyncError } from "../error/asyncError.js";
+import { APIFeatures } from "../apiFeature/apiFeature.js";
 
 /**
  * Middleware for creating a new document of a specific model.
@@ -14,88 +14,88 @@ import {APIFeatures} from "../apiFeature/apiFeature.js";
  * @throws {AppError} - If a document with the same name already exists, it may throw a 409 Conflict error.
  */
 const createOne = (model) => {
-    return catchAsyncError(async (req, res, next) => {
-        /**
-         * The name of the new document to be created.
-         * @type {string}
-         */
-        const {name} = req.body;
+  return catchAsyncError(async (req, res, next) => {
+    /**
+     * The name of the new document to be created.
+     * @type {string}
+     */
+    const { name } = req.body;
 
-        // Check if a document with the same name already exists
-        const existingDoc = await model.findOne({name});
+    // Check if a document with the same name already exists
+    const existingDoc = await model.findOne({ name });
 
-        if (existingDoc) {
-            return next(new AppError(`${model.modelName} already exists`, 409));
-        }
+    if (existingDoc) {
+      return next(new AppError(`${model.modelName} already exists`, 409));
+    }
 
-        /**
-         * The slug generated from the name.
-         * @type {string}
-         */
-        const slug = slugify(name);
+    /**
+     * The slug generated from the name.
+     * @type {string}
+     */
+    const slug = slugify(name);
 
-        /**
-         * The result of cloud upload for the document's image.
-         * @type {object}
-         * @property {string} secure_url - The secure URL of the uploaded image.
-         * @property {string} public_id - The public ID of the uploaded image.
-         */
-        const cloudUpload = await cloudinary.uploader.upload(req.file.path, {
-            folder: `E-commerce-40/${model.collection.name}/${slug}`,
-        });
-
-        const {secure_url, public_id} = cloudUpload;
-
-        // Create a new document
-        const newDoc = await model.create({
-            name,
-            slug,
-            image: {secure_url, public_id},
-        });
-
-        // Send the response with the newly created document
-        res.status(201).json({
-            status: "success",
-            message: `${model.modelName} added successfully`,
-            data: newDoc,
-        });
+    /**
+     * The result of cloud upload for the document's image.
+     * @type {object}
+     * @property {string} secure_url - The secure URL of the uploaded image.
+     * @property {string} public_id - The public ID of the uploaded image.
+     */
+    const cloudUpload = await cloudinary.uploader.upload(req.file.path, {
+      folder: `E-commerce-40/${model.collection.name}/${slug}`,
     });
+
+    const { secure_url, public_id } = cloudUpload;
+
+    // Create a new document
+    const newDoc = await model.create({
+      name,
+      slug,
+      image: { secure_url, public_id },
+    });
+
+    // Send the response with the newly created document
+    res.status(201).json({
+      status: "success",
+      message: `${model.modelName} added successfully`,
+      data: newDoc,
+    });
+  });
 };
 
 /**
  * update existing document
  */
 const updateOne = (model) => {
-    return catchAsyncError(async (req, res, next) => {
-        const {id} = req.params;
-        const existingDoc = await model.findById(id);
+  return catchAsyncError(async (req, res, next) => {
+    const { id } = req.params;
+    const existingDoc = await model.findById(id);
 
-        if (!existingDoc) {
-            return next(
-                new AppError(
-                    `Sorry, the ${model.modelName} with id ${id}  cannot be found`,
-                    404,
-                ),
-            );
-        }
-        // TODO: update name and slug
-        // TODO: when updating name and slug, you should also update folders names in clouninary
-        if (req.file) {
-            const {secure_url} = await cloudinary.uploader.upload(req.file.path, {
-                public_id: existingDoc.image.public_id,
-            });
+    if (!existingDoc) {
+      return next(
+        new AppError(
+          `Sorry, the ${model.modelName} with id ${id}  cannot be found`,
+          404
+        )
+      );
+    }
+    // TODO: update name and slug
+    // TODO: when updating name and slug, you should also update folders names in clouninary
+    if (req.file) {
+      const { secure_url } = await cloudinary.uploader.upload(req.file.path, {
+        public_id: existingDoc.image.public_id,
+      });
 
-            existingDoc.image.secure_url = secure_url;
-        }
+      existingDoc.image.secure_url = secure_url;
+    }
 
-        const updatedDoc = await existingDoc.save();
+    const updatedDoc = await existingDoc.save();
 
-        res.status(200).json({
-            status: "success",
-            message: `${model.modelName} image updated successfully`,
-            data: updatedDoc,
-        });
+    res.status(200).json({
+      status: "success",
+      message: `${model.modelName} image updated successfully`,
+      data: updatedDoc,
     });
+  });
 };
 
 /**
@@ -109,91 +109,88 @@ const updateOne = (model) => {
  *   - 404 Not Found: If no documents of the specified model exist.
  */
 const handleAll = (model) => {
-    return catchAsyncError(async (req, res, next) => {
-        // Create an empty query object
-        let queryObj = {};
+  return catchAsyncError(async (req, res, next) => {
+    // Create an empty query object
+    let queryObj = {};
 
-        // If a category ID is provided in the request params, add it to the query
-        req.params && req.params.id ? (queryObj.category = req.params.id) : null;
+    // If a category ID is provided in the request params, add it to the query
+    req.params && req.params.id ? (queryObj.category = req.params.id) : null;
 
-        // Create an APIFeatures instance to apply pagination, filtering, sorting, search, and selection
-        let features = new APIFeatures(model.find(queryObj), req.query)
-            .pagination()
-            .filter()
-            .sort()
-            .search()
-            .select();
+    // Create an APIFeatures instance to apply pagination, filtering, sorting, search, and selection
+    let features = new APIFeatures(model.find(queryObj), req.query)
+      .pagination()
+      .filter()
+      .sort()
+      .search()
+      .select();
 
-        // Execute the Mongoose query
-        const doc = await features.mongooseQuery;
+    // Execute the Mongoose query
+    const doc = await features.mongooseQuery;
 
-        // Handle cases where no documents are found
-        if (!doc.length)
-            return req.params && req.params.id
-                ? (await Category.findById(req.params.id))
-                    ? next(
-                        new AppError(
-                            "Subcategories are not found for this category",
-                            404,
-                        ),
-                    )
-                    : next(
-                        new AppError(
-                            "No such category with this id exists in the DB",
-                            404,
-                        ),
-                    )
-                : features.page // for pagination
-                    ? next(new AppError(`Page not found`, 404)) // for pagination
-                    : next(
-                        new AppError(
-                            `There's no ${model.modelName} added to the DB yet.`,
-                            404,
-                        ),
-                    );
+    // Handle cases where no documents are found
+    if (!doc.length)
+      return req.params && req.params.id
+        ? (await Category.findById(req.params.id))
+          ? next(
+              new AppError("Subcategories are not found for this category", 404)
+            )
+          : next(
+              new AppError(
+                "No such category with this id exists in the DB",
+                404
+              )
+            )
+        : features.page // for pagination
+        ? next(new AppError(`Page not found`, 404)) // for pagination
+        : next(
+            new AppError(
+              `There's no ${model.modelName} added to the DB yet.`,
+              404
+            )
+          );
 
-        // Send the response with the retrieved documents
-        res.status(200).json({
-            status: "success",
-            page: features.page,
-            limit: features.limit,
-            total: doc.length,
-            data: doc,
-        });
+    // Send the response with the retrieved documents
+    res.status(200).json({
+      status: "success",
+      page: features.page,
+      limit: features.limit,
+      total: doc.length,
+      data: doc,
     });
+  });
 };
 
 /**
  * Delete or Get a specific document by its id from DB
  */
 const handleOne = (model) => {
-    return catchAsyncError(async (req, res, next) => {
-        const {id} = req.params;
-        let doc;
+  return catchAsyncError(async (req, res, next) => {
+    const { id } = req.params;
+    let doc;
 
-        if (req.method === "GET") {
-            doc = await model.findById(id);
-        } else if (req.method === "DELETE") {
-            doc = await model.findByIdAndDelete(id);
-        }
+    if (req.method === "GET") {
+      doc = await model.findById(id);
+    } else if (req.method === "DELETE") {
+      doc = await model.findByIdAndDelete(id);
+    }
 
-        if (!doc)
-            return next(
-                new AppError(`${model.modelName} with ID ${id} not found`, 404),
-            );
+    if (!doc)
+      return next(
+        new AppError(`${model.modelName} with ID ${id} not found`, 404)
+      );
 
-        if (req.method === "GET") {
-            return res.status(200).json({
-                status: "success",
-                data: doc,
-            });
-        } else if (req.method === "DELETE") {
-            return res.status(200).json({
-                status: "success",
-                message: `${doc.name} successfully deleted`,
-            });
-        }
-    });
+    if (req.method === "GET") {
+      return res.status(200).json({
+        status: "success",
+        data: doc,
+      });
+    } else if (req.method === "DELETE") {
+      return res.status(200).json({
+        status: "success",
+        message: `${doc.name} successfully deleted`,
+      });
+    }
+  });
 };
 
-export {createOne, updateOne, handleAll, handleOne};
+export { createOne, updateOne, handleAll, handleOne };
