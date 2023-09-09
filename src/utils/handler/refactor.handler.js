@@ -161,30 +161,48 @@ const handleAll = (model) => {
 };
 
 /**
- * Delete or Get a specific document by its id from DB
+ * Middleware for handling requests to retrieve or delete a document of a specific model by its ID.
+ *
+ * @param {mongoose.Model} model - The Mongoose model to query documents from.
+ * @returns {Function} - An Express middleware function for handling the request.
+ *
+ * @throws {AppError} - If the requested document by ID is not found, it may throw a 404 Not Found error.
  */
 const handleOne = (model) => {
   return catchAsyncError(async (req, res, next) => {
+    /**
+     * The ID of the document to be retrieved or deleted.
+     * @type {string}
+     */
     const { id } = req.params;
+    /**
+     * The retrieved document by ID.
+     * @type {mongoose.Document}
+     */
     let doc;
 
     if (req.method === "GET") {
+      // Retrieve a document by its ID
       doc = await model.findById(id);
     } else if (req.method === "DELETE") {
+      // Delete a document by its ID
       doc = await model.findByIdAndDelete(id);
     }
 
+    // Handle cases where the document by ID is not found
     if (!doc)
       return next(
         new AppError(`${model.modelName} with ID ${id} not found`, 404)
       );
 
     if (req.method === "GET") {
+      // Send the response with the retrieved document
       return res.status(200).json({
         status: "success",
         data: doc,
       });
     } else if (req.method === "DELETE") {
+      // Send the response after successfully deleting the document
       return res.status(200).json({
         status: "success",
         message: `${doc.name} successfully deleted`,
