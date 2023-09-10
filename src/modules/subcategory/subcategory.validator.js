@@ -12,4 +12,12 @@ const updateSubcategoryValidation = Joi.object({
   category: mainValidationSchema.id,
 });
 
-export { createSubcategoryValidation, updateSubcategoryValidation };
+const handleOneSubcategoryValidation = Joi.object({
+  id: mainValidationSchema.id,
+});
+
+export {
+  createSubcategoryValidation,
+  updateSubcategoryValidation,
+  handleOneSubcategoryValidation,
+};
