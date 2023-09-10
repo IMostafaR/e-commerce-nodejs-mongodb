@@ -1,7 +1,10 @@
 import { Router } from "express";
 import * as subcategory from "./subcategory.controller.js";
 import { validation } from "../../middleware/validation/validation.js";
-import { createSubcategoryValidation } from "./subcategory.validator.js";
+import {
+  createSubcategoryValidation,
+  updateSubcategoryValidation,
+} from "./subcategory.validator.js";
 
 export const subcategoryRouter = Router({ mergeParams: true });
 
@@ -13,5 +16,5 @@ subcategoryRouter
 subcategoryRouter
   .route("/:id")
   .get(subcategory.getOneSubcategory)
-  .put(subcategory.updateSubcategory)
+  .put(validation(updateSubcategoryValidation), subcategory.updateSubcategory)
   .delete(subcategory.deleteOneSubcategory);

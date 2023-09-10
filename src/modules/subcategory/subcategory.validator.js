@@ -6,4 +6,10 @@ const createSubcategoryValidation = Joi.object({
   category: mainValidationSchema.id,
 });
 
-export { createSubcategoryValidation };
+const updateSubcategoryValidation = Joi.object({
+  id: mainValidationSchema.id,
+  name: mainValidationSchema.name,
+  category: mainValidationSchema.id,
+});
+
+export { createSubcategoryValidation, updateSubcategoryValidation };
