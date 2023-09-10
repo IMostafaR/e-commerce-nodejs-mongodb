@@ -1,12 +1,12 @@
 import Joi from "joi";
 import { mainValidationSchema } from "../../middleware/validation/validation.js";
 
-const createBrand = Joi.object({
+const createBrandValidation = Joi.object({
   name: mainValidationSchema.name,
 }).options({ allowUnknown: true });
 
-const handleOneBrand = Joi.object({
+const handleOneBrandValidation = Joi.object({
   id: mainValidationSchema.id,
 });
 
-export { createBrand, handleOneBrand };
+export { createBrandValidation, handleOneBrandValidation };
