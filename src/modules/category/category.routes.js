@@ -5,7 +5,10 @@ import {
   fileValidation,
 } from "../../utils/upload/multerCloud.js";
 import { subcategoryRouter } from "../subcategory/subcategory.routes.js";
-import { createCategory, handleOneCategory } from "./category.validator.js";
+import {
+  createCategoryValidation,
+  handleOneCategoryValidation,
+} from "./category.validator.js";
 import { validation } from "../../middleware/validation/validation.js";
 
 export const categoryRouter = Router();
@@ -21,13 +24,13 @@ categoryRouter
     uploadFileCloud({
       fileType: fileValidation.image,
     }).single("image"),
-    validation(createCategory),
+    validation(createCategoryValidation),
     category.createCategory
   );
 
 categoryRouter
   .route("/:id")
-  .get(validation(handleOneCategory), category.getOneCategory)
+  .get(validation(handleOneCategoryValidation), category.getOneCategory)
 
   // TODO: apply validation rules after handling updating category name logic in the controller (refactor handler)
   .put(
@@ -36,4 +39,4 @@ categoryRouter
     }).single("image"),
     category.updateCategory
   )
-  .delete(validation(handleOneCategory), category.deleteOneCategory);
+  .delete(validation(handleOneCategoryValidation), category.deleteOneCategory);
