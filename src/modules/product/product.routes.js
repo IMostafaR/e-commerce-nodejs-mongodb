@@ -4,6 +4,8 @@ import {
   uploadFileCloud,
 } from "../../utils/upload/multerCloud.js";
 import * as product from "./product.controller.js";
+import { validation } from "../../middleware/validation/validation.js";
+import { handleOneProductValidation } from "./product.validator.js";
 
 export const productRouter = Router();
 
@@ -17,9 +19,9 @@ productRouter
 
 productRouter
   .route("/:id")
-  .get(product.getOneProduct)
+  .get(validation(handleOneProductValidation), product.getOneProduct)
   .put(
     uploadFileCloud({ fileType: fileValidation.image }).single("mainImage"),
     product.updateProduct
   )
-  .delete(product.deleteOneProduct);
+  .delete(validation(handleOneProductValidation), product.deleteOneProduct);
