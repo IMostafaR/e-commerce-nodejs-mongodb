@@ -27,6 +27,7 @@ const createProduct = catchAsyncError(async (req, res, next) => {
   });
   const { secure_url, public_id } = cloudUpload;
 
+  // TODO: you must write logic to handle priceAfterDiscount and stock where their values become less than zero
   const priceAfterDiscount = price - discount;
 
   const stock = quantity - soldItems;
