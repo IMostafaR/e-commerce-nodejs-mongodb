@@ -8,23 +8,54 @@ import Jwt from "jsonwebtoken";
 import crypto from "crypto";
 
 /**
- * signup new users
- **/
+ * Middleware for user signup.
+ *
+ * @function
+ * @async
+ * @param {Express.Request} req - The Express request object.
+ * @param {Express.Response} res - The Express response object.
+ * @param {Express.NextFunction} next - The Express next middleware function.
+ *
+ * @throws {AppError} If the provided email already exists, it throws a 409 Conflict error.
+ *
+ * @returns {Promise<void>} A promise that resolves when the operation is complete.
+ *
+ * @example
+ * // Example usage in an Express route handler:
+ * app.post('/signup', signup);
+ */
 const signup = catchAsyncError(async (req, res, next) => {
-  // Request Data
+  /**
+   * Request data from the request body.
+   * @type {Object}
+   * @property {string} firstName - The first name of the user.
+   * @property {string} lastName - The last name of the user.
+   * @property {string} email - The email of the user.
+   * @property {string} password - The password of the user.
+   */
   const { firstName, lastName, email, password } = req.body;
 
+  /**
+   * Generate a slug based on the user's first and last name.
+   * @type {string}
+   */
   let slug = `${firstName} ${lastName}`;
 
   slug = slugify(slug);
 
-  // Check if email exists in the DB
+  /**
+   * Check if the provided email already exists in the database.
+   * @type {mongoose.Document | null}
+   */
   const existingEmail = await User.findOne({ email });
 
   if (existingEmail)
     return next(new AppError(`${email} already registered`, 409));
 
-  // Save user data into DB
+  /**
+   * Create a new user and save their data into the database.
+   * @type {mongoose.Document}
+   */
   const newUser = await User.create({
     firstName,
     lastName,
@@ -33,7 +64,10 @@ const signup = catchAsyncError(async (req, res, next) => {
     password,
   });
 
-  // email confirmation link creation with token
+  /**
+   * Generate a token for email verification.
+   * @type {string}
+   */
   const token = Jwt.sign(
     { email: newUser.email },
     process.env.VERIFY_EMAIL_KEY,
@@ -42,25 +76,42 @@ const signup = catchAsyncError(async (req, res, next) => {
     }
   );
 
+  /**
+   * Generate a refresh token for email verification.
+   * @type {string}
+   */
   const refreshToken = Jwt.sign(
     { email: newUser.email },
     process.env.VERIFY_EMAIL_KEY
   ); // to be sent to user's email to ask for new token if the original token has expired
 
+  /**
+   * The main confirmation link for email verification.
+   * @type {string}
+   */
   const confirmationLink = `${req.protocol}://${req.headers.host}/api/v1/auth/verifyEmail/${token}`; // main confirmation link
+
+  /**
+   * The link to resend the confirmation email if needed.
+   * @type {string}
+   */
   const resendEmailLink = `${req.protocol}://${req.headers.host}/api/v1/auth/resendEmail/${refreshToken}`; // to ask for new confirmation link
 
   const html = `<a href="${confirmationLink}" target="_blank">Verify Email</a> <br />
   <p>If the link above isn't working <a href="${resendEmailLink}" target="_blank">click here</a> to resend new confirmation email</p>`;
 
-  // Send confirmation email
+  /**
+   * Send the confirmation email.
+   */
   await emailSender({
     email: newUser.email,
     subject: "Confirmation email",
     html,
   });
 
-  // Send successful response
+  /**
+   * Send a successful response.
+   */
   res.status(201).json({
     status: "success",
     message:
