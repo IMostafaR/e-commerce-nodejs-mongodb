@@ -30,7 +30,7 @@ export const mainValidationSchema = {
   repeatPassword: Joi.string().valid(Joi.ref("password")).required().messages({
     "string.empty": `Repeat password cannot be an empty field`,
     "any.only": "Repeat password must match the password",
-    "any.required": "Password is required",
+    "any.required": "Repeat Password is required",
   }),
   phone: Joi.string()
     .pattern(/^01[0125][0-9]{8}$/)
