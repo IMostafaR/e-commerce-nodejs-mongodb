@@ -47,8 +47,8 @@ const signup = catchAsyncError(async (req, res, next) => {
     process.env.VERIFY_EMAIL_KEY
   ); // to be sent to user's email to ask for new token if the original token has expired
 
-  const confirmationLink = `${req.protocol}://${req.headers.host}/api/v1/user/verifyEmail/${token}`; // main confirmation link
-  const resendEmailLink = `${req.protocol}://${req.headers.host}/api/v1/user/resendEmail/${refreshToken}`; // to ask for new confirmation link
+  const confirmationLink = `${req.protocol}://${req.headers.host}/api/v1/auth/verifyEmail/${token}`; // main confirmation link
+  const resendEmailLink = `${req.protocol}://${req.headers.host}/api/v1/auth/resendEmail/${refreshToken}`; // to ask for new confirmation link
 
   const html = `<a href="${confirmationLink}" target="_blank">Verify Email</a> <br />
   <p>If the link above isn't working <a href="${resendEmailLink}" target="_blank">click here</a> to resend new confirmation email</p>`;
@@ -134,7 +134,7 @@ const resendVerificationEmail = catchAsyncError(async (req, res, next) => {
         }
       );
 
-      const confirmationLink = `${req.protocol}://${req.headers.host}/api/v1/user/verifyEmail/${token}`; // main confirmation link
+      const confirmationLink = `${req.protocol}://${req.headers.host}/api/v1/auth/verifyEmail/${token}`; // main confirmation link
 
       const html = `<a href="${confirmationLink}" target="_blank">Verify Email</a> <br />`;
 
