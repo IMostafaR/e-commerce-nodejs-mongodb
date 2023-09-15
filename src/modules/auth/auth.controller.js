@@ -24,16 +24,13 @@ const signup = catchAsyncError(async (req, res, next) => {
   if (existingEmail)
     return next(new AppError(`${email} already registered`, 409));
 
-  // Password Hashing
-  const hashedPassword = pass.hash(password);
-
   // Save user data into DB
   const newUser = await User.create({
     firstName,
     lastName,
     slug,
     email,
-    password: hashedPassword,
+    password,
   });
 
   // email confirmation link creation with token

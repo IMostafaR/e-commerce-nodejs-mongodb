@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { ImageSchema } from "./image.model.js";
+import bcrypt from "bcrypt";
 
 // AddressSchema will be embedded into UserSchema
 
@@ -104,5 +105,12 @@ const UserSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+UserSchema.pre("save", function () {
+  this.password = bcrypt.hashSync(
+    this.password,
+    Number(process.env.SALT_ROUNDS)
+  );
+});
 
 export const User = mongoose.model("User", UserSchema);
