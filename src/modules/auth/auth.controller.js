@@ -12,6 +12,7 @@ import crypto from "crypto";
  *
  * @function
  * @async
+ * @public
  * @param {Express.Request} req - The Express request object.
  * @param {Express.Response} res - The Express response object.
  * @param {Express.NextFunction} next - The Express next middleware function.
