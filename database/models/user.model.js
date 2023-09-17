@@ -107,10 +107,21 @@ const UserSchema = new mongoose.Schema(
 );
 
 UserSchema.pre("save", function () {
-  this.password = bcrypt.hashSync(
-    this.password,
-    Number(process.env.SALT_ROUNDS)
-  );
+  if (this.isModified("password")) {
+    this.password = bcrypt.hashSync(
+      this.password,
+      Number(process.env.SALT_ROUNDS)
+    );
+  }
+});
+
+UserSchema.pre("findOneAndUpdate", function () {
+  if (this._update.password) {
+    this._update.password = bcrypt.hashSync(
+      this._update.password,
+      Number(process.env.SALT_ROUNDS)
+    );
+  }
 });
 
 export const User = mongoose.model("User", UserSchema);

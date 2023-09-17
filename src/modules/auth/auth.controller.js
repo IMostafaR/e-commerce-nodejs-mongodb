@@ -331,12 +331,11 @@ const resetPassword = catchAsyncError(async (req, res, next) => {
   if (user && user.resetPassCode !== code)
     return next(new AppError("Incorrect code", 401));
 
-  const hashedPassword = pass.hash(password);
   const jwtSecretKey = crypto.randomBytes(32).toString("hex");
 
   user = await User.findOneAndUpdate(
     { email },
-    { password: hashedPassword, jwtSecretKey, $unset: { resetPassCode: 1 } }
+    { password, jwtSecretKey, $unset: { resetPassCode: 1 } }
   );
 
   return res.status(200).json({
