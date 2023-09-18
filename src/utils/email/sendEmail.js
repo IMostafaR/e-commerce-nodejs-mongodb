@@ -1,15 +1,5 @@
 import nodemailer from "nodemailer";
 
-const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST,
-  port: process.env.SMTP_PORT,
-  service: process.env.SERVICE,
-  auth: {
-    user: process.env.EMAIL_ADDRESS,
-    pass: process.env.EMAIL_PASSWORD,
-  },
-});
-
 /**
  * Send an email using the configured nodemailer transporter.
  *
@@ -20,7 +10,16 @@ const transporter = nodemailer.createTransport({
  * @param {string} options.html - The HTML content of the email.
  * @throws {Error} Throws an error if there's an issue with sending the email.
  */
+
 export const emailSender = async (options) => {
+  const transporter = nodemailer.createTransport({
+    service: process.env.SMTP_SERVICE,
+    auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASSWORD,
+    },
+  });
+
   /**
    * Information about the sent email.
    * @type {Object}
@@ -32,9 +31,5 @@ export const emailSender = async (options) => {
     html: options.html,
   });
 
-  /**
-   * The message ID of the sent email.
-   * @type {string}
-   */
-  console.log("Message sent: ", info.messageId);
+  return info.rejected.length ? false : true;
 };
