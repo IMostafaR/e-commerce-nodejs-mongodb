@@ -59,37 +59,18 @@ const signup = catchAsyncError(async (req, res, next) => {
     return next(new AppError(`${email} already registered`, 409));
 
   /**
-   * Create a new user and save their data into the database.
-   * @type {mongoose.Document}
-   */
-  const newUser = await User.create({
-    firstName,
-    lastName,
-    slug,
-    email,
-    password,
-  });
-
-  /**
    * Generate a token for email verification.
    * @type {string}
    */
-  const token = Jwt.sign(
-    { email: newUser.email },
-    process.env.VERIFY_EMAIL_KEY,
-    {
-      expiresIn: 60 * 10,
-    }
-  );
+  const token = Jwt.sign({ email }, process.env.VERIFY_EMAIL_KEY, {
+    expiresIn: 60 * 10,
+  });
 
   /**
    * Generate a refresh token for email verification.
    * @type {string}
    */
-  const refreshToken = Jwt.sign(
-    { email: newUser.email },
-    process.env.VERIFY_EMAIL_KEY
-  ); // to be sent to user's email to ask for new token if the original token has expired
+  const refreshToken = Jwt.sign({ email }, process.env.VERIFY_EMAIL_KEY); // to be sent to user's email to ask for new token if the original token has expired
 
   /**
    * The main confirmation link for email verification.
@@ -109,12 +90,31 @@ const signup = catchAsyncError(async (req, res, next) => {
   /**
    * Send the confirmation email.
    */
-  await emailSender({
-    email: newUser.email,
+  const confirmationEmail = await emailSender({
+    email,
     subject: "Confirmation email",
     html,
   });
 
+  if (!confirmationEmail)
+    return next(
+      new AppError(
+        "Something went wrong while sending confirmation email. Please try again later",
+        500
+      )
+    );
+
+  /**
+   * Create a new user and save their data into the database.
+   * @type {mongoose.Document}
+   */
+  const newUser = await User.create({
+    firstName,
+    lastName,
+    slug,
+    email,
+    password,
+  });
   /**
    * Send a successful response.
    */
