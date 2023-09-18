@@ -1,3 +1,8 @@
+/**
+ * Functions for user authentication and related operations.
+ * @module authControllers
+ */
+
 import slugify from "slugify";
 import { User } from "../../../database/models/user.model.js";
 import { emailSender } from "../../utils/email/sendEmail.js";
