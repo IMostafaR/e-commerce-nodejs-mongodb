@@ -4,6 +4,7 @@ import { emailSender } from "../../utils/email/sendEmail.js";
 import { AppError } from "../../utils/error/appError.js";
 import { catchAsyncError } from "../../utils/error/asyncError.js";
 import { handleAll, handleOne } from "../../utils/handler/refactor.handler.js";
+import crypto from "crypto";
 
 const createUser = catchAsyncError(async (req, res, next) => {
   const { firstName, lastName, email, password, role, verifiedEmail } =
@@ -73,6 +74,53 @@ const createUser = catchAsyncError(async (req, res, next) => {
 });
 
 /**
+ * update existing user's data
+ */
+
+const updateUser = catchAsyncError(async (req, res, next) => {
+  const { id } = req.params;
+  const { firstName, lastName, password, blocked, role, deactivated } =
+    req.body;
+
+  const existingUser = await User.findById(id);
+
+  if (!existingUser)
+    return next(
+      new AppError(`Sorry, the user with id ${id}  cannot be found`, 404)
+    );
+
+  if (firstName && lastName) {
+    const slug = slugify(`${firstName} ${lastName}`);
+    req.body.slug = slug;
+  }
+
+  if (firstName && !lastName) {
+    const slug = slugify(`${firstName} ${existingUser.lastName}`);
+    req.body.slug = slug;
+  }
+
+  if (!firstName && lastName) {
+    const slug = slugify(`${existingUser.firstName} ${lastName}`);
+    req.body.slug = slug;
+  }
+
+  if (password || blocked || role || deactivated) {
+    const jwtSecretKey = crypto.randomBytes(32).toString("hex");
+    req.body.jwtSecretKey = jwtSecretKey;
+  }
+
+  const updatedUser = await User.findByIdAndUpdate(id, req.body, {
+    new: true,
+  });
+
+  res.status(200).json({
+    status: "success",
+    message: `User with id ${id} updated successfully`,
+    data: updatedUser,
+  });
+});
+
+/**
  * Get all users from DB
  */
 const getAllUsers = handleAll(User);
@@ -87,4 +135,4 @@ const getOneUser = handleOne(User);
  */
 const deleteOneUser = handleOne(User);
 
-export { createUser, getAllUsers, getOneUser, deleteOneUser };
+export { createUser, updateUser, getAllUsers, getOneUser, deleteOneUser };

@@ -1,11 +1,15 @@
 import { Router } from "express";
 import { validation } from "../../middleware/validation/validation.js";
-import { createUserValidation } from "./user.validator.js";
+import {
+  createUserValidation,
+  updateUserValidation,
+} from "./user.validator.js";
 import {
   createUser,
   deleteOneUser,
   getAllUsers,
   getOneUser,
+  updateUser,
 } from "./user.controller.js";
 
 export const userRouter = Router();
@@ -15,4 +19,8 @@ userRouter
   .post(validation(createUserValidation), createUser)
   .get(getAllUsers);
 
-userRouter.route("/:id").get(getOneUser).delete(deleteOneUser);
+userRouter
+  .route("/:id")
+  .get(getOneUser)
+  .put(validation(updateUserValidation), updateUser)
+  .delete(deleteOneUser);
