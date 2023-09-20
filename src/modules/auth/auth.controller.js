@@ -8,9 +8,9 @@ import { User } from "../../../database/models/user.model.js";
 import { emailSender } from "../../utils/email/sendEmail.js";
 import { AppError } from "../../utils/error/appError.js";
 import { catchAsyncError } from "../../utils/error/asyncError.js";
-import * as pass from "../../utils/password/passwordHashing.js";
 import Jwt from "jsonwebtoken";
 import crypto from "crypto";
+import bcrypt from "bcrypt";
 
 /**
  * Middleware for user signup.
@@ -238,7 +238,7 @@ const login = catchAsyncError(async (req, res, next) => {
     );
 
   // check if the user's password is correct
-  if (!user || !pass.compare(password, user.password))
+  if (!user || !bcrypt.compareSync(password, user.password))
     return next(new AppError("Incorrect email or password", 401));
 
   // if all cases above didn't throw error:
