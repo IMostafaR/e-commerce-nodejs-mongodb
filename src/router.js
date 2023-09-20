@@ -5,6 +5,7 @@ import { brandRouter } from "./modules/brand/brand.routes.js";
 import { categoryRouter } from "./modules/category/category.routes.js";
 import { productRouter } from "./modules/product/product.routes.js";
 import { subcategoryRouter } from "./modules/subcategory/subcategory.routes.js";
+import { userRouter } from "./modules/user/user.routes.js";
 import { AppError } from "./utils/error/appError.js";
 import morgan from "morgan";
 
@@ -20,6 +21,7 @@ export const router = (app, express) => {
   app.use(express.json());
   app.use(morgan("dev"));
   app.use("/api/v1/auth", authRouter);
+  app.use("/api/v1/users", userRouter);
   app.use("/api/v1/categories", categoryRouter);
   app.use("/api/v1/subcategories", subcategoryRouter);
   app.use("/api/v1/brands", brandRouter);
