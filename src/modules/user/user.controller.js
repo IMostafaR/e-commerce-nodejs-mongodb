@@ -82,4 +82,9 @@ const getAllUsers = handleAll(User);
  */
 const getOneUser = handleOne(User);
 
-export { createUser, getAllUsers, getOneUser };
+/**
+ * Delete a specific category by its id from DB
+ */
+const deleteOneUser = handleOne(User);
+
+export { createUser, getAllUsers, getOneUser, deleteOneUser };
