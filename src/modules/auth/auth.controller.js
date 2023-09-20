@@ -42,14 +42,6 @@ const signup = catchAsyncError(async (req, res, next) => {
   const { firstName, lastName, email, password } = req.body;
 
   /**
-   * Generate a slug based on the user's first and last name.
-   * @type {string}
-   */
-  let slug = `${firstName} ${lastName}`;
-
-  slug = slugify(slug);
-
-  /**
    * Check if the provided email already exists in the database.
    * @type {mongoose.Document | null}
    */
@@ -103,6 +95,14 @@ const signup = catchAsyncError(async (req, res, next) => {
         500
       )
     );
+
+  /**
+   * Generate a slug based on the user's first and last name.
+   * @type {string}
+   */
+  let slug = `${firstName} ${lastName}`;
+
+  slug = slugify(slug);
 
   /**
    * Create a new user and save their data into the database.
