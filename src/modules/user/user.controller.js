@@ -3,7 +3,7 @@ import { User } from "../../../database/models/user.model.js";
 import { emailSender } from "../../utils/email/sendEmail.js";
 import { AppError } from "../../utils/error/appError.js";
 import { catchAsyncError } from "../../utils/error/asyncError.js";
-import { handleAll } from "../../utils/handler/refactor.handler.js";
+import { handleAll, handleOne } from "../../utils/handler/refactor.handler.js";
 
 const createUser = catchAsyncError(async (req, res, next) => {
   const { firstName, lastName, email, password, role, verifiedEmail } =
@@ -77,4 +77,9 @@ const createUser = catchAsyncError(async (req, res, next) => {
  */
 const getAllUsers = handleAll(User);
 
-export { createUser, getAllUsers };
+/**
+ * Get a specific user by its id from DB
+ */
+const getOneUser = handleOne(User);
+
+export { createUser, getAllUsers, getOneUser };
