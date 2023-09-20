@@ -83,7 +83,7 @@ const getAllUsers = handleAll(User);
 const getOneUser = handleOne(User);
 
 /**
- * Delete a specific category by its id from DB
+ * Delete a specific user by its id from DB
  */
 const deleteOneUser = handleOne(User);
 
