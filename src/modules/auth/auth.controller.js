@@ -242,22 +242,21 @@ const login = catchAsyncError(async (req, res, next) => {
     return next(new AppError("Incorrect email or password", 401));
 
   // if all cases above didn't throw error:
-  // * generate secret key and save it to DB (to be changed when the user logout)
-  user.jwtSecretKey = crypto.randomBytes(32).toString("hex");
+  // * generate securityDate and save it to DB (to be changed when the user logout, change password, blocked, or deactivated)
+  const securityDate = parseInt(Date.now() / 1000);
+  user.securityDate = securityDate;
   await user.save();
 
-  /* generate token with payload contains _id to retrieve user data in auth middleware */
-  const idToken = Jwt.sign({ id: user._id }, process.env.SECRET_KEY);
-
-  /* generate token with payload contains user's data to confirm if user authorized in auth middleware */
-  const authToken = Jwt.sign(
+  /* generate token with payload contains user's data to confirm if user authorized in authenticate middleware */
+  const token = Jwt.sign(
     {
       id: user._id,
       name: `${user.firstName} ${user.lastName}`,
       email: user.email,
       role: user.role,
+      iat: securityDate,
     },
-    user.jwtSecretKey,
+    process.env.SECRET_KEY,
     {
       expiresIn: "30d",
     }
@@ -267,8 +266,7 @@ const login = catchAsyncError(async (req, res, next) => {
   res.status(200).json({
     status: "success",
     message: `Welcome ${user.firstName}`,
-    idToken,
-    authToken,
+    token,
   });
 });
 
@@ -276,12 +274,11 @@ const login = catchAsyncError(async (req, res, next) => {
  * user logout
  */
 const logout = catchAsyncError(async (req, res, next) => {
-  const id = req.userId;
+  const { id } = req.user;
 
-  const user = await User.findById(id);
-
-  user.jwtSecretKey = crypto.randomBytes(32).toString("hex");
-  await user.save();
+  const user = await User.findByIdAndUpdate(id, {
+    securityDate: parseInt(Date.now() / 1000),
+  });
 
   res.status(200).json({
     status: "success",
