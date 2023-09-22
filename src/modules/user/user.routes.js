@@ -11,16 +11,27 @@ import {
   getOneUser,
   updateUser,
 } from "./user.controller.js";
+import { authenticate, authorize } from "../auth/auth.controller.js";
 
 export const userRouter = Router();
 
 userRouter
   .route("/")
-  .post(validation(createUserValidation), createUser)
-  .get(getAllUsers);
+  .post(
+    validation(createUserValidation),
+    authenticate,
+    authorize("admin"),
+    createUser
+  )
+  .get(authenticate, authorize("admin"), getAllUsers);
 
 userRouter
   .route("/:id")
-  .get(getOneUser)
-  .put(validation(updateUserValidation), updateUser)
-  .delete(deleteOneUser);
+  .get(authenticate, authorize("admin"), getOneUser)
+  .put(
+    validation(updateUserValidation),
+    authenticate,
+    authorize("admin"),
+    updateUser
+  )
+  .delete(authenticate, authorize("admin"), deleteOneUser);

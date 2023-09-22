@@ -8,6 +8,7 @@ import {
   resetPassCode,
   resetPassword,
   authenticate,
+  authorize,
 } from "./auth.controller.js";
 import { authValidatorSchema } from "./auth.validator.js";
 import { validation } from "../../middleware/validation/validation.js";
