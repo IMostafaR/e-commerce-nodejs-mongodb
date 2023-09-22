@@ -254,6 +254,7 @@ const login = catchAsyncError(async (req, res, next) => {
     {
       id: user._id,
       name: `${user.firstName} ${user.lastName}`,
+      email: user.email,
       role: user.role,
     },
     user.jwtSecretKey,
