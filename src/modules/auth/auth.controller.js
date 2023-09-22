@@ -380,4 +380,5 @@ export {
   logout,
   resetPassCode,
   resetPassword,
+  authenticate,
 };

@@ -7,10 +7,10 @@ import {
   logout,
   resetPassCode,
   resetPassword,
+  authenticate,
 } from "./auth.controller.js";
 import { authValidatorSchema } from "./auth.validator.js";
 import { validation } from "../../middleware/validation/validation.js";
-import { auth } from "../../middleware/auth/auth.js";
 
 export const authRouter = Router();
 
@@ -36,7 +36,7 @@ authRouter.post("/login", validation(authValidatorSchema.login), login);
 authRouter.patch(
   "/logout",
   validation(authValidatorSchema.logout),
-  auth,
+  authenticate,
   logout
 );
 
