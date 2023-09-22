@@ -354,8 +354,7 @@ const resetPassword = catchAsyncError(async (req, res, next) => {
 const authenticate = catchAsyncError(async (req, res, next) => {
   const { token } = req.headers;
 
-  if (!token)
-    return next(new AppError("Unauthorized. Please login first", 401));
+  if (!token) return next(new AppError("Forbidden. Please login first", 403));
 
   Jwt.verify(token, process.env.SECRET_KEY, async (error, decoded) => {
     if (error) return next(new AppError("Invalid token", 401));
