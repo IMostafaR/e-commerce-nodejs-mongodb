@@ -97,8 +97,8 @@ const UserSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
-    jwtSecretKey: {
-      type: mongoose.Schema.Types.Buffer,
+    securityDate: {
+      type: Number,
     },
   },
   {
