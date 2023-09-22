@@ -351,6 +351,27 @@ const resetPassword = catchAsyncError(async (req, res, next) => {
   });
 });
 
+const authenticate = catchAsyncError(async (req, res, next) => {
+  const { token } = req.headers;
+
+  if (!token)
+    return next(new AppError("Unauthorized. Please login first", 401));
+
+  Jwt.verify(token, process.env.SECRET_KEY, async (error, decoded) => {
+    if (error) return next(new AppError("Invalid token", 401));
+    console.log(decoded);
+
+    const user = await User.findById(decoded.id);
+
+    if (!user) return next(new AppError("No such user exist", 404));
+
+    if (user.securityDate > decoded.iat)
+      return next(new AppError("Unauthorized. Please login first", 401));
+    req.user = decoded;
+    next();
+  });
+});
+
 export {
   signup,
   verifyEmail,
