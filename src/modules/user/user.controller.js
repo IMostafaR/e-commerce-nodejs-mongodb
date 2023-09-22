@@ -124,11 +124,11 @@ const updateUser = catchAsyncError(async (req, res, next) => {
     req.body.slug = slug;
   }
 
-  /**Generate a new JWT secret key to enhance security and force users to login again
+  /**Generate a new securityDate to enhance security and force users to login again
    when sensitive user information like password, blocked status, role, or deactivation is updated */
   if (password || blocked || role || deactivated) {
-    const jwtSecretKey = crypto.randomBytes(32).toString("hex");
-    req.body.jwtSecretKey = jwtSecretKey;
+    const securityDate = parseInt(Date.now() / 1000);
+    req.body.securityDate = securityDate;
   }
 
   // Update the user and return the updated user data
