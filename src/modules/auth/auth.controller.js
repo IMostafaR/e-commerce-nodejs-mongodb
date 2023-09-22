@@ -365,11 +365,24 @@ const authenticate = catchAsyncError(async (req, res, next) => {
     if (!user) return next(new AppError("No such user exist", 404));
 
     if (user.securityDate > decoded.iat)
-      return next(new AppError("Unauthorized. Please login first", 401));
+      return next(new AppError("Forbidden. Please login first", 403));
     req.user = decoded;
     next();
   });
 });
+
+const authorize = (...roles) => {
+  return catchAsyncError(async (req, res, next) => {
+    if (!roles.includes(req.user.role))
+      return next(
+        new AppError(
+          `Unauthorized. Only ${roles.join(" and ")} can access this API`,
+          403
+        )
+      );
+    next();
+  });
+};
 
 export {
   signup,
@@ -380,4 +393,5 @@ export {
   resetPassCode,
   resetPassword,
   authenticate,
+  authorize,
 };
