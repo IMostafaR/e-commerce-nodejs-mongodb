@@ -358,8 +358,10 @@ const authenticate = catchAsyncError(async (req, res, next) => {
 
     if (!user) return next(new AppError("No such user exist", 404));
 
-    if (user.securityDate > decoded.iat)
-      return next(new AppError("Forbidden. Please login first", 403));
+    if (user.securityDate) {
+      if (user.securityDate > decoded.iat)
+        return next(new AppError("Forbidden. Please login first", 403));
+    }
     req.user = decoded;
     next();
   });
