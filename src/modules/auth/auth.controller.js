@@ -242,11 +242,6 @@ const login = catchAsyncError(async (req, res, next) => {
     return next(new AppError("Incorrect email or password", 401));
 
   // if all cases above didn't throw error:
-  // * generate securityDate and save it to DB (to be changed when the user logout, change password, blocked, or deactivated)
-  const securityDate = parseInt(Date.now() / 1000);
-  user.securityDate = securityDate;
-  await user.save();
-
   /* generate token with payload contains user's data to confirm if user authorized in authenticate middleware */
   const token = Jwt.sign(
     {
@@ -254,7 +249,6 @@ const login = catchAsyncError(async (req, res, next) => {
       name: `${user.firstName} ${user.lastName}`,
       email: user.email,
       role: user.role,
-      iat: securityDate,
     },
     process.env.SECRET_KEY,
     {
