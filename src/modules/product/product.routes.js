@@ -9,7 +9,7 @@ import {
   createProductValidation,
   handleOneProductValidation,
 } from "./product.validator.js";
-import { createCategoryValidation } from "../category/category.validator.js";
+import { authenticate, authorize } from "../auth/auth.controller.js";
 
 export const productRouter = Router();
 
@@ -19,6 +19,8 @@ productRouter
   .post(
     uploadFileCloud({ fileType: fileValidation.image }).single("mainImage"),
     validation(createProductValidation),
+    authenticate,
+    authorize("admin"),
     product.createProduct
   );
 
@@ -27,6 +29,13 @@ productRouter
   .get(validation(handleOneProductValidation), product.getOneProduct)
   .put(
     uploadFileCloud({ fileType: fileValidation.image }).single("mainImage"),
+    authenticate,
+    authorize("admin"),
     product.updateProduct
   )
-  .delete(validation(handleOneProductValidation), product.deleteOneProduct);
+  .delete(
+    validation(handleOneProductValidation),
+    authenticate,
+    authorize("admin"),
+    product.deleteOneProduct
+  );

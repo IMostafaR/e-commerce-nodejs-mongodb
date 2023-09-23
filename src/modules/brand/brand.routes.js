@@ -9,6 +9,7 @@ import {
   createBrandValidation,
   handleOneBrandValidation,
 } from "./brand.validator.js";
+import { authenticate, authorize } from "../auth/auth.controller.js";
 
 export const brandRouter = Router();
 
@@ -18,6 +19,8 @@ brandRouter
   .post(
     uploadFileCloud({ fileType: fileValidation.image }).single("image"),
     validation(createBrandValidation),
+    authenticate,
+    authorize("admin"),
     brand.createBrand
   );
 
@@ -28,6 +31,13 @@ brandRouter
   // TODO: apply validation rules after handling updating brand name logic in the controller (refactor handler)
   .put(
     uploadFileCloud({ fileType: fileValidation.image }).single("image"),
+    authenticate,
+    authorize("admin"),
     brand.updateBrand
   )
-  .delete(validation(handleOneBrandValidation), brand.deleteOneBrand);
+  .delete(
+    validation(handleOneBrandValidation),
+    authenticate,
+    authorize("admin"),
+    brand.deleteOneBrand
+  );

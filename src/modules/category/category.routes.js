@@ -10,6 +10,7 @@ import {
   handleOneCategoryValidation,
 } from "./category.validator.js";
 import { validation } from "../../middleware/validation/validation.js";
+import { authenticate, authorize } from "../auth/auth.controller.js";
 
 export const categoryRouter = Router();
 
@@ -25,6 +26,8 @@ categoryRouter
       fileType: fileValidation.image,
     }).single("image"),
     validation(createCategoryValidation),
+    authenticate,
+    authorize("admin"),
     category.createCategory
   );
 
@@ -37,6 +40,13 @@ categoryRouter
     uploadFileCloud({
       fileType: fileValidation.image,
     }).single("image"),
+    authenticate,
+    authorize("admin"),
     category.updateCategory
   )
-  .delete(validation(handleOneCategoryValidation), category.deleteOneCategory);
+  .delete(
+    validation(handleOneCategoryValidation),
+    authenticate,
+    authorize("admin"),
+    category.deleteOneCategory
+  );
