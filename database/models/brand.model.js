@@ -15,6 +15,16 @@ const BrandSchema = new mongoose.Schema(
       lowercase: true,
     },
     image: { type: ImageSchema, required: [true, "Brand image is required"] },
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    updatedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
   },
   {
     timestamps: true,
