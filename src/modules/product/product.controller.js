@@ -26,6 +26,7 @@ const createProduct = catchAsyncError(async (req, res, next) => {
   } = req.body;
 
   const slug = slugify(name);
+  const { id: createdBy, id: updatedBy } = req.user;
 
   const cloudUpload = await cloudinary.uploader.upload(req.file.path, {
     folder: `E-commerce-40/${Product.collection.name}/${slug}`,
@@ -51,6 +52,8 @@ const createProduct = catchAsyncError(async (req, res, next) => {
     category,
     subcategory,
     brand,
+    createdBy,
+    updatedBy,
   });
 
   res.status(201).json({

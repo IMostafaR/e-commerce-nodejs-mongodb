@@ -34,6 +34,9 @@ const createOne = (model) => {
      */
     const slug = slugify(name);
 
+    // Extract the current user's ID from the request
+    const { id: createdBy, id: updatedBy } = req.user;
+
     /**
      * The result of cloud upload for the document's image.
      * @type {object}
@@ -51,6 +54,8 @@ const createOne = (model) => {
       name,
       slug,
       image: { secure_url, public_id },
+      createdBy,
+      updatedBy,
     });
 
     // Send the response with the newly created document
@@ -88,6 +93,9 @@ const updateOne = (model) => {
       existingDoc.image.secure_url = secure_url;
     }
 
+    // Update the updatedBy field with the current user's ID
+    existingDoc.updatedBy = req.user.id;
+
     const updatedDoc = await existingDoc.save();
 
     res.status(200).json({
@@ -117,7 +125,10 @@ const handleAll = (model, populateOptions) => {
     req.params && req.params.id ? (queryObj.category = req.params.id) : null;
 
     // Create an APIFeatures instance to apply pagination, filtering, sorting, search, and selection
-    let features = new APIFeatures(model.find(queryObj), req.query)
+    let features = new APIFeatures(
+      model.find(queryObj).populate(populateOptions),
+      req.query
+    )
       .pagination()
       .filter()
       .sort()
@@ -171,7 +182,7 @@ const handleOne = (model, populateOptions) => {
 
     if (req.method === "GET") {
       // Retrieve a document by its ID
-      doc = await model.findById(id);
+      doc = await model.findById(id).populate(populateOptions);
     } else if (req.method === "DELETE") {
       // Delete a document by its ID
       doc = await model.findByIdAndDelete(id);

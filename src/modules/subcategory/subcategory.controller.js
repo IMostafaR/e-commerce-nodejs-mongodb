@@ -40,8 +40,17 @@ const createSubcategory = catchAsyncError(async (req, res, next) => {
   // Generate a slug for the subcategory name
   const slug = slugify(name);
 
+  // Extract the current user's ID from the request
+  const { id: createdBy, id: updatedBy } = req.user;
+
   // Create a new subcategory
-  const newSubcategory = await Subcategory.create({ name, slug, category });
+  const newSubcategory = await Subcategory.create({
+    name,
+    slug,
+    category,
+    createdBy,
+    updatedBy,
+  });
 
   // Send a success response with the new subcategory data
   res.status(201).json({
@@ -92,6 +101,9 @@ const updateSubcategory = catchAsyncError(async (req, res, next) => {
 
   // Update the category reference if provided in the request
   if (category) existingSubcategory.category = category;
+
+  // Update the updatedBy field with the current user's ID
+  existingSubcategory.updatedBy = req.user.id;
 
   // Save the updated subcategory
   const updatedSubcategory = await existingSubcategory.save();
