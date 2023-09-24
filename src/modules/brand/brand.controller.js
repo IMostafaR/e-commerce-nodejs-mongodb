@@ -26,12 +26,12 @@ const updateBrand = updateOne(Brand);
 /**
  * Get all brands from DB
  */
-const getAllBrands = handleAll(Brand);
+const getAllBrands = handleAll(Brand, populateOptions);
 
 /**
  * Get a specific brand by its id from DB
  */
-const getOneBrand = handleOne(Brand);
+const getOneBrand = handleOne(Brand, populateOptions);
 
 /**
  * Delete a specific brand by its id from DB

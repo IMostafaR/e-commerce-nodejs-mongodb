@@ -104,74 +104,10 @@ const updateSubcategory = catchAsyncError(async (req, res, next) => {
   });
 });
 
-/**
- * Middleware for retrieving all subcategories from the database.
- *
- * This middleware uses the `handleAll` middleware to handle requests for listing
- * documents of the `Subcategory` model. It supports pagination, filtering, sorting,
- * and searching based on the request query parameters.
- *
- * @function
- * @param {Express.Request} req - The Express request object.
- * @param {Express.Response} res - The Express response object.
- * @param {Express.NextFunction} next - The Express next middleware function.
- *
- * @throws {AppError} If no subcategories are found or if there are errors in the process,
- * it may throw the following errors:
- *   - 404 Not Found: If no subcategories exist.
- *   - 404 Not Found: If a category or page is not found.
- *   - 500 Internal Server Error: If there are other unexpected errors.
- *
- * @returns {Promise<void>} A promise that resolves when the operation is complete.
- *
- * @example
- * // Example usage in an Express route handler:
- * app.get('categories/:categoryId/subcategories', getAllSubcategories);
- */
-const getAllSubcategories = handleAll(Subcategory);
+const getAllSubcategories = handleAll(Subcategory, populateOptions);
 
-/**
- * Middleware for retrieving a specific subcategory by its ID from the database.
- *
- * This middleware uses the `handleOne` middleware to handle requests for retrieving
- * a single document of the `Subcategory` model by its ID.
- *
- * @function
- * @param {Express.Request} req - The Express request object.
- * @param {Express.Response} res - The Express response object.
- * @param {Express.NextFunction} next - The Express next middleware function.
- *
- * @throws {AppError} If the requested subcategory by ID is not found, it may throw a
- * 404 Not Found error.
- *
- * @returns {Promise<void>} A promise that resolves when the operation is complete.
- *
- * @example
- * // Example usage in an Express route handler:
- * app.get('/subcategories/:id', getOneSubcategory);
- */
-const getOneSubcategory = handleOne(Subcategory);
+const getOneSubcategory = handleOne(Subcategory, populateOptions);
 
-/**
- * Middleware for deleting a specific subcategory by its ID from the database.
- *
- * This middleware uses the `handleOne` middleware to handle requests for deleting
- * a single document of the `Subcategory` model by its ID.
- *
- * @function
- * @param {Express.Request} req - The Express request object.
- * @param {Express.Response} res - The Express response object.
- * @param {Express.NextFunction} next - The Express next middleware function.
- *
- * @throws {AppError} If the requested subcategory by ID is not found, it may throw a
- * 404 Not Found error.
- *
- * @returns {Promise<void>} A promise that resolves when the operation is complete.
- *
- * @example
- * // Example usage in an Express route handler:
- * app.delete('/subcategories/:id', deleteOneSubcategory);
- */
 const deleteOneSubcategory = handleOne(Subcategory);
 
 export {

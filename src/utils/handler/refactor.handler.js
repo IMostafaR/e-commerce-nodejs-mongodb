@@ -108,7 +108,7 @@ const updateOne = (model) => {
  *   - 404 Not Found: If a category or page is not found.
  *   - 404 Not Found: If no documents of the specified model exist.
  */
-const handleAll = (model) => {
+const handleAll = (model, populateOptions) => {
   return catchAsyncError(async (req, res, next) => {
     // Create an empty query object
     let queryObj = {};
@@ -156,7 +156,7 @@ const handleAll = (model) => {
  *
  * @throws {AppError} - If the requested document by ID is not found, it may throw a 404 Not Found error.
  */
-const handleOne = (model) => {
+const handleOne = (model, populateOptions) => {
   return catchAsyncError(async (req, res, next) => {
     /**
      * The ID of the document to be retrieved or deleted.

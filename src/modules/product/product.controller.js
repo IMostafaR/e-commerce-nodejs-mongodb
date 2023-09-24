@@ -69,12 +69,12 @@ const updateProduct = catchAsyncError(async (req, res, next) => {});
 /**
  * Get all products from DB
  */
-const getAllProducts = handleAll(Product);
+const getAllProducts = handleAll(Product, populateOptions);
 
 /**
  * Get a specific product by its id from DB
  */
-const getOneProduct = handleOne(Product);
+const getOneProduct = handleOne(Product, populateOptions);
 
 /**
  * Delete a specific product by its id from DB

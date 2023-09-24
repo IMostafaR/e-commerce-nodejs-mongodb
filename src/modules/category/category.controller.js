@@ -24,12 +24,12 @@ const updateCategory = updateOne(Category);
 /**
  * Get all categories from DB
  */
-const getAllCategories = handleAll(Category);
+const getAllCategories = handleAll(Category, populateOptions);
 
 /**
  * Get a specific category by its id from DB
  */
-const getOneCategory = handleOne(Category);
+const getOneCategory = handleOne(Category, populateOptions);
 
 /**
  * Delete a specific category by its id from DB
