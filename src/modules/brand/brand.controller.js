@@ -7,6 +7,11 @@ import {
   updateOne,
 } from "../../utils/handler/refactor.handler.js";
 
+const populateOptions = {
+  path: "createdBy updatedBy",
+  select: "_id firstName lastName email role",
+};
+
 /**
  * create new brnad
  */

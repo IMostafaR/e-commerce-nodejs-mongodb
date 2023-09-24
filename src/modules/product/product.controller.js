@@ -4,6 +4,11 @@ import cloudinary from "../../utils/cloud/cloud.js";
 import { Product } from "../../../database/models/product.model.js";
 import { handleAll, handleOne } from "../../utils/handler/refactor.handler.js";
 
+const populateOptions = {
+  path: "createdBy updatedBy category subcategory brand",
+  select: "_id name slug firstName lastName email role",
+};
+
 /**
  * create new product
  */
