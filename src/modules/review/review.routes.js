@@ -1,7 +1,9 @@
 import { Router } from "express";
+import { createReview } from "./review.controller.js";
+import { authenticate } from "../auth/auth.controller.js";
 
 export const reviewRouter = Router();
 
-reviewRouter("/").get().post();
+reviewRouter.route("/").get().post();
 
-reviewRouter("/:id").get().put().delete();
+reviewRouter.route("/:id").get().put().delete(authenticate, createReview);
