@@ -39,9 +39,10 @@ export const mainValidationSchema = {
     }),
   token: Joi.string()
     .pattern(/^[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_.+/=]*$/)
+    .required()
     .messages({
-      "string.empty": `The URL missing a token`,
-      "string.pattern.base": "The token formate is invalid",
+      "string.pattern.base": "Invalid token",
+      "any.required": "Token is required",
     }),
   id: Joi.string().hex().length(24).required().messages({
     "string.empty": `id cannot be an empty field`,
