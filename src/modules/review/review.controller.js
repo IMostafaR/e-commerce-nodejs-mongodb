@@ -26,6 +26,8 @@ const createReview = catchAsyncError(async (req, res, next) => {
   const { id: product } = req.params;
   const { id: customer } = req.user;
 
+  // TODO: Check if customer has already purchased this product (using orders)
+
   // check if the customer has already reviewed this product
   const existingReview = await Review.findOne({ customer, product });
   if (existingReview) {
