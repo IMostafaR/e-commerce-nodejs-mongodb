@@ -352,7 +352,6 @@ const authenticate = catchAsyncError(async (req, res, next) => {
 
   Jwt.verify(token, process.env.SECRET_KEY, async (error, decoded) => {
     if (error) return next(new AppError("Invalid token", 401));
-    console.log(decoded);
 
     const user = await User.findById(decoded.id);
 
