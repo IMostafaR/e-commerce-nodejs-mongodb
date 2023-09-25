@@ -1,12 +1,12 @@
 import { Router } from "express";
-import { createReview } from "./review.controller.js";
+import { createReview, getAllReviews } from "./review.controller.js";
 import { authenticate } from "../auth/auth.controller.js";
 import { validation } from "../../middleware/validation/validation.js";
 import { createReviewValidation } from "./review.validator.js";
 
 export const reviewRouter = Router();
 
-reviewRouter.route("/").get();
+reviewRouter.route("/").get(getAllReviews);
 
 reviewRouter
   .route("/:id")

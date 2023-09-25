@@ -1,6 +1,12 @@
 import { Review } from "../../../database/models/review.model.js";
 import { AppError } from "../../utils/error/appError.js";
 import { catchAsyncError } from "../../utils/error/asyncError.js";
+import { handleAll } from "../../utils/handler/refactor.handler.js";
+
+const populateOptions = {
+  path: "product customer",
+  select: "_id firstName lastName name priceAfterDiscount brand",
+};
 
 /**
  * Create a new review based on the provided request body fields.
@@ -42,4 +48,9 @@ const createReview = catchAsyncError(async (req, res, next) => {
   });
 });
 
-export { createReview };
+/**
+ * Get all reviews from the database.
+ */
+const getAllReviews = handleAll(Review, populateOptions);
+
+export { createReview, getAllReviews };
