@@ -1,16 +1,20 @@
 import { Router } from "express";
-import { createReview, getAllReviews } from "./review.controller.js";
-import { authenticate } from "../auth/auth.controller.js";
+import {
+  createReview,
+  getAllReviews,
+  getProductReviews,
+} from "./review.controller.js";
+import { authenticate, authorize } from "../auth/auth.controller.js";
 import { validation } from "../../middleware/validation/validation.js";
 import { createReviewValidation } from "./review.validator.js";
 
 export const reviewRouter = Router();
 
-reviewRouter.route("/").get(getAllReviews);
+reviewRouter.route("/").get(authenticate, authorize("admin"), getAllReviews);
 
 reviewRouter
   .route("/:id")
   .post(validation(createReviewValidation), authenticate, createReview)
-  .get()
+  .get(authenticate, getProductReviews)
   .put()
   .delete();

@@ -1,4 +1,5 @@
 import { Review } from "../../../database/models/review.model.js";
+import { APIFeatures } from "../../utils/apiFeature/apiFeature.js";
 import { AppError } from "../../utils/error/appError.js";
 import { catchAsyncError } from "../../utils/error/asyncError.js";
 import { handleAll } from "../../utils/handler/refactor.handler.js";
@@ -53,4 +54,35 @@ const createReview = catchAsyncError(async (req, res, next) => {
  */
 const getAllReviews = handleAll(Review, populateOptions);
 
-export { createReview, getAllReviews };
+/**
+ * Get all reviews for a specific product from the database.
+ */
+const getProductReviews = catchAsyncError(async (req, res, next) => {
+  const { id: product } = req.params;
+
+  // Create an APIFeatures instance to apply pagination, filtering, sorting, search, and selection
+  let features = new APIFeatures(Review.find({ product }), req.query)
+    .pagination()
+    .filter()
+    .sort()
+    .search()
+    .select();
+
+  // Execute the Mongoose query & Get all reviews for the specified product
+  const reviews = await features.mongooseQuery;
+
+  // Handle cases where no reviews are found for the specified product
+  if (!reviews.length)
+    return next(new AppError("This product has not reviewed yet", 404));
+
+  // Send the response with the retrieved reviews
+  res.status(200).json({
+    status: "success",
+    page: features.page,
+    limit: features.limit,
+    results: reviews.length,
+    data: reviews,
+  });
+});
+
+export { createReview, getAllReviews, getProductReviews };
