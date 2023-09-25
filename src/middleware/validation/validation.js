@@ -63,6 +63,10 @@ export const validation = (schema) => {
   return (req, res, next) => {
     const reqData = { ...req.body, ...req.params, ...req.query };
 
+    if (req.headers.token) {
+      reqData.token = req.headers.token;
+    }
+
     const { error } = schema.validate(reqData, { abortEarly: false });
 
     if (error) {
