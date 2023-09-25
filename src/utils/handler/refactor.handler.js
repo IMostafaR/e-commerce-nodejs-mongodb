@@ -153,7 +153,7 @@ const handleAll = (model, populateOptions) => {
       status: "success",
       page: features.page,
       limit: features.limit,
-      total: doc.length,
+      results: doc.length,
       data: doc,
     });
   });
