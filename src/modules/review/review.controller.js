@@ -46,7 +46,7 @@ const createReview = catchAsyncError(async (req, res, next) => {
   // Send a successful response
   res.status(201).json({
     status: "success",
-    message: "Review successfully added.",
+    message: "Thank you for reviewing this product",
     data: newReview,
   });
 });
