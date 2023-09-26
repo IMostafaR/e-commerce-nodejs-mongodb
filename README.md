@@ -1,4 +1,6 @@
-# E-commerce App with Express.js, Mongoose, and MongoDB ![GitHub package.json dynamic](https://img.shields.io/github/package-json/version/IMostafaR/e-commerce-nodejs-mongodb) ![GitHub repo size](https://img.shields.io/github/repo-size/IMostafaR/e-commerce-nodejs-mongodb)
+# E-commerce App with Express.js, Mongoose, and MongoDB
+
+![GitHub package.json dynamic](https://img.shields.io/github/package-json/version/IMostafaR/e-commerce-nodejs-mongodb) ![GitHub repo size](https://img.shields.io/github/repo-size/IMostafaR/e-commerce-nodejs-mongodb)
 
 ![Dependencies](https://img.shields.io/badge/Dependencies-%20package.json-blue)
 
