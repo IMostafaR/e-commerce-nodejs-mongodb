@@ -1,4 +1,4 @@
-# E-commerce App with Express.js, Mongoose, and MongoDB
+# E-commerce App with Express.js, Mongoose, and MongoDB ![GitHub package.json dynamic](https://img.shields.io/github/package-json/version/IMostafaR/e-commerce-nodejs-mongodb) ![GitHub repo size](https://img.shields.io/github/repo-size/IMostafaR/e-commerce-nodejs-mongodb)
 
 ![Static Badge](https://img.shields.io/badge/Language-JavaScript-%23F7DF1E?logo=javascript&labelColor=black&color=%23F7DF1E)
 ![Static Badge](https://img.shields.io/badge/npm-v9.5.1-%23CB3837?logo=npm&labelColor=white&color=%23CB3837)
