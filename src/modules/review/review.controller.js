@@ -87,4 +87,25 @@ const getProductReviews = catchAsyncError(async (req, res, next) => {
   });
 });
 
-export { createReview, getAllReviews, getProductReviews };
+/**
+ * Delete a specific review by its id from DB (Admin only)
+ */
+const deleteOneReview = catchAsyncError(async (req, res, next) => {
+  const { id } = req.params;
+
+  // Find the review by its id and delete it
+  const review = await Review.findByIdAndDelete(id);
+
+  // Handle cases where no review is found
+  if (!review) return next(new AppError(`No review found with ID: ${id}`, 404));
+
+  // Send the response with the deleted review
+  res.status(200).json({
+    status: "success",
+    message: "Review deleted successfully",
+  });
+});
+
+export { createReview, getAllReviews, getProductReviews, deleteOneReview };
+
+// There is no updateReview controller because we don't need it. once a review is created, it cannot be updated.

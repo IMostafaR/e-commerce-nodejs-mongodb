@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   createReview,
+  deleteOneReview,
   getAllReviews,
   getProductReviews,
 } from "./review.controller.js";
@@ -16,5 +17,4 @@ reviewRouter
   .route("/:id")
   .post(validation(createReviewValidation), authenticate, createReview)
   .get(authenticate, getProductReviews)
-  .put()
-  .delete();
+  .delete(authenticate, authorize("admin"), deleteOneReview);
