@@ -52,6 +52,37 @@ const createReview = catchAsyncError(async (req, res, next) => {
 });
 
 /**
+ * update a specific review written by the current customer
+ */
+const updateReview = catchAsyncError(async (req, res, next) => {
+  const { title, content, rate } = req.body;
+  const { id } = req.params;
+  const { id: customer } = req.user;
+
+  // check if the review written by the current customer exists
+  const existingReview = await Review.findOne({ customer, _id: id });
+
+  // if the review doesn't exist, return a 403 error
+  if (!existingReview)
+    return next(new AppError("You can't update this review", 403));
+
+  // update the review with the provided fields
+  if (title) existingReview.title = title;
+  if (content) existingReview.content = content;
+  if (rate) existingReview.rate = rate;
+
+  // save the updated review into the database
+  const updatedReview = await existingReview.save();
+
+  // Send a successful response
+  res.status(200).json({
+    status: "success",
+    message: "Review updated successfully",
+    data: updatedReview,
+  });
+});
+
+/**
  * Get all reviews from the database.
  */
 const getAllReviews = handleAll(Review, populateOptions);
@@ -106,6 +137,10 @@ const deleteOneReview = catchAsyncError(async (req, res, next) => {
   });
 });
 
-export { createReview, getAllReviews, getProductReviews, deleteOneReview };
-
-// There is no updateReview controller because we don't need it. once a review is created, it cannot be updated.
+export {
+  createReview,
+  getAllReviews,
+  getProductReviews,
+  updateReview,
+  deleteOneReview,
+};
