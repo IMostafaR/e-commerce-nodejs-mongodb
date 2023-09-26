@@ -59,20 +59,22 @@ const updateReview = catchAsyncError(async (req, res, next) => {
   const { id } = req.params;
   const { id: customer } = req.user;
 
-  // check if the review written by the current customer exists
-  const existingReview = await Review.findOne({ customer, _id: id });
+  // update the review with the provided fields
+  const updateFields = {};
+  if (title) updateFields.title = title;
+  if (content) updateFields.content = content;
+  if (rate) updateFields.rate = rate;
+
+  // check if the review written by the current customer exists and update it
+  const updatedReview = await Review.findOneAndUpdate(
+    { customer, _id: id },
+    updateFields,
+    { new: true }
+  );
 
   // if the review doesn't exist, return a 403 error
-  if (!existingReview)
+  if (!updatedReview)
     return next(new AppError("You can't update this review", 403));
-
-  // update the review with the provided fields
-  if (title) existingReview.title = title;
-  if (content) existingReview.content = content;
-  if (rate) existingReview.rate = rate;
-
-  // save the updated review into the database
-  const updatedReview = await existingReview.save();
 
   // Send a successful response
   res.status(200).json({
