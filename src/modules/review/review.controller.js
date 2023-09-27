@@ -4,11 +4,6 @@ import { AppError } from "../../utils/error/appError.js";
 import { catchAsyncError } from "../../utils/error/asyncError.js";
 import { handleAll } from "../../utils/handler/refactor.handler.js";
 
-const populateOptions = {
-  path: "product customer",
-  select: "_id firstName lastName name finalPrice brand",
-};
-
 /**
  * Create a new review based on the provided request body fields.
  * @function
@@ -87,7 +82,7 @@ const updateReview = catchAsyncError(async (req, res, next) => {
 /**
  * Get all reviews from the database.
  */
-const getAllReviews = handleAll(Review, populateOptions);
+const getAllReviews = handleAll(Review);
 
 /**
  * Get all reviews for a specific product from the database.

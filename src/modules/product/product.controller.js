@@ -4,11 +4,6 @@ import cloudinary from "../../utils/cloud/cloud.js";
 import { Product } from "../../../database/models/product.model.js";
 import { handleAll, handleOne } from "../../utils/handler/refactor.handler.js";
 
-const populateOptions = {
-  path: "createdBy updatedBy category subcategory brand",
-  select: "_id name slug firstName lastName email role",
-};
-
 /**
  * create new product
  */
@@ -78,12 +73,12 @@ const updateProduct = catchAsyncError(async (req, res, next) => {});
 /**
  * Get all products from DB
  */
-const getAllProducts = handleAll(Product, populateOptions);
+const getAllProducts = handleAll(Product);
 
 /**
  * Get a specific product by its id from DB
  */
-const getOneProduct = handleOne(Product, populateOptions);
+const getOneProduct = handleOne(Product);
 
 /**
  * Delete a specific product by its id from DB

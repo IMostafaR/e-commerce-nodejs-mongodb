@@ -7,11 +7,6 @@ import {
   updateOne,
 } from "../../utils/handler/refactor.handler.js";
 
-const populateOptions = {
-  path: "createdBy updatedBy",
-  select: "_id firstName lastName email role",
-};
-
 /**
  * create new brnad
  */
@@ -26,12 +21,12 @@ const updateBrand = updateOne(Brand);
 /**
  * Get all brands from DB
  */
-const getAllBrands = handleAll(Brand, populateOptions);
+const getAllBrands = handleAll(Brand);
 
 /**
  * Get a specific brand by its id from DB
  */
-const getOneBrand = handleOne(Brand, populateOptions);
+const getOneBrand = handleOne(Brand);
 
 /**
  * Delete a specific brand by its id from DB

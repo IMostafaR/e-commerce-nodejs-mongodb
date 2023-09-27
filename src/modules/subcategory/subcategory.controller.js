@@ -4,11 +4,6 @@ import { AppError } from "../../utils/error/appError.js";
 import { catchAsyncError } from "../../utils/error/asyncError.js";
 import { handleAll, handleOne } from "../../utils/handler/refactor.handler.js";
 
-const populateOptions = {
-  path: "createdBy updatedBy category",
-  select: "_id name slug firstName lastName email role",
-};
-
 /**
  * Middleware for creating a new subcategory.
  *
@@ -116,9 +111,9 @@ const updateSubcategory = catchAsyncError(async (req, res, next) => {
   });
 });
 
-const getAllSubcategories = handleAll(Subcategory, populateOptions);
+const getAllSubcategories = handleAll(Subcategory);
 
-const getOneSubcategory = handleOne(Subcategory, populateOptions);
+const getOneSubcategory = handleOne(Subcategory);
 
 const deleteOneSubcategory = handleOne(Subcategory);
 
