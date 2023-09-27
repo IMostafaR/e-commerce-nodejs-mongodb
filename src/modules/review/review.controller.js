@@ -6,7 +6,7 @@ import { handleAll } from "../../utils/handler/refactor.handler.js";
 
 const populateOptions = {
   path: "product customer",
-  select: "_id firstName lastName name priceAfterDiscount brand",
+  select: "_id firstName lastName name finalPrice brand",
 };
 
 /**
