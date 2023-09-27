@@ -35,4 +35,11 @@ const CategorySchema = new mongoose.Schema(
   }
 );
 
+CategorySchema.pre(/^find/, function () {
+  this.populate({
+    path: "createdBy updatedBy",
+    select: "_id firstName lastName email role",
+  });
+});
+
 export const Category = mongoose.model("Category", CategorySchema);

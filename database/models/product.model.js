@@ -102,4 +102,12 @@ const ProductSchema = new mongoose.Schema(
   }
 );
 
+ProductSchema.pre(/^find/, function () {
+  this.populate({
+    ref: "User",
+    path: "createdBy updatedBy category subcategory brand",
+    select: "_id name slug firstName lastName email role",
+  });
+});
+
 export const Product = mongoose.model("Product", ProductSchema);
