@@ -27,31 +27,37 @@ const ProductSchema = new mongoose.Schema(
     },
     price: {
       type: Number,
+      required: true,
       default: 0,
       min: 0,
     },
     discount: {
       type: Number,
+      required: true,
       default: 0,
       min: 0,
     },
-    priceAfterDiscount: {
+    finalPrice: {
       type: Number,
+      required: true,
       default: 0,
       min: 0,
     },
     quantity: {
       type: Number,
+      required: true,
       default: 0,
       min: 0,
     },
     stock: {
       type: Number,
+      required: true,
       default: 0,
       min: 0,
     },
     soldItems: {
       type: Number,
+      required: true,
       default: 0,
       min: 0,
     },
