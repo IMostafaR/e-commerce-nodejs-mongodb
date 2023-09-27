@@ -25,37 +25,43 @@ const createProduct = catchAsyncError(async (req, res, next) => {
     brand,
   } = req.body;
 
+  // Create slug
   const slug = slugify(name);
+  // Get the id of the user who created the product
   const { id: createdBy, id: updatedBy } = req.user;
 
-  const cloudUpload = await cloudinary.uploader.upload(req.file.path, {
-    folder: `E-commerce-40/${Product.collection.name}/${slug}`,
-  });
-  const { secure_url, public_id } = cloudUpload;
-
-  // TODO: you must write logic to handle priceAfterDiscount and stock where their values become less than zero
-  const priceAfterDiscount = price - discount;
-
-  const stock = quantity - soldItems;
-
-  const newProduct = await Product.create({
+  // Create product data object
+  const productData = {
     name,
-    slug,
-    mainImage: { secure_url, public_id },
     description,
     price,
     discount,
-    priceAfterDiscount,
     quantity,
-    stock,
     soldItems,
     category,
     subcategory,
     brand,
+    slug,
     createdBy,
     updatedBy,
-  });
+  };
 
+  // Upload image to cloudinary
+  const cloudUpload = await cloudinary.uploader.upload(req.file.path, {
+    folder: `E-commerce-40/${Product.collection.name}/${slug}`,
+  });
+  // Destructure the response from cloudinary and add it to the product data object
+  const { secure_url, public_id } = cloudUpload;
+  productData.mainImage = { secure_url, public_id };
+
+  // Calculate final price and stock and add them to the product data object
+  productData.finalPrice = price - discount;
+  productData.stock = quantity - soldItems;
+
+  // Create new product
+  const newProduct = await Product.create(productData);
+
+  // Send response
   res.status(201).json({
     status: "success",
     message: `Product added successfully`,
