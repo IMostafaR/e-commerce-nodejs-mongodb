@@ -4,7 +4,6 @@ import { emailSender } from "../../utils/email/sendEmail.js";
 import { AppError } from "../../utils/error/appError.js";
 import { catchAsyncError } from "../../utils/error/asyncError.js";
 import { handleAll, handleOne } from "../../utils/handler/refactor.handler.js";
-import crypto from "crypto";
 
 /**
  * Create a new user based on the provided request body fields.
