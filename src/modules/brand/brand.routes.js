@@ -7,7 +7,8 @@ import {
 import { validation } from "../../middleware/validation/validation.js";
 import {
   createBrandValidation,
-  handleOneBrandValidation,
+  deleteOneBrandValidation,
+  getOneBrandValidation,
 } from "./brand.validator.js";
 import { authenticate, authorize } from "../auth/auth.controller.js";
 
@@ -26,7 +27,7 @@ brandRouter
 
 brandRouter
   .route("/:id")
-  .get(validation(handleOneBrandValidation), brand.getOneBrand)
+  .get(validation(getOneBrandValidation), brand.getOneBrand)
 
   // TODO: apply validation rules after handling updating brand name logic in the controller (refactor handler)
   .put(
@@ -36,7 +37,7 @@ brandRouter
     brand.updateBrand
   )
   .delete(
-    validation(handleOneBrandValidation),
+    validation(deleteOneBrandValidation),
     authenticate,
     authorize("admin"),
     brand.deleteOneBrand

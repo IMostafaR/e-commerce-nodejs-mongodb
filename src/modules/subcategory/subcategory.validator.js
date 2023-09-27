@@ -12,12 +12,17 @@ const updateSubcategoryValidation = Joi.object({
   category: mainValidationSchema.id,
 });
 
-const handleOneSubcategoryValidation = Joi.object({
+const getOneSubcategoryValidation = Joi.object({
   id: mainValidationSchema.id,
+});
+const deleteOneSubcategoryValidation = Joi.object({
+  id: mainValidationSchema.id,
+  token: mainValidationSchema.token,
 });
 
 export {
   createSubcategoryValidation,
   updateSubcategoryValidation,
-  handleOneSubcategoryValidation,
+  getOneSubcategoryValidation,
+  deleteOneSubcategoryValidation,
 };

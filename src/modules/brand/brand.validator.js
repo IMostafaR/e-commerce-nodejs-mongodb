@@ -5,8 +5,16 @@ const createBrandValidation = Joi.object({
   name: mainValidationSchema.name,
 }).options({ allowUnknown: true });
 
-const handleOneBrandValidation = Joi.object({
+const getOneBrandValidation = Joi.object({
   id: mainValidationSchema.id,
 });
+const deleteOneBrandValidation = Joi.object({
+  id: mainValidationSchema.id,
+  token: mainValidationSchema.token,
+});
 
-export { createBrandValidation, handleOneBrandValidation };
+export {
+  createBrandValidation,
+  getOneBrandValidation,
+  deleteOneBrandValidation,
+};

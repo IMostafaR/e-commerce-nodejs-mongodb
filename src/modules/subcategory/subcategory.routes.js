@@ -3,7 +3,8 @@ import * as subcategory from "./subcategory.controller.js";
 import { validation } from "../../middleware/validation/validation.js";
 import {
   createSubcategoryValidation,
-  handleOneSubcategoryValidation,
+  deleteOneSubcategoryValidation,
+  getOneSubcategoryValidation,
   updateSubcategoryValidation,
 } from "./subcategory.validator.js";
 import { authenticate, authorize } from "../auth/auth.controller.js";
@@ -23,10 +24,7 @@ subcategoryRouter
 
 subcategoryRouter
   .route("/:id")
-  .get(
-    validation(handleOneSubcategoryValidation),
-    subcategory.getOneSubcategory
-  )
+  .get(validation(getOneSubcategoryValidation), subcategory.getOneSubcategory)
   .put(
     validation(updateSubcategoryValidation),
     authenticate,
@@ -34,7 +32,7 @@ subcategoryRouter
     subcategory.updateSubcategory
   )
   .delete(
-    validation(handleOneSubcategoryValidation),
+    validation(deleteOneSubcategoryValidation),
     authenticate,
     authorize("admin"),
     subcategory.deleteOneSubcategory

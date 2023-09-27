@@ -7,7 +7,8 @@ import {
 import { subcategoryRouter } from "../subcategory/subcategory.routes.js";
 import {
   createCategoryValidation,
-  handleOneCategoryValidation,
+  deleteOneCategoryValidation,
+  getOneCategoryValidation,
 } from "./category.validator.js";
 import { validation } from "../../middleware/validation/validation.js";
 import { authenticate, authorize } from "../auth/auth.controller.js";
@@ -33,7 +34,7 @@ categoryRouter
 
 categoryRouter
   .route("/:id")
-  .get(validation(handleOneCategoryValidation), category.getOneCategory)
+  .get(validation(getOneCategoryValidation), category.getOneCategory)
 
   // TODO: apply validation rules after handling updating category name logic in the controller (refactor handler)
   .put(
@@ -45,7 +46,7 @@ categoryRouter
     category.updateCategory
   )
   .delete(
-    validation(handleOneCategoryValidation),
+    validation(deleteOneCategoryValidation),
     authenticate,
     authorize("admin"),
     category.deleteOneCategory

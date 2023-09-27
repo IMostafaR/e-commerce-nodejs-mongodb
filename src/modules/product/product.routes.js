@@ -7,7 +7,8 @@ import * as product from "./product.controller.js";
 import { validation } from "../../middleware/validation/validation.js";
 import {
   createProductValidation,
-  handleOneProductValidation,
+  deleteOneProductValidation,
+  getOneProductValidation,
 } from "./product.validator.js";
 import { authenticate, authorize } from "../auth/auth.controller.js";
 
@@ -26,7 +27,7 @@ productRouter
 
 productRouter
   .route("/:id")
-  .get(validation(handleOneProductValidation), product.getOneProduct)
+  .get(validation(getOneProductValidation), product.getOneProduct)
   .put(
     uploadFileCloud({ fileType: fileValidation.image }).single("mainImage"),
     authenticate,
@@ -34,7 +35,7 @@ productRouter
     product.updateProduct
   )
   .delete(
-    validation(handleOneProductValidation),
+    validation(deleteOneProductValidation),
     authenticate,
     authorize("admin"),
     product.deleteOneProduct

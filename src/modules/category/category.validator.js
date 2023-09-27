@@ -8,8 +8,16 @@ const createCategoryValidation = Joi.object({
   name: mainValidationSchema.name,
 }).options({ allowUnknown: true });
 
-const handleOneCategoryValidation = Joi.object({
+const getOneCategoryValidation = Joi.object({
   id: mainValidationSchema.id,
 });
+const deleteOneCategoryValidation = Joi.object({
+  id: mainValidationSchema.id,
+  token: mainValidationSchema.token,
+});
 
-export { createCategoryValidation, handleOneCategoryValidation };
+export {
+  createCategoryValidation,
+  getOneCategoryValidation,
+  deleteOneCategoryValidation,
+};

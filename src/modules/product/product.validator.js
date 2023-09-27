@@ -65,8 +65,16 @@ const createProductValidation = Joi.object({
   }
 }, "custom validation");
 
-const handleOneProductValidation = Joi.object({
+const getOneProductValidation = Joi.object({
   id: mainValidationSchema.id,
 });
+const deleteOneProductValidation = Joi.object({
+  id: mainValidationSchema.id,
+  token: mainValidationSchema.token,
+});
 
-export { createProductValidation, handleOneProductValidation };
+export {
+  createProductValidation,
+  getOneProductValidation,
+  deleteOneProductValidation,
+};
