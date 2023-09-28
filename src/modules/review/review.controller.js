@@ -4,6 +4,11 @@ import { AppError } from "../../utils/error/appError.js";
 import { catchAsyncError } from "../../utils/error/asyncError.js";
 import { handleAll } from "../../utils/handler/refactor.handler.js";
 
+const populateOptions = {
+  path: "product customer",
+  select: "_id firstName lastName name finalPrice brand",
+};
+
 /**
  * Create a new review based on the provided request body fields.
  * @function
@@ -82,7 +87,7 @@ const updateReview = catchAsyncError(async (req, res, next) => {
 /**
  * Get all reviews from the database.
  */
-const getAllReviews = handleAll(Review);
+const getAllReviews = handleAll(Review, populateOptions);
 
 /**
  * Get all reviews for a specific product from the database.
@@ -91,7 +96,10 @@ const getProductReviews = catchAsyncError(async (req, res, next) => {
   const { id: product } = req.params;
 
   // Create an APIFeatures instance to apply pagination, filtering, sorting, search, and selection
-  let features = new APIFeatures(Review.find({ product }), req.query)
+  let features = new APIFeatures(
+    Review.find({ product }).populate(populateOptions),
+    req.query
+  )
     .pagination()
     .filter()
     .sort()

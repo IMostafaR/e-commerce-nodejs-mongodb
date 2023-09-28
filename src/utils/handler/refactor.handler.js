@@ -116,7 +116,7 @@ const updateOne = (model) => {
  *   - 404 Not Found: If a category or page is not found.
  *   - 404 Not Found: If no documents of the specified model exist.
  */
-const handleAll = (model) => {
+const handleAll = (model, populateOptions) => {
   return catchAsyncError(async (req, res, next) => {
     // Create an empty query object
     let queryObj = {};
@@ -125,7 +125,10 @@ const handleAll = (model) => {
     req.params && req.params.id ? (queryObj.category = req.params.id) : null;
 
     // Create an APIFeatures instance to apply pagination, filtering, sorting, search, and selection
-    let features = new APIFeatures(model.find(queryObj), req.query)
+    let features = new APIFeatures(
+      model.find(queryObj).populate(populateOptions),
+      req.query
+    )
       .pagination()
       .filter()
       .sort()
@@ -164,7 +167,7 @@ const handleAll = (model) => {
  *
  * @throws {AppError} - If the requested document by ID is not found, it may throw a 404 Not Found error.
  */
-const handleOne = (model) => {
+const handleOne = (model, populateOptions) => {
   return catchAsyncError(async (req, res, next) => {
     /**
      * The ID of the document to be retrieved or deleted.
@@ -179,7 +182,7 @@ const handleOne = (model) => {
 
     if (req.method === "GET") {
       // Retrieve a document by its ID
-      doc = await model.findById(id);
+      doc = await model.findById(id).populate(populateOptions);
     } else if (req.method === "DELETE") {
       // Delete a document by its ID
       doc = await model.findByIdAndDelete(id);
