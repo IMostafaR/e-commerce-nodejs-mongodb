@@ -31,11 +31,4 @@ const BrandSchema = new mongoose.Schema(
   }
 );
 
-BrandSchema.pre(/^find/, function () {
-  this.populate({
-    path: "createdBy updatedBy",
-    select: "_id firstName lastName email role",
-  });
-});
-
 export const Brand = mongoose.model("Brand", BrandSchema);

@@ -34,11 +34,4 @@ const ReviewSchema = new mongoose.Schema(
   }
 );
 
-ReviewSchema.pre(/^find/, function () {
-  this.populate({
-    path: "product customer",
-    select: "_id firstName lastName name finalPrice brand",
-  });
-});
-
 export const Review = mongoose.model("Review", ReviewSchema);

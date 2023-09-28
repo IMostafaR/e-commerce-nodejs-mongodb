@@ -38,11 +38,4 @@ const SubcategorySchema = new mongoose.Schema(
   }
 );
 
-SubcategorySchema.pre(/^find/, function () {
-  this.populate({
-    path: "createdBy updatedBy category",
-    select: "_id name slug firstName lastName email role",
-  });
-});
-
 export const Subcategory = mongoose.model("Subcategory", SubcategorySchema);
