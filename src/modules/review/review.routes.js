@@ -15,11 +15,11 @@ import {
 
 export const reviewRouter = Router();
 
-reviewRouter.route("/").get(authenticate, authorize("admin"), getAllReviews);
+reviewRouter.route("/").get(getAllReviews);
 
 reviewRouter
   .route("/:id")
   .post(validation(createReviewValidation), authenticate, createReview)
-  .get(authenticate, getProductReviews)
+  .get(getProductReviews)
   .put(validation(updateReviewValidation), authenticate, updateReview)
   .delete(authenticate, authorize("admin"), deleteOneReview);
