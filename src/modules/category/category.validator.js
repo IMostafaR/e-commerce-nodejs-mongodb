@@ -6,7 +6,8 @@ import { mainValidationSchema } from "../../middleware/validation/validation.js"
  */
 const createCategoryValidation = Joi.object({
   name: mainValidationSchema.name,
-}).options({ allowUnknown: true });
+  token: mainValidationSchema.token,
+});
 
 const getOneCategoryValidation = Joi.object({
   id: mainValidationSchema.id,
