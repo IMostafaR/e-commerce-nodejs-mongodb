@@ -69,7 +69,7 @@ const deleteProductFromWishlist = catchAsyncError(async (req, res, next) => {
   const user = await User.findByIdAndUpdate(
     id,
     {
-      $pull: { wishlist: productId },
+      $pull: { wishlist: productId }, // reference document
     },
     { new: true }
   ).populate(populateOptions);
