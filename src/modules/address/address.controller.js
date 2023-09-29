@@ -80,13 +80,13 @@ const changeDefaultAddress = catchAsyncError(async (req, res, next) => {
   const user = await User.findByIdAndUpdate(
     id,
     {
-      $set: { "address.$[newDefault].default": true }, // the address which user want to set as default
-      $unset: { "address.$[oldDefault].default": false }, // all other addresses
+      $set: { "address.$[new].default": true }, // the address which user want to set as default
+      $unset: { "address.$[old].default": false }, // all other addresses
     },
     {
       arrayFilters: [
-        { "newDefault._id": addressId }, // the address which user want to set as default
-        { "oldDefault._id": { $ne: addressId } }, // all other addresses
+        { "new._id": addressId }, // the address which user want to set as default
+        { "old._id": { $ne: addressId } }, // all other addresses
       ],
       new: true,
     }
