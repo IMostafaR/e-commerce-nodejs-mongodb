@@ -4,8 +4,6 @@
  * This module is intended for creating a Super Admin account with predefined values.
  * It should be used for initial setup and testing purposes.
  *
- * Note: This module is now deprecated and replaced with the createUser function
- * in the user controller. It is left here for legacy purposes.
  *
  * Important: Make sure to customize the `adminObj` data for each admin account
  * created using this module.
@@ -13,14 +11,11 @@
  * @module createAdmin
  */
 
-import path from "path";
-import { config } from "dotenv";
-
-config({ path: path.resolve("../../../config/.env") });
+import dotenv from "dotenv";
 import mongoose from "mongoose";
 import { User } from "../../../database/models/user.model.js";
 import bcrypt from "bcrypt";
-
+dotenv.config();
 (async () => {
   /**
    * Establish a connection to the database.

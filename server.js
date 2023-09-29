@@ -1,9 +1,8 @@
-import path from "path";
-import { config } from "dotenv";
-config({ path: path.resolve("config/.env") });
+import dotenv from "dotenv";
 import express from "express";
 import { router } from "./src/router.js";
 
+dotenv.config();
 const app = express();
 const port = process.env.PORT || 8080;
 
