@@ -25,7 +25,7 @@ const AddressSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
-  defaultAddress: {
+  default: {
     type: Boolean,
     default: false,
   },
