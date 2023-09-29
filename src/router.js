@@ -7,6 +7,7 @@ import { productRouter } from "./modules/product/product.routes.js";
 import { reviewRouter } from "./modules/review/review.routes.js";
 import { subcategoryRouter } from "./modules/subcategory/subcategory.routes.js";
 import { userRouter } from "./modules/user/user.routes.js";
+import { wishlistRouter } from "./modules/wishlist/wishlist.routes.js";
 import { AppError } from "./utils/error/appError.js";
 import morgan from "morgan";
 
@@ -28,6 +29,7 @@ export const router = (app, express) => {
   app.use("/api/v1/brands", brandRouter);
   app.use("/api/v1/products", productRouter);
   app.use("/api/v1/reviews", reviewRouter);
+  app.use("/api/v1/wishlist", wishlistRouter);
   app.use("/uploads", express.static("uploads"));
   app.all("*", (req, res, next) => {
     next(new AppError(`invalid routing ${req.originalUrl}`, 404));
