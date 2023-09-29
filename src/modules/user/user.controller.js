@@ -5,6 +5,11 @@ import { AppError } from "../../utils/error/appError.js";
 import { catchAsyncError } from "../../utils/error/asyncError.js";
 import { handleAll, handleOne } from "../../utils/handler/refactor.handler.js";
 
+const populateOptions = {
+  path: "wishlist",
+  select: "name price mainImage.secure_url",
+};
+
 /**
  * Create a new user based on the provided request body fields.
  *
@@ -146,12 +151,12 @@ const updateUser = catchAsyncError(async (req, res, next) => {
 /**
  * Get all users from DB
  */
-const getAllUsers = handleAll(User);
+const getAllUsers = handleAll(User, populateOptions);
 
 /**
  * Get a specific user by its id from DB
  */
-const getOneUser = handleOne(User);
+const getOneUser = handleOne(User, populateOptions);
 
 /**
  * Delete a specific user by its id from DB
