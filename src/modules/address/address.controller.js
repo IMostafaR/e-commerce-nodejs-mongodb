@@ -7,7 +7,7 @@ import { catchAsyncError } from "../../utils/error/asyncError.js";
  */
 const addAddress = catchAsyncError(async (req, res, next) => {
   const { id } = req.user;
-  const { street, city, zipCode, country } = req.body;
+  const { street, city, zipCode, country, phone } = req.body;
 
   // check the length of address array and send error if it is full
   const user = await User.findById(id);
@@ -25,12 +25,13 @@ const addAddress = catchAsyncError(async (req, res, next) => {
             city,
             zipCode,
             country,
+            phone,
           },
         },
       },
     },
     {
-      $addToSet: { address: { street, city, zipCode, country } },
+      $addToSet: { address: { street, city, zipCode, country, phone } },
     },
     { new: true }
   ).populate("address");
