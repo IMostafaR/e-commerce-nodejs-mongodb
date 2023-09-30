@@ -4,6 +4,7 @@ import { addressRouter } from "./modules/address/address.routes.js";
 import { authRouter } from "./modules/auth/auth.routes.js";
 import { brandRouter } from "./modules/brand/brand.routes.js";
 import { categoryRouter } from "./modules/category/category.routes.js";
+import { couponRouter } from "./modules/coupon/coupon.routes.js";
 import { productRouter } from "./modules/product/product.routes.js";
 import { reviewRouter } from "./modules/review/review.routes.js";
 import { subcategoryRouter } from "./modules/subcategory/subcategory.routes.js";
@@ -32,6 +33,7 @@ export const router = (app, express) => {
   app.use("/api/v1/reviews", reviewRouter);
   app.use("/api/v1/wishlist", wishlistRouter);
   app.use("/api/v1/address", addressRouter);
+  app.use("/api/v1/coupons", couponRouter);
   app.use("/uploads", express.static("uploads"));
   app.all("*", (req, res, next) => {
     next(new AppError(`invalid routing ${req.originalUrl}`, 404));
