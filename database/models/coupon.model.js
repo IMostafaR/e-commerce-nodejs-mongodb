@@ -21,6 +21,10 @@ const CouponSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    active: {
+      type: Boolean,
+      default: true,
+    },
     usedBy: {
       type: [mongoose.Schema.Types.ObjectId],
       ref: "User",
