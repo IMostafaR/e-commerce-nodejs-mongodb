@@ -29,4 +29,9 @@ const createCouponValidation = Joi.object({
   token: mainValidationSchema.token,
 });
 
-export { createCouponValidation };
+const deleteCouponValidation = Joi.object({
+  id: mainValidationSchema.id,
+  token: mainValidationSchema.token,
+});
+
+export { createCouponValidation, deleteCouponValidation };

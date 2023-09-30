@@ -2,6 +2,7 @@ import e from "express";
 import { Coupon } from "../../../database/models/coupon.model.js";
 import { AppError } from "../../utils/error/appError.js";
 import { catchAsyncError } from "../../utils/error/asyncError.js";
+import { handleOne } from "../../utils/handler/refactor.handler.js";
 
 /**
  * @desc    Create new coupon with fixed discount amount and custom code entered by admin
@@ -42,4 +43,9 @@ const createCoupon = catchAsyncError(async (req, res, next) => {
   });
 });
 
-export { createCoupon };
+/**
+ * @desc    Delete coupon
+ */
+const deleteCoupon = handleOne(Coupon);
+
+export { createCoupon, deleteCoupon };
