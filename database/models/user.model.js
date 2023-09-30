@@ -25,6 +25,11 @@ const AddressSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
+  phone: {
+    type: String,
+    required: true,
+    trim: true,
+  },
   default: {
     type: Boolean,
     default: false,
@@ -63,10 +68,6 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: [true, "Password is required"],
       minLength: [8, "Password is too short"],
-    },
-    phone: {
-      type: String,
-      trim: true,
     },
     profilePic: ImageSchema,
     address: {
