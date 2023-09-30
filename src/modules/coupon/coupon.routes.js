@@ -1,6 +1,11 @@
 import { Router } from "express";
 import { authenticate, authorize } from "../auth/auth.controller.js";
-import { createCoupon, deleteCoupon } from "./coupon.controller.js";
+import {
+  createCoupon,
+  deleteCoupon,
+  getAllCoupons,
+  getOneCoupon,
+} from "./coupon.controller.js";
 import { validation } from "../../middleware/validation/validation.js";
 import {
   createCouponValidation,
@@ -11,6 +16,7 @@ export const couponRouter = Router();
 
 couponRouter
   .route("/")
+  .get(authenticate, authorize("admin"), getAllCoupons)
   .post(
     validation(createCouponValidation),
     authenticate,
@@ -20,6 +26,7 @@ couponRouter
 
 couponRouter
   .route("/:id")
+  .get(authenticate, authorize("admin"), getOneCoupon)
   .delete(
     validation(deleteCouponValidation),
     authenticate,

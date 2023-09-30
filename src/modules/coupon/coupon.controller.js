@@ -2,7 +2,12 @@ import e from "express";
 import { Coupon } from "../../../database/models/coupon.model.js";
 import { AppError } from "../../utils/error/appError.js";
 import { catchAsyncError } from "../../utils/error/asyncError.js";
-import { handleOne } from "../../utils/handler/refactor.handler.js";
+import { handleAll, handleOne } from "../../utils/handler/refactor.handler.js";
+
+const populateOptions = {
+  path: "createdBy updatedBy usedBy",
+  select: "firstName lastName email role -_id",
+};
 
 /**
  * @desc    Create new coupon with fixed discount amount and custom code entered by admin
@@ -44,8 +49,18 @@ const createCoupon = catchAsyncError(async (req, res, next) => {
 });
 
 /**
+ * @desc    Get all coupons
+ */
+const getAllCoupons = handleAll(Coupon, populateOptions);
+
+/**
+ * @desc    Get specific coupon
+ */
+const getOneCoupon = handleOne(Coupon, populateOptions);
+
+/**
  * @desc    Delete coupon
  */
 const deleteCoupon = handleOne(Coupon);
 
-export { createCoupon, deleteCoupon };
+export { createCoupon, deleteCoupon, getOneCoupon, getAllCoupons };
