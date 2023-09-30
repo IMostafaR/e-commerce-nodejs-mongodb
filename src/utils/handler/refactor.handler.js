@@ -204,7 +204,7 @@ const handleOne = (model, populateOptions) => {
       // Send the response after successfully deleting the document
       return res.status(200).json({
         status: "success",
-        message: `${doc.slug} successfully deleted`,
+        message: `Successfully deleted`,
       });
     }
   });
