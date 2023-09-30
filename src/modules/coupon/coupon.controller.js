@@ -25,10 +25,8 @@ const createCoupon = catchAsyncError(async (req, res, next) => {
 
   // Convert expiresAt to Date object
   expiresAt = new Date(expiresAt);
-  // add 24 hours to expiresAt to set the expiry time to 11:59:59 PM of that day
+  // add 24 hours to expiresAt to set the expiry time to 11:59:59 PM of that day. This works for YYYY-MM-DD format
   expiresAt.setHours(expiresAt.getHours() + 24);
-  // convert expiresAt to milliseconds
-  expiresAt = expiresAt.getTime();
 
   // Create new coupon
   const newCoupon = await Coupon.create({
