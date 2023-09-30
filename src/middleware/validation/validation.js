@@ -34,8 +34,10 @@ export const mainValidationSchema = {
   }),
   phone: Joi.string()
     .pattern(/^01[0125][0-9]{8}$/)
+    .required()
     .messages({
       "string.pattern.base": "Only Egyptian phone numbers are allowed",
+      "any.required": "Phone number is required",
     }),
   token: Joi.string()
     .pattern(/^[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_.+/=]*$/)
