@@ -9,7 +9,7 @@ const CouponSchema = new mongoose.Schema(
       trim: true,
     },
     expiresAt: {
-      type: Number,
+      type: Date,
       required: true,
     },
     discount: {
