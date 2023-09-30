@@ -17,13 +17,23 @@ const CouponSchema = new mongoose.Schema(
       default: 0,
       min: 0,
     },
-    active: {
-      type: Boolean,
-      default: false,
+    maxUse: {
+      type: Number,
+      required: true,
     },
-    customer: {
+    usedBy: {
       type: [mongoose.Schema.Types.ObjectId],
       ref: "User",
+    },
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    updatedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
     },
   },
   {
