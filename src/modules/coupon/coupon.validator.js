@@ -9,9 +9,11 @@ const createCouponValidation = Joi.object({
     "string.max": "Code should have a maximum length of {#limit}",
     "any.required": "Code is a required field",
   }),
-  expiresAt: Joi.date().required().messages({
+  expiresAt: Joi.date().iso().greater("now").required().messages({
     "date.base": "ExpiresAt should be a date",
     "date.empty": "ExpiresAt cannot be empty",
+    "date.greater": "ExpiresAt should be greater than today's date",
+    "date.format": "ExpiresAt should be in the formate of YYYY-MM-DD",
     "any.required": "ExpiresAt is a required field",
   }),
   discount: Joi.number().min(0).required().messages({
