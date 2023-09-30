@@ -31,7 +31,7 @@
 
 # Introduction
 
-This is my work assigned by [Route-Academy](https://www.linkedin.com/company/routeacademy/mycompany/) during learning backend web development.
+This is my work during learning backend web development.
 
 This is an e-commerce-Node.js application built with Express.js, Mongoose, and MongoDB, following the MVC (Model-View-Controller) design pattern.
 
