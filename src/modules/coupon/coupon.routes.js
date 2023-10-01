@@ -5,11 +5,13 @@ import {
   deleteCoupon,
   getAllCoupons,
   getOneCoupon,
+  updateCoupon,
 } from "./coupon.controller.js";
 import { validation } from "../../middleware/validation/validation.js";
 import {
   createCouponValidation,
   deleteCouponValidation,
+  updateCouponValidation,
 } from "./coupon.validator.js";
 
 export const couponRouter = Router();
@@ -27,6 +29,12 @@ couponRouter
 couponRouter
   .route("/:id")
   .get(authenticate, authorize("admin"), getOneCoupon)
+  .put(
+    validation(updateCouponValidation),
+    authenticate,
+    authorize("admin"),
+    updateCoupon
+  )
   .delete(
     validation(deleteCouponValidation),
     authenticate,

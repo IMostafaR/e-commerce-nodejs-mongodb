@@ -47,6 +47,43 @@ const createCoupon = catchAsyncError(async (req, res, next) => {
 });
 
 /**
+ * @desc    Update coupon
+ */
+
+const updateCoupon = catchAsyncError(async (req, res, next) => {
+  const { id } = req.params;
+  let { expiresAt, discount, maxUse, active } = req.body;
+  const { id: updatedBy } = req.user;
+
+  // update coupon with the provided data
+  const updateFields = {};
+  updateFields.updatedBy = updatedBy;
+  if (expiresAt) {
+    expiresAt = new Date(expiresAt);
+    expiresAt.setHours(expiresAt.getHours() + 24);
+    updateFields.expiresAt = expiresAt;
+  }
+  if (discount) updateFields.discount = discount;
+  if (maxUse) updateFields.maxUse = maxUse;
+  if (active) updateFields.active = active;
+
+  // find the coupon and update it
+  const updatedCoupon = await Coupon.findByIdAndUpdate(id, updateFields, {
+    new: true,
+  }).populate(populateOptions);
+
+  if (!updatedCoupon)
+    return next(new AppError("Coupon not found or already deleted", 404));
+
+  // send response
+  res.status(200).json({
+    status: "success",
+    message: "Coupon updated successfully",
+    data: updatedCoupon,
+  });
+});
+
+/**
  * @desc    Get all coupons
  */
 const getAllCoupons = handleAll(Coupon, populateOptions);
@@ -61,4 +98,10 @@ const getOneCoupon = handleOne(Coupon, populateOptions);
  */
 const deleteCoupon = handleOne(Coupon);
 
-export { createCoupon, deleteCoupon, getOneCoupon, getAllCoupons };
+export {
+  createCoupon,
+  updateCoupon,
+  getAllCoupons,
+  getOneCoupon,
+  deleteCoupon,
+};
