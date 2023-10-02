@@ -3,6 +3,7 @@ import { globalErrorHandler } from "./middleware/error/globalErrorHandler.js";
 import { addressRouter } from "./modules/address/address.routes.js";
 import { authRouter } from "./modules/auth/auth.routes.js";
 import { brandRouter } from "./modules/brand/brand.routes.js";
+import { cartRouter } from "./modules/cart/cart.routes.js";
 import { categoryRouter } from "./modules/category/category.routes.js";
 import { couponRouter } from "./modules/coupon/coupon.routes.js";
 import { productRouter } from "./modules/product/product.routes.js";
@@ -34,6 +35,7 @@ export const router = (app, express) => {
   app.use("/api/v1/wishlist", wishlistRouter);
   app.use("/api/v1/address", addressRouter);
   app.use("/api/v1/coupons", couponRouter);
+  app.use("/api/v1/cart", cartRouter);
   app.use("/uploads", express.static("uploads"));
   app.all("*", (req, res, next) => {
     next(new AppError(`invalid routing ${req.originalUrl}`, 404));
