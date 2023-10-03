@@ -55,6 +55,7 @@ const createCart = catchAsyncError(async (req, res, next) => {
     return res.status(201).json({
       status: "success",
       message: "Cart created successfully",
+      totalItems: newCart.products.length,
       data: newCart,
     });
   }
@@ -85,6 +86,7 @@ const createCart = catchAsyncError(async (req, res, next) => {
     return res.status(201).json({
       status: "success",
       message: "Product added to cart successfully",
+      totalItems: newProductToCart.products.length,
       data: newProductToCart,
     });
   }
@@ -118,6 +120,7 @@ const createCart = catchAsyncError(async (req, res, next) => {
   return res.status(200).json({
     status: "success",
     message: "Product quantity updated successfully",
+    totalItems: newProductDataToCart.products.length,
     data: newProductDataToCart,
   });
 });
