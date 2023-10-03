@@ -3,6 +3,21 @@ import { Product } from "../../../database/models/product.model.js";
 import { AppError } from "../../utils/error/appError.js";
 import { catchAsyncError } from "../../utils/error/asyncError.js";
 
+// find product and calculate totalPrice for the cart
+const findProductAndCalculate = async (productID, quantity, next) => {
+  // get product details
+  const product = await Product.findById(productID);
+  // check if product stock is less than the quantity requested
+  if (product.stock < quantity)
+    return next(new AppError("Quantity exceeds stock", 400));
+
+  // calculate totalPrice for the cart according to the product price and quantity
+  const price = product.finalPrice;
+  const productTotalPrice = price * quantity;
+
+  return { price, productTotalPrice };
+};
+
 const createCart = catchAsyncError(async (req, res, next) => {
   const { id: user } = req.user;
   const { productID, quantity } = req.body;
@@ -12,23 +27,13 @@ const createCart = catchAsyncError(async (req, res, next) => {
 
   // if cart does not exist for the user
   if (!existingCart) {
-    // get product details
-    const product = await Product.findById(productID);
-
-    // check if product stock is less than the quantity requested
-    if (product.stock < quantity)
-      return next(new AppError("Quantity exceeds stock", 400));
-
-    const price = product.finalPrice;
-
-    // calculate totalPrice for the cart according to the product price and quantity
-    const totalPrice = price * quantity;
+    const priceData = await findProductAndCalculate(productID, quantity, next);
 
     // create new cart
     const newCart = await Cart.create({
       user,
-      products: [{ product: productID, quantity, price }],
-      totalPrice,
+      products: [{ product: productID, quantity, price: priceData.price }],
+      totalPrice: priceData.productTotalPrice,
     });
 
     // send response
@@ -47,24 +52,16 @@ const createCart = catchAsyncError(async (req, res, next) => {
 
   // if product does not exist in the cart
   if (!existingProductInCart) {
-    // get product details
-    const product = await Product.findById(productID);
-
-    // check if product stock is less than the quantity requested
-    if (product.stock < quantity)
-      return next(new AppError("Quantity exceeds stock", 400));
-
-    const price = product.finalPrice;
-
-    // calculate ProductTotalPrice to be incremented to the totalPrice in cart according to the product price and quantity
-    const ProductTotalPrice = price * quantity;
+    const priceData = await findProductAndCalculate(productID, quantity, next);
 
     // add product to cart
     const newProductToCart = await Cart.findByIdAndUpdate(
       existingCart._id,
       {
-        $addToSet: { products: { product: productID, quantity, price } },
-        $inc: { totalPrice: ProductTotalPrice },
+        $addToSet: {
+          products: { product: productID, quantity, price: priceData.price },
+        },
+        $inc: { totalPrice: priceData.productTotalPrice },
       },
       { new: true }
     );
@@ -78,18 +75,16 @@ const createCart = catchAsyncError(async (req, res, next) => {
   }
 
   // if product already exists in the cart
-  // get product details to get the up to date price
-  const product = await Product.findById(productID);
-
-  // check if product stock is less than the quantity requested to be added to the existing quantity
-  if (product.stock < quantity + existingProductInCart.quantity)
-    return next(new AppError("Quantity exceeds stock", 400));
+  const priceData = await findProductAndCalculate(
+    productID,
+    quantity + existingProductInCart.quantity,
+    next
+  );
 
   // calculate product old totalPrice and new totalPrice according to the product price and quantity
   const productOldTotalPrice =
     existingProductInCart.price * existingProductInCart.quantity;
-  const productNewTotalPrice =
-    product.finalPrice * (quantity + existingProductInCart.quantity);
+  const productNewTotalPrice = priceData.productTotalPrice;
 
   // increment quantity and totalPrice of the product in the cart
   const newProductDataToCart = await Cart.findByIdAndUpdate(
