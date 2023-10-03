@@ -4,7 +4,7 @@ import { catchAsyncError } from "../../utils/error/asyncError.js";
 
 const createCart = catchAsyncError(async (req, res, next) => {
   const { id: user } = req.user;
-  const { product, quantity } = req.body;
+  const { productID, quantity } = req.body;
 
   // check if cart already exists for the user
   const existingCart = await Cart.findOne({ user });
@@ -12,7 +12,7 @@ const createCart = catchAsyncError(async (req, res, next) => {
   // if cart does not exist for the user
   if (!existingCart) {
     // get product details
-    const newProductToCart = await Product.findById(product);
+    const newProductToCart = await Product.findById(productID);
 
     const price = newProductToCart.finalPrice;
 
@@ -22,7 +22,7 @@ const createCart = catchAsyncError(async (req, res, next) => {
     // create new cart
     let cart = await Cart.create({
       user,
-      products: [{ product, quantity, price }],
+      products: [{ product: productID, quantity, price }],
       totalPrice,
     });
 
@@ -37,13 +37,13 @@ const createCart = catchAsyncError(async (req, res, next) => {
   // if cart already exists for the user
   // check if the product already exists in the cart
   const existingProduct = existingCart.products.find(
-    (item) => item.product == product
+    (item) => item.product == productID
   );
 
   // if product does not exist in the cart
   if (!existingProduct) {
     // get product details
-    const newProductToCart = await Product.findById(product);
+    const newProductToCart = await Product.findById(productID);
 
     const price = newProductToCart.finalPrice;
 
@@ -54,7 +54,7 @@ const createCart = catchAsyncError(async (req, res, next) => {
     let cart = await Cart.findByIdAndUpdate(
       existingCart._id,
       {
-        $addToSet: { products: { product, quantity, price } },
+        $addToSet: { products: { product: productID, quantity, price } },
         $inc: { totalPrice: ProductTotalPrice },
       },
       { new: true }
@@ -70,7 +70,7 @@ const createCart = catchAsyncError(async (req, res, next) => {
 
   // if product already exists in the cart
   // get product details to get the up to date price
-  const newProductDataToCart = await Product.findById(product);
+  const newProductDataToCart = await Product.findById(productID);
 
   // calculate product old totalPrice and new totalPrice according to the product price and quantity
   const productOldTotalPrice = existingProduct.price * existingProduct.quantity;
@@ -87,7 +87,7 @@ const createCart = catchAsyncError(async (req, res, next) => {
         totalPrice: -productOldTotalPrice + productNewTotalPrice,
       },
     },
-    { arrayFilters: [{ "id.product": product }], new: true }
+    { arrayFilters: [{ "id.product": productID }], new: true }
   );
 
   // send response
