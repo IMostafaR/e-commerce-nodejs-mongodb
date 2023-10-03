@@ -171,4 +171,25 @@ const deleteProductFromCart = catchAsyncError(async (req, res, next) => {
   });
 });
 
-export { createCart, getCart, deleteProductFromCart };
+/**
+ * @desc    delete user's cart
+ */
+
+const deleteCart = catchAsyncError(async (req, res, next) => {
+  const { id: user } = req.user;
+
+  // Delete cart
+  const deletedCart = await Cart.findOneAndDelete({ user });
+
+  // check if there is no cart to delete
+  if (!deletedCart)
+    return next(new AppError("You don't have cart to be deleted", 404));
+
+  // Send response
+  res.status(200).json({
+    status: "success",
+    message: "Cart deleted successfully",
+  });
+});
+
+export { createCart, getCart, deleteProductFromCart, deleteCart };
