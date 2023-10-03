@@ -33,7 +33,7 @@ const findProductAndCalculate = async (productID, quantity, next) => {
 /**
  * @desc    Create cart for user and add products to it or update quantity of products in it if it already exists
  */
-const createCart = catchAsyncError(async (req, res, next) => {
+const addToCart = catchAsyncError(async (req, res, next) => {
   const { id: user } = req.user;
   const { productID, quantity } = req.body;
 
@@ -192,4 +192,4 @@ const deleteCart = catchAsyncError(async (req, res, next) => {
   });
 });
 
-export { createCart, getCart, deleteProductFromCart, deleteCart };
+export { addToCart, getCart, deleteProductFromCart, deleteCart };

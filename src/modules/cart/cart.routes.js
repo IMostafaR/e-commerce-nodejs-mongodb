@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { authenticate } from "../auth/auth.controller.js";
 import {
-  createCart,
+  addToCart,
   deleteCart,
   deleteProductFromCart,
   getCart,
@@ -12,6 +12,6 @@ export const cartRouter = Router();
 cartRouter
   .route("/")
   .get(authenticate, getCart)
-  .post(authenticate, createCart)
+  .post(authenticate, addToCart)
   .patch(authenticate, deleteProductFromCart)
   .delete(authenticate, deleteCart);
