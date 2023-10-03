@@ -3,6 +3,11 @@ import { Product } from "../../../database/models/product.model.js";
 import { AppError } from "../../utils/error/appError.js";
 import { catchAsyncError } from "../../utils/error/asyncError.js";
 
+const populateOptions = {
+  path: "products.product",
+  select: "name mainImage.secure_url",
+};
+
 /**
  * @desc    Find product and calculate totalPrice for the cart
  *
