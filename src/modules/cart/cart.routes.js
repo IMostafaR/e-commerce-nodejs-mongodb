@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { authenticate } from "../auth/auth.controller.js";
-import { createCart } from "./cart.controller.js";
+import { createCart, getCart } from "./cart.controller.js";
 
 export const cartRouter = Router();
 
-cartRouter.route("/").get().post(authenticate, createCart);
+cartRouter.route("/").get(authenticate, getCart).post(authenticate, createCart);

@@ -117,4 +117,26 @@ const createCart = catchAsyncError(async (req, res, next) => {
   });
 });
 
-export { createCart };
+/**
+ * @desc    Get cart of user with all products in it and their details populated
+ */
+const getCart = catchAsyncError(async (req, res, next) => {
+  const { id: user } = req.user;
+
+  // get cart of user from database and populate it with product details
+  const cart = await Cart.findOne({ user }).populate({
+    path: "products.product",
+    select: "name mainImage.secure_url",
+  });
+
+  // check if cart is empty or not and send response accordingly
+  if (!cart) return next(new AppError("Cart is empty", 404));
+
+  // send response
+  res.status(200).json({
+    status: "success",
+    data: cart,
+  });
+});
+
+export { createCart, getCart };
