@@ -140,8 +140,35 @@ const getCart = catchAsyncError(async (req, res, next) => {
   // send response
   res.status(200).json({
     status: "success",
+    totalItems: cart.products.length,
     data: cart,
   });
 });
 
-export { createCart, getCart };
+/**
+ * @desc    delete product from cart
+ */
+
+const deleteProductFromCart = catchAsyncError(async (req, res, next) => {
+  const { id: user } = req.user;
+  const { productID } = req.body;
+
+  // Delete product from cart
+  const cart = await Cart.findOneAndUpdate(
+    { user },
+    {
+      $pull: { products: { product: productID } }, // reference document
+    },
+    { new: true }
+  ).populate(populateOptions);
+
+  // Send response
+  res.status(200).json({
+    status: "success",
+    message: "Product deleted from cart",
+    totalItems: cart.products.length,
+    data: cart,
+  });
+});
+
+export { createCart, getCart, deleteProductFromCart };
