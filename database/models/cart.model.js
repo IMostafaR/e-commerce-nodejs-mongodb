@@ -21,7 +21,7 @@ const CartSchema = new mongoose.Schema(
           default: 1,
           min: 1,
         },
-        finalPrice: {
+        price: {
           type: Number,
           required: true,
           default: 0,
@@ -30,18 +30,6 @@ const CartSchema = new mongoose.Schema(
       },
     ],
     totalPrice: {
-      type: Number,
-      required: true,
-      default: 0,
-      min: 0,
-    },
-    totalDiscount: {
-      type: Number,
-      required: true,
-      default: 0,
-      min: 0,
-    },
-    totalFinalPrice: {
       type: Number,
       required: true,
       default: 0,
