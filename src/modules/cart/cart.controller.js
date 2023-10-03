@@ -12,15 +12,15 @@ const createCart = catchAsyncError(async (req, res, next) => {
   // if cart does not exist for the user
   if (!existingCart) {
     // get product details
-    const newProductToCart = await Product.findById(productID);
+    const product = await Product.findById(productID);
 
-    const price = newProductToCart.finalPrice;
+    const price = product.finalPrice;
 
     // calculate totalPrice for the cart according to the product price and quantity
     const totalPrice = price * quantity;
 
     // create new cart
-    let cart = await Cart.create({
+    const newCart = await Cart.create({
       user,
       products: [{ product: productID, quantity, price }],
       totalPrice,
@@ -30,28 +30,28 @@ const createCart = catchAsyncError(async (req, res, next) => {
     return res.status(201).json({
       status: "success",
       message: "Cart created successfully",
-      data: cart,
+      data: newCart,
     });
   }
 
   // if cart already exists for the user
   // check if the product already exists in the cart
-  const existingProduct = existingCart.products.find(
+  const existingProductInCart = existingCart.products.find(
     (item) => item.product == productID
   );
 
   // if product does not exist in the cart
-  if (!existingProduct) {
+  if (!existingProductInCart) {
     // get product details
-    const newProductToCart = await Product.findById(productID);
+    const product = await Product.findById(productID);
 
-    const price = newProductToCart.finalPrice;
+    const price = product.finalPrice;
 
     // calculate ProductTotalPrice to be incremented to the totalPrice in cart according to the product price and quantity
     const ProductTotalPrice = price * quantity;
 
     // add product to cart
-    let cart = await Cart.findByIdAndUpdate(
+    const newProductToCart = await Cart.findByIdAndUpdate(
       existingCart._id,
       {
         $addToSet: { products: { product: productID, quantity, price } },
@@ -64,21 +64,22 @@ const createCart = catchAsyncError(async (req, res, next) => {
     return res.status(201).json({
       status: "success",
       message: "Product added to cart successfully",
-      data: cart,
+      data: newProductToCart,
     });
   }
 
   // if product already exists in the cart
   // get product details to get the up to date price
-  const newProductDataToCart = await Product.findById(productID);
+  const product = await Product.findById(productID);
 
   // calculate product old totalPrice and new totalPrice according to the product price and quantity
-  const productOldTotalPrice = existingProduct.price * existingProduct.quantity;
+  const productOldTotalPrice =
+    existingProductInCart.price * existingProductInCart.quantity;
   const productNewTotalPrice =
-    newProductDataToCart.finalPrice * (quantity + existingProduct.quantity);
+    product.finalPrice * (quantity + existingProductInCart.quantity);
 
   // increment quantity and totalPrice of the product in the cart
-  let cart = await Cart.findByIdAndUpdate(
+  const newProductDataToCart = await Cart.findByIdAndUpdate(
     existingCart._id,
 
     {
@@ -94,7 +95,7 @@ const createCart = catchAsyncError(async (req, res, next) => {
   return res.status(200).json({
     status: "success",
     message: "Product quantity updated successfully",
-    data: cart,
+    data: newProductDataToCart,
   });
 });
 
