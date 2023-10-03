@@ -3,7 +3,14 @@ import { Product } from "../../../database/models/product.model.js";
 import { AppError } from "../../utils/error/appError.js";
 import { catchAsyncError } from "../../utils/error/asyncError.js";
 
-// find product and calculate totalPrice for the cart
+/**
+ * @desc    Find product and calculate totalPrice for the cart
+ *
+ * @param { ObjectId } productID
+ * @param {Number} quantity
+ * @param {Express.NextFunction} next
+ * @returns {Object} price and productTotalPrice
+ */
 const findProductAndCalculate = async (productID, quantity, next) => {
   // get product details
   const product = await Product.findById(productID);
@@ -18,6 +25,9 @@ const findProductAndCalculate = async (productID, quantity, next) => {
   return { price, productTotalPrice };
 };
 
+/**
+ * @desc    Create cart for user and add products to it or update quantity of products in it if it already exists
+ */
 const createCart = catchAsyncError(async (req, res, next) => {
   const { id: user } = req.user;
   const { productID, quantity } = req.body;
