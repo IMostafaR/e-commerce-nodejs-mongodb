@@ -1,5 +1,6 @@
 import { Cart } from "../../../database/models/cart.model.js";
 import { Product } from "../../../database/models/product.model.js";
+import { AppError } from "../../utils/error/appError.js";
 import { catchAsyncError } from "../../utils/error/asyncError.js";
 
 const createCart = catchAsyncError(async (req, res, next) => {
@@ -13,6 +14,10 @@ const createCart = catchAsyncError(async (req, res, next) => {
   if (!existingCart) {
     // get product details
     const product = await Product.findById(productID);
+
+    // check if product stock is less than the quantity requested
+    if (product.stock < quantity)
+      return next(new AppError("Quantity exceeds stock", 400));
 
     const price = product.finalPrice;
 
@@ -45,6 +50,10 @@ const createCart = catchAsyncError(async (req, res, next) => {
     // get product details
     const product = await Product.findById(productID);
 
+    // check if product stock is less than the quantity requested
+    if (product.stock < quantity)
+      return next(new AppError("Quantity exceeds stock", 400));
+
     const price = product.finalPrice;
 
     // calculate ProductTotalPrice to be incremented to the totalPrice in cart according to the product price and quantity
@@ -71,6 +80,10 @@ const createCart = catchAsyncError(async (req, res, next) => {
   // if product already exists in the cart
   // get product details to get the up to date price
   const product = await Product.findById(productID);
+
+  // check if product stock is less than the quantity requested to be added to the existing quantity
+  if (product.stock < quantity + existingProductInCart.quantity)
+    return next(new AppError("Quantity exceeds stock", 400));
 
   // calculate product old totalPrice and new totalPrice according to the product price and quantity
   const productOldTotalPrice =
