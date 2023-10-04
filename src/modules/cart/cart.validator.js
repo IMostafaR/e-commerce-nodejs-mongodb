@@ -25,9 +25,19 @@ const deleteCartValidation = Joi.object({
   token: mainValidationSchema.token,
 });
 
+const applyCouponToCartValidation = Joi.object({
+  token: mainValidationSchema.token,
+  couponCode: Joi.string().required().messages({
+    "string.base": "couponCode must be a string",
+    "string.empty": "couponCode cannot be an empty field",
+    "any.required": "couponCode is required",
+  }),
+});
+
 export {
   addToCartValidation,
   getCartValidation,
   deleteProductFromCartValidation,
   deleteCartValidation,
+  applyCouponToCartValidation,
 };

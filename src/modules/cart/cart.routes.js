@@ -2,6 +2,7 @@ import { Router } from "express";
 import { authenticate } from "../auth/auth.controller.js";
 import {
   addToCart,
+  applyCouponToCart,
   deleteCart,
   deleteProductFromCart,
   getCart,
@@ -9,6 +10,7 @@ import {
 import { validation } from "../../middleware/validation/validation.js";
 import {
   addToCartValidation,
+  applyCouponToCartValidation,
   deleteCartValidation,
   deleteProductFromCartValidation,
   getCartValidation,
@@ -25,4 +27,9 @@ cartRouter
     authenticate,
     deleteProductFromCart
   )
-  .delete(validation(deleteCartValidation), authenticate, deleteCart);
+  .delete(validation(deleteCartValidation), authenticate, deleteCart)
+  .put(
+    validation(applyCouponToCartValidation),
+    authenticate,
+    applyCouponToCart
+  );

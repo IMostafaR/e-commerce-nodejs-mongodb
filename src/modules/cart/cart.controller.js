@@ -1,4 +1,5 @@
 import { Cart } from "../../../database/models/cart.model.js";
+import { Coupon } from "../../../database/models/coupon.model.js";
 import { Product } from "../../../database/models/product.model.js";
 import { AppError } from "../../utils/error/appError.js";
 import { catchAsyncError } from "../../utils/error/asyncError.js";
@@ -192,4 +193,61 @@ const deleteCart = catchAsyncError(async (req, res, next) => {
   });
 });
 
-export { addToCart, getCart, deleteProductFromCart, deleteCart };
+/**
+ * @desc    Apply coupon to cart
+ */
+
+const applyCouponToCart = catchAsyncError(async (req, res, next) => {
+  const { id: user } = req.user;
+  const { couponCode } = req.body;
+  // check if coupon exists
+  const existingCoupon = await Coupon.findOne({ code: couponCode });
+  if (!existingCoupon)
+    return next(new AppError("Coupon does not exist, try again", 404));
+
+  // check if the user already used this coupon
+  if (existingCoupon.usedBy.includes(user))
+    return next(new AppError("You already used this coupon", 400));
+
+  // check if coupon is active, expired, or used max times
+  if (
+    !existingCoupon.active ||
+    existingCoupon.expiresAt < Date.now() ||
+    existingCoupon.usedBy.length > existingCoupon.maxUse
+  )
+    return next(new AppError("Coupon is expired", 400));
+
+  // check if user applied coupon to his cart before
+  const cart = await Cart.findOne({ user });
+  if (cart.coupon.code === existingCoupon.code)
+    return next(new AppError("You already applied coupon to your cart", 400));
+
+  // update cart with coupon details and calculate totalPrice for the cart
+  const updatedCart = await Cart.findOneAndUpdate(
+    { user },
+    {
+      coupon: { code: existingCoupon.code, discount: existingCoupon.discount },
+      $inc: {
+        totalPrice: -existingCoupon.discount,
+      },
+    },
+    { new: true }
+  ).populate(populateOptions);
+
+  // send response
+  res.status(200).json({
+    status: "success",
+    message: "Coupon applied successfully",
+    data: updatedCart,
+  });
+
+  // updating the usedBy field in the coupon document will be done in the order controller after the order is created successfully and the user successfully paid for it
+});
+
+export {
+  addToCart,
+  getCart,
+  deleteProductFromCart,
+  deleteCart,
+  applyCouponToCart,
+};
