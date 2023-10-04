@@ -30,6 +30,23 @@ const CartSchema = new mongoose.Schema(
         },
       },
     ],
+    coupon: {
+      type: {
+        _id: false,
+        code: {
+          type: String,
+        },
+        discount: {
+          type: Number,
+        },
+      },
+    },
+    totalPriceWithoutDiscount: {
+      type: Number,
+      required: true,
+      default: 0,
+      min: 0,
+    },
     totalPrice: {
       type: Number,
       required: true,
