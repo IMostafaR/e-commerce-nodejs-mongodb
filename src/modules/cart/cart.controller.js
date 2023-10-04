@@ -43,13 +43,18 @@ const addToCart = catchAsyncError(async (req, res, next) => {
 
   // if cart does not exist for the user
   if (!existingCart) {
-    const priceData = await findProductAndCalculate(productID, quantity, next);
+    const { price, productTotalPrice } = await findProductAndCalculate(
+      productID,
+      quantity,
+      next
+    );
 
     // create new cart
     const newCart = await Cart.create({
       user,
-      products: [{ product: productID, quantity, price: priceData.price }],
-      totalPrice: priceData.productTotalPrice,
+      products: [{ product: productID, quantity, price }],
+      totalPriceWithoutDiscount: productTotalPrice,
+      totalPrice: productTotalPrice,
     });
 
     // send response
@@ -69,16 +74,23 @@ const addToCart = catchAsyncError(async (req, res, next) => {
 
   // if product does not exist in the cart
   if (!existingProductInCart) {
-    const priceData = await findProductAndCalculate(productID, quantity, next);
+    const { price, productTotalPrice } = await findProductAndCalculate(
+      productID,
+      quantity,
+      next
+    );
 
     // add product to cart
     const newProductToCart = await Cart.findByIdAndUpdate(
       existingCart._id,
       {
         $addToSet: {
-          products: { product: productID, quantity, price: priceData.price },
+          products: { product: productID, quantity, price },
         },
-        $inc: { totalPrice: priceData.productTotalPrice },
+        $inc: {
+          totalPriceWithoutDiscount: productTotalPrice,
+          totalPrice: productTotalPrice,
+        },
       },
       { new: true }
     );
@@ -93,7 +105,7 @@ const addToCart = catchAsyncError(async (req, res, next) => {
   }
 
   // if product already exists in the cart
-  const priceData = await findProductAndCalculate(
+  const { productTotalPrice } = await findProductAndCalculate(
     productID,
     quantity + existingProductInCart.quantity,
     next
@@ -102,7 +114,7 @@ const addToCart = catchAsyncError(async (req, res, next) => {
   // calculate product old totalPrice and new totalPrice according to the product price and quantity
   const productOldTotalPrice =
     existingProductInCart.price * existingProductInCart.quantity;
-  const productNewTotalPrice = priceData.productTotalPrice;
+  const productNewTotalPrice = productTotalPrice;
 
   // increment quantity and totalPrice of the product in the cart
   const newProductDataToCart = await Cart.findByIdAndUpdate(
@@ -111,6 +123,7 @@ const addToCart = catchAsyncError(async (req, res, next) => {
     {
       $inc: {
         "products.$[id].quantity": quantity,
+        totalPriceWithoutDiscount: -productOldTotalPrice + productNewTotalPrice,
         totalPrice: -productOldTotalPrice + productNewTotalPrice,
       },
     },
