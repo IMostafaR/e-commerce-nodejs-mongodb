@@ -6,12 +6,14 @@ import {
   deleteProductFromCart,
   getCart,
 } from "./cart.controller.js";
+import { validation } from "../../middleware/validation/validation.js";
+import { addToCartValidation } from "./cart.validator.js";
 
 export const cartRouter = Router();
 
 cartRouter
   .route("/")
   .get(authenticate, getCart)
-  .post(authenticate, addToCart)
+  .post(validation(addToCartValidation), authenticate, addToCart)
   .patch(authenticate, deleteProductFromCart)
   .delete(authenticate, deleteCart);
