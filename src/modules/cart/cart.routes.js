@@ -9,6 +9,7 @@ import {
 import { validation } from "../../middleware/validation/validation.js";
 import {
   addToCartValidation,
+  deleteCartValidation,
   deleteProductFromCartValidation,
   getCartValidation,
 } from "./cart.validator.js";
@@ -24,4 +25,4 @@ cartRouter
     authenticate,
     deleteProductFromCart
   )
-  .delete(authenticate, deleteCart);
+  .delete(validation(deleteCartValidation), authenticate, deleteCart);

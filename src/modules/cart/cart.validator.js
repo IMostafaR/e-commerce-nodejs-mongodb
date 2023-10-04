@@ -21,8 +21,13 @@ const deleteProductFromCartValidation = Joi.object({
   productID: mainValidationSchema.id,
 });
 
+const deleteCartValidation = Joi.object({
+  token: mainValidationSchema.token,
+});
+
 export {
   addToCartValidation,
   getCartValidation,
   deleteProductFromCartValidation,
+  deleteCartValidation,
 };
