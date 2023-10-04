@@ -12,4 +12,8 @@ const addToCartValidation = Joi.object({
   }),
 });
 
-export { addToCartValidation };
+const getCartValidation = Joi.object({
+  token: mainValidationSchema.token,
+});
+
+export { addToCartValidation, getCartValidation };
