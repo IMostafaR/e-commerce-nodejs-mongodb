@@ -278,8 +278,12 @@ const applyCouponToCart = catchAsyncError(async (req, res, next) => {
 
   // check if user applied coupon to his cart before
   const cart = await Cart.findOne({ user });
-  if (cart.coupon.code === existingCoupon.code)
+  if (cart.coupon?.code === existingCoupon.code)
     return next(new AppError("You already applied coupon to your cart", 400));
+
+  // check if the coupon discount is greater than the totalPrice of the cart
+  if (cart.totalPrice < existingCoupon.discount)
+    return next(new AppError("This coupon is not valid for your cart", 400));
 
   // update cart with coupon details and calculate totalPrice for the cart
   const updatedCart = await Cart.findOneAndUpdate(
