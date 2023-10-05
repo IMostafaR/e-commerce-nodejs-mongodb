@@ -140,22 +140,68 @@ const addToCart = catchAsyncError(async (req, res, next) => {
 });
 
 /**
- * @desc    Get cart of user with all products in it and their details populated
+ * @desc    Get cart of user with all products in it with their updated prices
  */
 const getCart = catchAsyncError(async (req, res, next) => {
   const { id: user } = req.user;
 
-  // get cart of user from database and populate it with product details
-  const cart = await Cart.findOne({ user }).populate(populateOptions);
+  // Get cart of user from database
+  const cart = await Cart.findOne({ user });
 
-  // check if cart is empty or not and send response accordingly
+  // Check if the cart is empty or does not exist
   if (!cart) return next(new AppError("Cart is empty", 404));
 
-  // send response
+  // Get product IDs from the cart
+  const productIDs = cart.products.map((cartItem) => cartItem.product);
+
+  // Get products from database using the IDs
+  const products = await Product.find({ _id: { $in: productIDs } });
+
+  // Create an object to map product IDs to their prices
+  const productPrices = {};
+
+  // get product prices from the products array
+  products.forEach(
+    (product) => (productPrices[product._id.toString()] = product.finalPrice)
+  );
+
+  // Set a flag to check if the cart needs to be updated
+  let cartNeedsUpdate = false;
+
+  // Iterate through cart items and update prices if the product price changed
+  cart.products.forEach((cartItem) => {
+    if (cartItem.price != productPrices[cartItem.product]) {
+      cartItem.price = productPrices[cartItem.product];
+      cartNeedsUpdate = true;
+    }
+  });
+
+  // If the cart was updated, recalculate the totalPriceWithoutDiscount and totalPrice
+  if (cartNeedsUpdate) {
+    cart.totalPriceWithoutDiscount = 0;
+    cart.totalPrice = 0;
+
+    cart.products.forEach((cartItem) => {
+      cart.totalPriceWithoutDiscount += cartItem.price * cartItem.quantity;
+      cart.totalPrice += cartItem.price * cartItem.quantity;
+    });
+
+    // Check if there is a coupon applied to the cart and update the totalPrice if the totalPrice is greater than the coupon discount
+    if (cart.coupon?.discount && cart.totalPrice > cart.coupon?.discount) {
+      cart.totalPrice -= cart.coupon.discount;
+    }
+
+    await cart.save();
+  }
+
+  // Populate cart with product details
+  const populatedCart = await Cart.findById(cart._id).populate(populateOptions);
+
+  // Send response
   res.status(200).json({
     status: "success",
     totalItems: cart.products.length,
-    data: cart,
+    data: populatedCart,
   });
 });
 
