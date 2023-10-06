@@ -126,23 +126,24 @@ const paymentListenerAndCreateOrder = catchAsyncError(
     if (event.type === "checkout.session.completed") {
       const session = event.data.object;
 
-      console.log("successful payment ✨✨✨");
+      console.log("successful card payment ✨✨✨");
+
+      // get cart ID and address from session data
       const { client_reference_id: cartID, metadata: address } = session;
+
+      // get cart info for order (products, totalPrice, coupon)
       const cartInfo = await getCartInfoForCardOrder(cartID);
 
-      console.log("cartID=>", cartID);
-      console.log("address=>", address);
+      // create order info object
       const orderInfo = {
         ...cartInfo,
         address,
         status: "completed",
         paymentMethod: "card",
       };
-      console.log("orderInfo=>", orderInfo);
 
       // create order
       const order = await Order.create(orderInfo);
-      console.log("order=>", order);
       if (!order) return next(new AppError("Order could not be created", 500));
 
       // update related documents after order (usedBy array in coupon document, soldItems and stock in product document, delete cart document)
