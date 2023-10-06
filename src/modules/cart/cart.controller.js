@@ -132,7 +132,7 @@ const getCart = catchAsyncError(async (req, res, next) => {
   // Check if the cart is empty or does not exist
   if (!cart) return next(new AppError("Cart is empty", 404));
 
-  // Get real time product price
+  // update cart with real time product prices
   await getRealTimeProductPrice(cart);
 
   // Populate cart with product details
