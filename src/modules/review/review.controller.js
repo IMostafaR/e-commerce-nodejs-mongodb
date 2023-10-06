@@ -1,3 +1,4 @@
+import { Order } from "../../../database/models/order.model.js";
 import { Review } from "../../../database/models/review.model.js";
 import { APIFeatures } from "../../utils/apiFeature/apiFeature.js";
 import { AppError } from "../../utils/error/appError.js";
@@ -26,7 +27,16 @@ const createReview = catchAsyncError(async (req, res, next) => {
   const { id: product } = req.params;
   const { id: customer } = req.user;
 
-  // TODO: Check if customer has already purchased this product (using orders)
+  // Check if customer has already purchased this product (using orders)
+  const userOrder = await Order.findOne({
+    user: customer,
+    products: { $elemMatch: { product } },
+  });
+
+  if (!userOrder)
+    return next(
+      new AppError("You can't review this product before purchasing it", 403)
+    );
 
   // check if the customer has already reviewed this product
   const existingReview = await Review.findOne({ customer, product });
