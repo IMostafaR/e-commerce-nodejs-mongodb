@@ -115,7 +115,7 @@ const paymentListenerAndCreateOrder = catchAsyncError(
       event = stripe.webhooks.constructEvent(
         request.body,
         sig,
-        "whsec_VsvTIZqtTH9C1ZKKJ653FljIWAEpqVzj"
+        process.env.STRIPE_WEBHOOK_SECRET
       );
     } catch (err) {
       return response.status(400).send(`Webhook Error: ${err.message}`);
@@ -125,7 +125,7 @@ const paymentListenerAndCreateOrder = catchAsyncError(
     if (event.type === "checkout.session.completed") {
       const session = event.data.object;
 
-      console.log("success ✨✨✨", session);
+      console.log("successful payment ✨✨✨");
       // const { client_reference_id: cartID } = session;
       // const { metadata: address } = session;
       // const { id: user } = await Order.findOne({ cart: cartID });
