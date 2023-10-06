@@ -140,8 +140,6 @@ const paymentListenerAndCreateOrder = catchAsyncError(
       };
       console.log("orderInfo=>", orderInfo);
 
-      if (cart.coupon?.discount) orderInfo.coupon = cart.coupon;
-
       // create order
       const order = await Order.create(orderInfo);
       console.log("order=>", order);
