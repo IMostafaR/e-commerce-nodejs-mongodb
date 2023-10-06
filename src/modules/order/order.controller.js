@@ -158,7 +158,7 @@ const paymentListenerAndCreateOrder = catchAsyncError(
       );
 
       // send response
-      return res.status(201).json({
+      return response.status(201).json({
         status: "success",
         message: "Order created successfully",
         data: order,
