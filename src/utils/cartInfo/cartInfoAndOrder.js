@@ -139,9 +139,9 @@ const updateRelatedDocsAfterOrder = async (
   }
 
   // Create an object to map product IDs to their quantities
-  const productQuantityMap = {};
+  const productQuantities = {};
   products.forEach((item) => {
-    productQuantityMap[item.product] = item.quantity;
+    productQuantities[item.product] = item.quantity;
   });
 
   // Get the product IDs from the cart
@@ -149,7 +149,7 @@ const updateRelatedDocsAfterOrder = async (
 
   // Create an array to store the update operations for each product
   const updateOperations = productIDs.map((productID) => {
-    const quantityOrdered = productQuantityMap[productID];
+    const quantityOrdered = productQuantities[productID];
     return {
       updateOne: {
         filter: { _id: productID },
