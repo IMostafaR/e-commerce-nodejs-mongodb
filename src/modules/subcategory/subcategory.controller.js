@@ -1,8 +1,8 @@
 import slugify from "slugify";
-import { Subcategory } from "../../../database/models/subcategory.model.js";
 import { AppError } from "../../utils/error/appError.js";
 import { catchAsyncError } from "../../utils/error/asyncError.js";
 import { handleAll, handleOne } from "../../utils/handler/refactor.handler.js";
+import { Subcategory } from "../../../database/models/subcategory.model.js";
 
 const populateOptions = {
   path: "createdBy updatedBy category",
