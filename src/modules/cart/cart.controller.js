@@ -1,12 +1,11 @@
 import { Cart } from "../../../database/models/cart.model.js";
 import { Coupon } from "../../../database/models/coupon.model.js";
-import { Product } from "../../../database/models/product.model.js";
-import { AppError } from "../../utils/error/appError.js";
-import { catchAsyncError } from "../../utils/error/asyncError.js";
 import {
   findProductAndCalculate,
   getRealTimeProductPrice,
-} from "../../utils/priceAndStock/price.js";
+} from "../../utils/cartInfo/cartInfoAndOrder.js";
+import { AppError } from "../../utils/error/appError.js";
+import { catchAsyncError } from "../../utils/error/asyncError.js";
 
 const populateOptions = {
   path: "products.product",
