@@ -6,6 +6,8 @@ import {
 } from "../../utils/cartInfo/cartInfoAndOrder.js";
 import { Order } from "../../../database/models/order.model.js";
 import { AppError } from "../../utils/error/appError.js";
+import Stripe from "stripe";
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 /**
  * @desc    Create order for user
@@ -60,4 +62,47 @@ const getAllUserOrders = catchAsyncError(async (req, res, next) => {
   });
 });
 
-export { createCashOrder, getAllUserOrders };
+/**
+ * @desc    Online payment
+ */
+
+const createOnlinePaymentSession = catchAsyncError(async (req, res, next) => {
+  const { id: user, name, email } = req.user;
+  const { addressID, paymentMethod } = req.body;
+
+  // get address from user address array by address ID
+  const address = await getAddress(user, addressID);
+  // get cart info for order (products, totalPrice, coupon) after updating the cart prices
+  const cartInfo = await getCartInfoForOrder(user, next);
+
+  // create stripe session for online payment and send it to the client to complete the payment process
+  const session = await stripe.checkout.sessions.create({
+    line_items: [
+      {
+        price_data: {
+          currency: "egp",
+          unit_amount: cartInfo.totalPrice * 100,
+          product_data: {
+            name: `Order from E-commerce. Customer: ${name}`,
+          },
+        },
+        quantity: 1,
+      },
+    ],
+    mode: "payment",
+    success_url: `${process.env.CLIENT_URL_SUCCESS}`,
+    cancel_url: `${process.env.CLIENT_URL_CANCEL}`,
+    customer_email: email,
+    client_reference_id: cartInfo.cart,
+    metadata: address,
+  });
+
+  // send response
+  return res.status(200).json({
+    status: "success",
+    message: "Session created successfully",
+    data: session,
+  });
+});
+
+export { createCashOrder, getAllUserOrders, createOnlinePaymentSession };

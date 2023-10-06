@@ -5,7 +5,11 @@ import {
   createOrderValidation,
   getAllUserOrdersValidation,
 } from "./order.validator.js";
-import { createCashOrder, getAllUserOrders } from "./order.controller.js";
+import {
+  createCashOrder,
+  createOnlinePaymentSession,
+  getAllUserOrders,
+} from "./order.controller.js";
 
 export const orderRouter = Router();
 
@@ -13,3 +17,11 @@ orderRouter
   .route("/")
   .post(validation(createOrderValidation), authenticate, createCashOrder)
   .get(validation(getAllUserOrdersValidation), authenticate, getAllUserOrders);
+
+orderRouter
+  .route("/checkout")
+  .post(
+    validation(createOrderValidation),
+    authenticate,
+    createOnlinePaymentSession
+  );
