@@ -115,7 +115,7 @@ const paymentListenerAndCreateOrder = catchAsyncError(
       event = stripe.webhooks.constructEvent(
         request.body,
         sig,
-        process.env.STRIPE_WEBHOOK_SECRET
+        `${process.env.STRIPE_WEBHOOK_SECRET}`
       );
     } catch (err) {
       return response.status(400).send(`Webhook Error: ${err.message}`);
