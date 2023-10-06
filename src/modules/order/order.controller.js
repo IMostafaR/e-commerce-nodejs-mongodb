@@ -94,7 +94,13 @@ const createOnlinePaymentSession = catchAsyncError(async (req, res, next) => {
     cancel_url: `${process.env.CLIENT_URL_CANCEL}`,
     customer_email: email,
     client_reference_id: cartInfo.cart,
-    metadata: address,
+    metadata: {
+      user,
+      address,
+      ...cartInfo,
+      paymentMethod,
+      status: "completed",
+    },
   });
 
   // send response
