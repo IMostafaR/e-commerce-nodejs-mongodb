@@ -124,6 +124,13 @@ const getCartInfoForOrder = async (user, next) => {
   return cartInfo;
 };
 
+/**
+ * @desc    Update related documents after order (usedBy array in coupon document, soldItems and stock in product document, delete cart document)
+ * @param {String} couponCode
+ * @param {String} user
+ * @param {Array} products
+ * @param {String} cartID
+ */
 const updateRelatedDocsAfterOrder = async (
   couponCode,
   user,
