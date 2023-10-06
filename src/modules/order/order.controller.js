@@ -7,6 +7,7 @@ import {
 import { Order } from "../../../database/models/order.model.js";
 import { AppError } from "../../utils/error/appError.js";
 import Stripe from "stripe";
+import { Cart } from "../../../database/models/cart.model.js";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 /**
@@ -94,13 +95,7 @@ const createOnlinePaymentSession = catchAsyncError(async (req, res, next) => {
     cancel_url: `${process.env.CLIENT_URL_CANCEL}`,
     customer_email: email,
     client_reference_id: cartInfo.cart,
-    metadata: {
-      user,
-      address,
-      ...cartInfo,
-      paymentMethod,
-      status: "completed",
-    },
+    metadata: address,
   });
 
   // send response
@@ -132,29 +127,39 @@ const paymentListenerAndCreateOrder = catchAsyncError(
       const session = event.data.object;
 
       console.log("successful payment ✨✨✨");
-      // const { client_reference_id: cartID } = session;
-      // const { metadata: address } = session;
-      // const { id: user } = await Order.findOne({ cart: cartID });
-      // const cartInfo = await getCartInfoForOrder(user, next);
+      const { client_reference_id: cartID, metadata: address } = session;
+      const cart = await Cart.findById(cartID);
+      const orderInfo = {
+        user: cart.user,
+        address,
+        cart: cartID,
+        products: cart.products,
+        totalPrice: cart.totalPrice,
+        status: "completed",
+        paymentMethod: "card",
+      };
 
-      // // create order
-      // const order = await Order.create({
-      //   user,
-      //   address,
-      //   ...cartInfo,
-      //   paymentMethod: "card",
-      //   status: "completed",
-      // });
+      if (cart.coupon?.discount) orderInfo.coupon = cart.coupon;
 
-      // if (!order) return next(new AppError("Order could not be created", 500));
+      // create order
+      const order = await Order.create(orderInfo);
 
-      // // update related documents after order (usedBy array in coupon document, soldItems and stock in product document, delete cart document)
-      // await updateRelatedDocsAfterOrder(
-      //   cartInfo.coupon?.code,
-      //   user,
-      //   cartInfo.products,
-      //   cartInfo.cart
-      // );
+      if (!order) return next(new AppError("Order could not be created", 500));
+
+      // update related documents after order (usedBy array in coupon document, soldItems and stock in product document, delete cart document)
+      await updateRelatedDocsAfterOrder(
+        orderInfo.coupon?.code,
+        orderInfo.user,
+        orderInfo.products,
+        orderInfo.cart
+      );
+
+      // send response
+      return res.status(201).json({
+        status: "success",
+        message: "Order created successfully",
+        data: order,
+      });
     } else {
       console.log(`Unhandled event type ${event.type}`);
     }
