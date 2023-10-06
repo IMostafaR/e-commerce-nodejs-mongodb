@@ -46,4 +46,18 @@ const createCashOrder = catchAsyncError(async (req, res, next) => {
   });
 });
 
-export { createCashOrder };
+const getAllUserOrders = catchAsyncError(async (req, res, next) => {
+  const { id: user } = req.user;
+
+  const orders = await Order.find({ user });
+
+  if (!orders)
+    return next(new AppError("You don't have any order history", 404));
+
+  return res.status(200).json({
+    status: "success",
+    data: orders,
+  });
+});
+
+export { createCashOrder, getAllUserOrders };

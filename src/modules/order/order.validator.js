@@ -12,4 +12,8 @@ const createOrderValidation = Joi.object({
   }),
 });
 
-export { createOrderValidation };
+const getAllUserOrdersValidation = Joi.object({
+  token: mainValidationSchema.token,
+});
+
+export { createOrderValidation, getAllUserOrdersValidation };
