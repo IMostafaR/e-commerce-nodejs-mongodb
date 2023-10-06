@@ -20,6 +20,8 @@
 ![Static Badge](https://img.shields.io/badge/nodemailer-v6.9.5-darkblue?logoColor=cloudflare&labelColor=black&color=darkblue)
 ![Static Badge](https://img.shields.io/badge/slugify-v1.6.6-darkblue?logoColor=cloudflare&labelColor=black&color=darkblue)
 ![Static Badge](https://img.shields.io/badge/uuid-v9.0.0-darkblue?logoColor=cloudflare&labelColor=black&color=darkblue)
+![Static Badge](https://img.shields.io/badge/stripe-v13.9.0-darkblue?logo=stripe&labelColor=black)
+![Static Badge](https://img.shields.io/badge/cors-v2.8.5-darkblue?labelColor=black)
 
 # Table of Contents
 
