@@ -1,4 +1,5 @@
 import { db } from "../database/connection.js";
+import cors from "cors";
 import { globalErrorHandler } from "./middleware/error/globalErrorHandler.js";
 import { addressRouter } from "./modules/address/address.routes.js";
 import { authRouter } from "./modules/auth/auth.routes.js";
@@ -24,6 +25,7 @@ export const router = (app, express) => {
   });
 
   db();
+  app.use(cors());
   app.use(express.json());
   app.use(morgan("dev"));
   app.use("/api/v1/auth", authRouter);
