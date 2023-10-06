@@ -105,4 +105,59 @@ const createOnlinePaymentSession = catchAsyncError(async (req, res, next) => {
   });
 });
 
-export { createCashOrder, getAllUserOrders, createOnlinePaymentSession };
+const paymentListenerAndCreateOrder = catchAsyncError(
+  async (request, response, next) => {
+    const sig = request.headers["stripe-signature"].toString();
+
+    let event;
+
+    try {
+      event = stripe.webhooks.constructEvent(
+        request.body,
+        sig,
+        process.env.STRIPE_WEBHOOK_SECRET
+      );
+    } catch (err) {
+      return response.status(400).send(`Webhook Error: ${err.message}`);
+    }
+
+    // Handle the event
+    if (event.type === "checkout.session.completed") {
+      const session = event.data.object;
+
+      console.log(session);
+      // const { client_reference_id: cartID } = session;
+      // const { metadata: address } = session;
+      // const { id: user } = await Order.findOne({ cart: cartID });
+      // const cartInfo = await getCartInfoForOrder(user, next);
+
+      // // create order
+      // const order = await Order.create({
+      //   user,
+      //   address,
+      //   ...cartInfo,
+      //   paymentMethod: "card",
+      //   status: "completed",
+      // });
+
+      // if (!order) return next(new AppError("Order could not be created", 500));
+
+      // // update related documents after order (usedBy array in coupon document, soldItems and stock in product document, delete cart document)
+      // await updateRelatedDocsAfterOrder(
+      //   cartInfo.coupon?.code,
+      //   user,
+      //   cartInfo.products,
+      //   cartInfo.cart
+      // );
+    } else {
+      console.log(`Unhandled event type ${event.type}`);
+    }
+  }
+);
+
+export {
+  createCashOrder,
+  getAllUserOrders,
+  createOnlinePaymentSession,
+  paymentListenerAndCreateOrder,
+};

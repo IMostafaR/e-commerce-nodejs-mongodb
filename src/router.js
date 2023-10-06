@@ -15,6 +15,7 @@ import { userRouter } from "./modules/user/user.routes.js";
 import { wishlistRouter } from "./modules/wishlist/wishlist.routes.js";
 import { AppError } from "./utils/error/appError.js";
 import morgan from "morgan";
+import { paymentListenerAndCreateOrder } from "./modules/order/order.controller.js";
 
 export const router = (app, express) => {
   process.on("unhandledRejection", (error) => {
@@ -26,6 +27,11 @@ export const router = (app, express) => {
 
   db();
   app.use(cors());
+  app.post(
+    "/webhook",
+    express.raw({ type: "application/json" }),
+    paymentListenerAndCreateOrder
+  );
   app.use(express.json());
   app.use(morgan("dev"));
   app.use("/api/v1/auth", authRouter);
