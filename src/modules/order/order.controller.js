@@ -128,6 +128,8 @@ const paymentListenerAndCreateOrder = catchAsyncError(
 
       console.log("successful payment ✨✨✨");
       const { client_reference_id: cartID, metadata: address } = session;
+      console.log("cartID=>", cartID);
+      console.log("address=>", address);
       const cart = await Cart.findById(cartID);
       const orderInfo = {
         user: cart.user,
@@ -138,12 +140,13 @@ const paymentListenerAndCreateOrder = catchAsyncError(
         status: "completed",
         paymentMethod: "card",
       };
+      console.log("orderInfo=>", orderInfo);
 
       if (cart.coupon?.discount) orderInfo.coupon = cart.coupon;
 
       // create order
       const order = await Order.create(orderInfo);
-
+      console.log("order=>", order);
       if (!order) return next(new AppError("Order could not be created", 500));
 
       // update related documents after order (usedBy array in coupon document, soldItems and stock in product document, delete cart document)
