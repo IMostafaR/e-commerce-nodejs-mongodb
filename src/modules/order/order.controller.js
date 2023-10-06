@@ -125,7 +125,7 @@ const paymentListenerAndCreateOrder = catchAsyncError(
     if (event.type === "checkout.session.completed") {
       const session = event.data.object;
 
-      console.log(session);
+      console.log("success ✨✨✨", session);
       // const { client_reference_id: cartID } = session;
       // const { metadata: address } = session;
       // const { id: user } = await Order.findOne({ cart: cartID });
