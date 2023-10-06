@@ -1,13 +1,13 @@
 import { catchAsyncError } from "../../utils/error/asyncError.js";
 import { getAddress } from "../../utils/getAddress/getAddress.js";
 import {
+  getCartInfoForCardOrder,
   getCartInfoForOrder,
   updateRelatedDocsAfterOrder,
 } from "../../utils/cartInfo/cartInfoAndOrder.js";
 import { Order } from "../../../database/models/order.model.js";
 import { AppError } from "../../utils/error/appError.js";
 import Stripe from "stripe";
-import { Cart } from "../../../database/models/cart.model.js";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 /**
@@ -128,15 +128,13 @@ const paymentListenerAndCreateOrder = catchAsyncError(
 
       console.log("successful payment ✨✨✨");
       const { client_reference_id: cartID, metadata: address } = session;
+      const cartInfo = await getCartInfoForCardOrder(cartID);
+
       console.log("cartID=>", cartID);
       console.log("address=>", address);
-      const cart = await Cart.findById(cartID);
       const orderInfo = {
-        user: cart.user,
+        ...cartInfo,
         address,
-        cart: cartID,
-        products: cart.products,
-        totalPrice: cart.totalPrice,
         status: "completed",
         paymentMethod: "card",
       };
@@ -151,10 +149,10 @@ const paymentListenerAndCreateOrder = catchAsyncError(
 
       // update related documents after order (usedBy array in coupon document, soldItems and stock in product document, delete cart document)
       await updateRelatedDocsAfterOrder(
-        orderInfo.coupon?.code,
-        orderInfo.user,
-        orderInfo.products,
-        orderInfo.cart
+        cartInfo.coupon?.code,
+        cartInfo.user,
+        cartInfo.products,
+        cartInfo.cart
       );
 
       // send response

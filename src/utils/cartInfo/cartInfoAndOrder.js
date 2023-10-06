@@ -123,6 +123,49 @@ const getCartInfoForOrder = async (user, next) => {
 
   return cartInfo;
 };
+/**
+ * @desc    Get cart info for card order (products, totalPrice, coupon) after updating the cart prices
+ * @param {String} user
+ * @returns
+ */
+
+const getCartInfoForCardOrder = async (cartID) => {
+  // get cart of the user and get real time product prices
+  let existingCart = await Cart.findById(cartID);
+  if (!existingCart) return next(new AppError("Cart is empty", 404));
+
+  existingCart = JSON.parse(JSON.stringify(existingCart));
+
+  // Get product IDs from the cart
+  const productIDs = existingCart.products.map((cartItem) => cartItem.product);
+
+  // Get products from database using the IDs
+  const existingProducts = await Product.find({ _id: { $in: productIDs } });
+
+  // Create an object to map product IDs to their names
+  const productNames = {};
+  // get product names from the existingProducts array
+  existingProducts.forEach(
+    (product) => (productNames[product._id] = product.name)
+  );
+
+  // Iterate through cart items and add product names to the product object in the products array
+  existingCart.products.forEach((cartItem) => {
+    cartItem.name = productNames[cartItem.product];
+  });
+
+  // create cart info object
+  const cartInfo = {
+    user: existingCart.user,
+    cart: existingCart._id,
+    products: existingCart.products,
+    totalPrice: existingCart.totalPrice,
+  };
+  // add coupon to cart info if it exists
+  if (existingCart.coupon?.discount) cartInfo.coupon = existingCart.coupon;
+
+  return cartInfo;
+};
 
 /**
  * @desc    Update related documents after order (usedBy array in coupon document, soldItems and stock in product document, delete cart document)
@@ -172,4 +215,5 @@ export {
   getRealTimeProductPrice,
   getCartInfoForOrder,
   updateRelatedDocsAfterOrder,
+  getCartInfoForCardOrder,
 };
