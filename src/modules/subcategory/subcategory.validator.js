@@ -4,6 +4,7 @@ import { mainValidationSchema } from "../../middleware/validation/validation.js"
 const createSubcategoryValidation = Joi.object({
   name: mainValidationSchema.name,
   category: mainValidationSchema.id,
+  token: mainValidationSchema.token,
 });
 
 const updateSubcategoryValidation = Joi.object({
