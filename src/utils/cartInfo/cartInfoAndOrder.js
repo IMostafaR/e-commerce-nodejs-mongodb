@@ -90,7 +90,7 @@ const getCartInfoForOrder = async (user, next) => {
 
   let updatedCartPrices = await getRealTimeProductPrice(existingCart);
   updatedCartPrices = JSON.parse(JSON.stringify(updatedCartPrices));
-  // updatedCartPrices = updatedCartPrices.toJSON();
+
   // Get product IDs from the cart
   const productIDs = updatedCartPrices.products.map(
     (cartItem) => cartItem.product
